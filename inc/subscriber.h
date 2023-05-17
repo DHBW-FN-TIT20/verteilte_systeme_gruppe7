@@ -15,13 +15,13 @@
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-typedef vector<SUBSCRIBER>              T_subscriber_list;
-typedef map<string, T_subscriber_list>  T_topic_list;
+typedef vector<SUBSCRIBER>              T_SubscriberList;
+typedef map<string, T_SubscriberList>   T_TopicList;
 
 typedef struct {
-  bool              is_topic_available;
-  int32_t           timestamp;
-  T_subscriber_list subscriber_list_t;
+  bool                                  IsTopicAvailable;
+  int32_t                               Timestamp;
+  T_SubscriberList                      SubscriberList_t;
 } TOPIC_STATUS;
 
 /**************************************************************************************************
@@ -40,7 +40,7 @@ class SUBSCRIBER {
      * @return true Subscriber registered successfully
      * @return false Error: invalid parameters
      */
-    bool subscribe_topic(string topic) const;
+    bool subscribeTopic(string topic) const;
 
     /**
      * @brief Unsubscribe subscriber from the topic.
@@ -50,7 +50,7 @@ class SUBSCRIBER {
      * @return true 
      * @return false 
      */
-    bool unsubscribe_topic(string topic) const;
+    bool unsubscribeTopic(string topic) const;
 
     /**
      * @brief Publish new information on a topic
@@ -60,14 +60,14 @@ class SUBSCRIBER {
      * @return true Topic updated successfully
      * @return false Error: Topic doesn't exist / invalid parameters
      */
-    bool publish_topic(string topic, string &msg) const;
+    bool publishTopic(string topic, string &msg) const;
 
     /**
      * @brief Request list of available topics.
      * 
      * @return vector<string>* Pointer to list of topics
      */
-    vector<string>* list_topics(void) const;
+    vector<string>* listTopics(void) const;
 
     /**
      * @brief Get the topic status object
@@ -75,7 +75,7 @@ class SUBSCRIBER {
      * @param topic Topic name
      * @return TOPIC_STATUS Current status of the topic
      */
-    TOPIC_STATUS get_topic_status(string topic) const;
+    TOPIC_STATUS getTopicStatus(string topic) const;
 
     /**
      * @brief Send the content of a topic to all subscribers.
@@ -84,6 +84,6 @@ class SUBSCRIBER {
      * @param msg Message
      * @param timestamp timestamp of latest update
      */
-    void update_topic(string topic, string &msg, int32_t timestamp) const;
+    void updateTopic(string topic, string &msg, int32_t timestamp) const;
 
 };

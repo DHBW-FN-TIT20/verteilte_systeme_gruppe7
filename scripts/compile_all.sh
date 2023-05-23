@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# change to scripts directory if not already in it
+current_dir=$(basename "$PWD")
+scripts_dir="scripts"
+
+if [ "$current_dir" != "$scripts_dir" ]; then
+  cd "$scripts_dir" || exit 1
+fi
+
 # directories
 src_dir="../src"
 inc_dir="../inc"
@@ -14,6 +22,24 @@ files=(
   "subscriber.cpp"
   "broker.cpp"
 )
+
+while getopts ":pbs" opt; do
+  case $opt in
+    p)
+      files=("publisher.cpp")
+      ;;
+    b)
+      files=("broker.cpp")
+      ;;
+    s)
+      files=("subscriber.cpp")
+      ;;
+    \?)
+      echo "invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
 
 # array to store compiled files
 compiled_files=()

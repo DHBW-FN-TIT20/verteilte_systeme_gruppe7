@@ -10,19 +10,11 @@
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "./main.h"
+#include "./datatypes.h"
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-typedef vector<SUBSCRIBER>              T_SubscriberList;
-typedef map<string, T_SubscriberList>   T_TopicList;
-
-typedef struct {
-  bool                                  IsTopicAvailable;
-  int32_t                               Timestamp;
-  T_SubscriberList                      SubscriberList_t;
-} TOPIC_STATUS;
 
 /**************************************************************************************************
  * Public - Class prototype
@@ -30,37 +22,45 @@ typedef struct {
 
 class SUBSCRIBER {
   private:
-  
 
   public:
+
+    SUBSCRIBER(string address, int port);
+
+    /**
+     * @brief Default destructor for class SUBSCRIBER
+     * 
+     */
+    ~SUBSCRIBER();
+
     /**
      * @brief Register subscriber to the topic. If it doesn't exist, it will be created.
      * 
-     * @param topic Topic name
+     * @param topicName Topic name
      * @return true Subscriber registered successfully
      * @return false Error: invalid parameters
      */
-    bool subscribeTopic(string topic) const;
+    bool subscribeTopic(string topicName) const;
 
     /**
      * @brief Unsubscribe subscriber from the topic.
      * If no more subscribers are registered on this topic, it will be deleted.
      * 
-     * @param topic Topic name
+     * @param topicName Topic name
      * @return true 
      * @return false 
      */
-    bool unsubscribeTopic(string topic) const;
+    bool unsubscribeTopic(string topicName) const;
 
     /**
      * @brief Publish new information on a topic
      * 
-     * @param topic Topic name
+     * @param topicName Topic name
      * @param msg Message to publish
      * @return true Topic updated successfully
      * @return false Error: Topic doesn't exist / invalid parameters
      */
-    bool publishTopic(string topic, string &msg) const;
+    bool publishTopic(string topicName, string &msg) const;
 
     /**
      * @brief Request list of available topics.
@@ -72,18 +72,18 @@ class SUBSCRIBER {
     /**
      * @brief Get the topic status object
      * 
-     * @param topic Topic name
+     * @param topicName Topic name
      * @return TOPIC_STATUS Current status of the topic
      */
-    TOPIC_STATUS getTopicStatus(string topic) const;
+    T_TopicStatus getTopicStatus(string topicName) const;
 
     /**
      * @brief Send the content of a topic to all subscribers.
      * 
-     * @param topic Topic name
+     * @param topicName Topic name
      * @param msg Message
      * @param timestamp timestamp of latest update
      */
-    void updateTopic(string topic, string &msg, int32_t timestamp) const;
+    void updateTopic(string topicName, string &msg, int32_t timestamp) const;
 
 };

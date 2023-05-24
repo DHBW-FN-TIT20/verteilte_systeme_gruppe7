@@ -1,6 +1,6 @@
 /**
   *************************************************************************************************
-  * @file    T_Message.h
+  * @file    T_Request.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
   * @date    24-May-2023
   * @brief   
@@ -24,4 +24,4 @@ typedef struct {
   T_Action                                Action_t;
   std::map<std::string, std::string>      ParameterList;
   int32_t                                 Timestamp;
-} T_Message; /*!< type definition for message for communication between publisher and broker */
+} T_Request; /*!< type definition for message for communication between publisher and broker */

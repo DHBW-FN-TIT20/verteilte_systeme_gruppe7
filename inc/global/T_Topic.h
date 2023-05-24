@@ -13,12 +13,12 @@
  * Include Header Files
  *************************************************************************************************/
 #include <string>
-#include "T_Message.h"
+#include "T_Request.h"
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
 typedef struct {
   std::string       TopicName;
-  T_Message         Message_t;
+  T_Request         Request_t;
 } T_Topic;  /*!< type definition for topic */

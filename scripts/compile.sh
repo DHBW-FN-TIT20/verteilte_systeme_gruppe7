@@ -21,18 +21,28 @@ files=(
   "publisher.cpp"
   "subscriber.cpp"
   "broker.cpp"
+  "message_parser.cpp"
 )
 
 while getopts ":pbs" opt; do
   case $opt in
     p)
-      files=("publisher.cpp")
+      files=(
+        "publisher.cpp"
+        "message_parser.cpp"
+      )
       ;;
     b)
-      files=("broker.cpp")
+      files=(
+        "broker.cpp"
+        "message_parser.cpp"
+      )
       ;;
     s)
-      files=("subscriber.cpp")
+      files=(
+        "subscriber.cpp"
+        "message_parser.cpp"
+      )
       ;;
     \?)
       echo "invalid option: -$OPTARG" >&2

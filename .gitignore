@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Script logs
+scripts/error_log.txt

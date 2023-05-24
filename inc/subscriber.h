@@ -10,7 +10,15 @@
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "./datatypes.h"
+/* C++ Libs */
+#include <string>
+#include <vector>
+
+/* Own Libs / datatypes */
+#include "T_TopicStatus.h"
+
+using std::string;
+using std::vector;
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
@@ -22,17 +30,6 @@
 
 class SUBSCRIBER {
   private:
-
-  public:
-
-    SUBSCRIBER(string address, int port);
-
-    /**
-     * @brief Default destructor for class SUBSCRIBER
-     * 
-     */
-    ~SUBSCRIBER();
-
     /**
      * @brief Register subscriber to the topic. If it doesn't exist, it will be created.
      * 
@@ -85,5 +82,15 @@ class SUBSCRIBER {
      * @param timestamp timestamp of latest update
      */
     void updateTopic(string topicName, string &msg, int32_t timestamp) const;
+
+  public:
+    
+    SUBSCRIBER(string address, int port);
+
+    /**
+     * @brief Default destructor for class SUBSCRIBER
+     * 
+     */
+    ~SUBSCRIBER();
 
 };

@@ -19,26 +19,26 @@
  *************************************************************************************************/
 
 void TEST_toString() {
-  ACTION_ENUM test_subscribe_topic = ACTION_ENUM::SUBSCRIBE_TOPIC;
-  assert(test_subscribe_topic.toString() == "SUBSCRIBE_TOPIC");
+  ACTION_ENUM testSubscribeTopic = ACTION_ENUM::SUBSCRIBE_TOPIC;
+  assert(testSubscribeTopic.toString() == "SUBSCRIBE_TOPIC");
 
-  ACTION_ENUM test_unsubscribe_topic = ACTION_ENUM::UNSUBSCRIBE_TOPIC;
-  assert(test_unsubscribe_topic.toString() == "UNSUBSCRIBE_TOPIC");
+  ACTION_ENUM testUnsubscribeTopic = ACTION_ENUM::UNSUBSCRIBE_TOPIC;
+  assert(testUnsubscribeTopic.toString() == "UNSUBSCRIBE_TOPIC");
 
-  ACTION_ENUM test_publish_topic = ACTION_ENUM::PUBLISH_TOPIC;
-  assert(test_publish_topic.toString() == "PUBLISH_TOPIC");
+  ACTION_ENUM testPublishTopic = ACTION_ENUM::PUBLISH_TOPIC;
+  assert(testPublishTopic.toString() == "PUBLISH_TOPIC");
 
-  ACTION_ENUM test_list_topics = ACTION_ENUM::LIST_TOPICS;
-  assert(test_list_topics.toString() == "LIST_TOPICS");
+  ACTION_ENUM testListTopic = ACTION_ENUM::LIST_TOPICS;
+  assert(testListTopic.toString() == "LIST_TOPICS");
 
-  ACTION_ENUM test_get_topic_status = ACTION_ENUM::GET_TOPIC_STATUS;
-  assert(test_get_topic_status.toString() == "GET_TOPIC_STATUS");
+  ACTION_ENUM testGetTopicStatus = ACTION_ENUM::GET_TOPIC_STATUS;
+  assert(testGetTopicStatus.toString() == "GET_TOPIC_STATUS");
 
-  ACTION_ENUM test_update_topic = ACTION_ENUM::UPDATE_TOPIC;
-  assert(test_update_topic.toString() == "UPDATE_TOPIC");
+  ACTION_ENUM testUpdateTopic = ACTION_ENUM::UPDATE_TOPIC;
+  assert(testUpdateTopic.toString() == "UPDATE_TOPIC");
 
-  ACTION_ENUM test_error = static_cast<ACTION_ENUM::Action>(10);
-  assert(test_error.toString() == "Error");
+  ACTION_ENUM testError = static_cast<ACTION_ENUM::Action>(10);
+  assert(testError.toString() == "Error");
 }
 
 void TEST_conversionOperator() {

@@ -19,20 +19,20 @@
  *************************************************************************************************/
 
 void TEST_toString() {
-  ACTION_STATUS_ENUM test_status_ok = ACTION_STATUS_ENUM::STATUS_OK;
-  assert(test_status_ok.toString() == "STATUS_OK");
+  ACTION_STATUS_ENUM testStatusOk = ACTION_STATUS_ENUM::STATUS_OK;
+  assert(testStatusOk.toString() == "STATUS_OK");
 
-  ACTION_STATUS_ENUM test_topic_non_existent = ACTION_STATUS_ENUM::TOPIC_NON_EXISTENT;
-  assert(test_topic_non_existent.toString() == "TOPIC_NON_EXISTENT");
+  ACTION_STATUS_ENUM testTopicNonExistent = ACTION_STATUS_ENUM::TOPIC_NON_EXISTENT;
+  assert(testTopicNonExistent.toString() == "TOPIC_NON_EXISTENT");
 
-  ACTION_STATUS_ENUM test_invalid_parameters = ACTION_STATUS_ENUM::INVALID_PARAMETERS;
-  assert(test_invalid_parameters.toString() == "INVALID_PARAMETERS");
+  ACTION_STATUS_ENUM testInvalidParameters = ACTION_STATUS_ENUM::INVALID_PARAMETERS;
+  assert(testInvalidParameters.toString() == "INVALID_PARAMETERS");
 
-  ACTION_STATUS_ENUM test_internal_error = ACTION_STATUS_ENUM::INTERNAL_ERROR;
-  assert(test_internal_error.toString() == "INTERNAL_ERROR");
+  ACTION_STATUS_ENUM testInternalError = ACTION_STATUS_ENUM::INTERNAL_ERROR;
+  assert(testInternalError.toString() == "INTERNAL_ERROR");
 
-  ACTION_STATUS_ENUM test_error = static_cast<ACTION_STATUS_ENUM::ActionStatus>(10);
-  assert(test_error.toString() == "Error");
+  ACTION_STATUS_ENUM testError = static_cast<ACTION_STATUS_ENUM::ActionStatus>(10);
+  assert(testError.toString() == "Error");
 }
 
 void TEST_conversionOperator() {

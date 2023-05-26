@@ -10,8 +10,13 @@
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "./main.h"
+/* C++ Libs */
+#include <string>
 
+/* Own Libs / datatypes */
+#include "T_TopicStatus.h"
+
+using std::string;
 
  /*************************************************************************************************
  * Public - Class prototype
@@ -30,7 +35,7 @@ class PUBLISHER {
      * @return true Topic updated successfully
      * @return false Error: Topic doesn't exist / invalid parameters
      */
-    bool publishTopic(string topic, string &msg) const;
+    bool publishTopic(const string topicName, const string &msg) const;
 
     /**
      * @brief Get the topic status object
@@ -38,6 +43,6 @@ class PUBLISHER {
      * @param topic Topic name
      * @return TOPIC_STATUS Current status of the topic
      */
-    TOPIC_STATUS getTopicStatus(string topic) const;
+    T_TopicStatus getTopicStatus(const string topicName) const;
 
 };

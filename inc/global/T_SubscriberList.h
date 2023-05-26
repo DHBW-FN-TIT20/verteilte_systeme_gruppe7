@@ -1,31 +1,21 @@
 /**
   *************************************************************************************************
-  * @file    main.h
+  * @file    T_SubscriberList.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    16-May-2023
+  * @date    24-May-2023
   * @brief   
   *************************************************************************************************
   */
 
-#ifndef MAIN_H_
-#define MAIN_H_
+#pragma once
 
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-/* Own Libs */
-#include "./datatypes.h"
-#include "./broker.h"
-#include "./publisher.h"
-#include "./subscriber.h"
-
-
-/**************************************************************************************************
- * MACROS
- *************************************************************************************************/
+#include <vector>
+#include <string>
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-
-#endif /* MAIN_H_ */
+typedef std::vector<std::string>  T_SubscriberList;   /*!< type definition for list of subscribers identified by their names */

@@ -1,31 +1,27 @@
 /**
   *************************************************************************************************
-  * @file    main.h
+  * @file    T_Request.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    16-May-2023
+  * @date    24-May-2023
   * @brief   
   *************************************************************************************************
   */
 
-#ifndef MAIN_H_
-#define MAIN_H_
+#pragma once
 
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-/* Own Libs */
-#include "./datatypes.h"
-#include "./broker.h"
-#include "./publisher.h"
-#include "./subscriber.h"
+#include <map>
+#include <string>
+#include "T_Action.h"
 
-
-/**************************************************************************************************
- * MACROS
- *************************************************************************************************/
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-
-#endif /* MAIN_H_ */
+typedef struct {
+  T_Action                                Action_t;
+  std::map<std::string, std::string>      ParameterList;
+  int32_t                                 Timestamp;
+} T_Request; /*!< type definition for message for communication between publisher and broker */

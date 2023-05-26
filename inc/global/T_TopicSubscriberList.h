@@ -1,31 +1,22 @@
 /**
   *************************************************************************************************
-  * @file    main.h
+  * @file    T_TopicSubscriberList.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    16-May-2023
+  * @date    24-May-2023
   * @brief   
   *************************************************************************************************
   */
 
-#ifndef MAIN_H_
-#define MAIN_H_
+#pragma once
 
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-/* Own Libs */
-#include "./datatypes.h"
-#include "./broker.h"
-#include "./publisher.h"
-#include "./subscriber.h"
-
-
-/**************************************************************************************************
- * MACROS
- *************************************************************************************************/
+#include <map>
+#include <string>
+#include "T_SubscriberList.h"
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-
-#endif /* MAIN_H_ */
+typedef std::map<std::string, T_SubscriberList>   T_TopicSubscriberList;    /*!< type definition for list of topics with all their respective subscribers */

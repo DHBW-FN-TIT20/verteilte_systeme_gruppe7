@@ -15,6 +15,7 @@
 
 /* Own Libs / datatypes */
 #include "topic_status_type.h"
+#include "request_type.h"
 
 using std::string;
 
@@ -24,8 +25,12 @@ using std::string;
 
 class PUBLISHER {
   private:
-  
-
+    /**
+     * @brief Send specified request to the broker
+     *
+     * @param request The request which should be send to the broker
+     */
+    string sendRequest(const RequestType &request) const;
   public:
     /**
      * @brief Publish new information on a topic

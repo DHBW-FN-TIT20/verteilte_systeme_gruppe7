@@ -10,12 +10,23 @@ fi
 
 # directories
 src_dir="../src"
-inc_dir="../inc"
 build_dir="../build"
 error_log="error_log.txt"
 
+# include paths
+include_paths="-I../inc -I../inc/global"
+
+# C++ compiler flags
+cpp_standard="-std=c++11"
+warning_flags="-Wall -Wextra"
+optimization_flags="-O2"
+compiler_flags="$warning_flags $optimization_flags $cpp_standard"   # standard has to be last
+
 # create build directory, if it doesn't exist
 mkdir -p "$build_dir"
+
+# support colors
+tput init
 
 files=(
   "publisher.cpp"
@@ -67,37 +78,55 @@ show_progress_bar() {
   local num_chars=$(( (progress * bar_length) / total_files ))
   local bar=""
 
-  for (( i=0; i<num_chars; i++ )); do
+  local prev_progress="$2"
+  local prev_num_chars=$(( (prev_progress * bar_length) / total_files ))
+  #local prev_bar_length=$((num_chars - prev_num_chars))
+
+  for (( i=0; i<prev_num_chars; i++ )); do
     bar+="="
   done
-
   printf "[%-*s] %d%%\r" "$bar_length" "$bar" "$(( (progress * 100) / total_files ))"
+
+  for (( i=prev_num_chars; i<num_chars; i++ )); do
+    bar+="="
+    printf "[%-*s] %d%%\r" "$bar_length" "$bar" "$(( (progress * 100) / total_files ))"
+    sleep 0.005
+  done
+
 }
 
 # compile files
 total_files=${#files[@]}
 completed_files=0
+clear
 
 for file in "${files[@]}"; do
+  prev_compiled_files="$completed_files"
   ((completed_files++))
-  show_progress_bar "$completed_files"
+  show_progress_bar "$completed_files" "$prev_compiled_files"
 
-  g++ -c "$src_dir/$file" -I"$inc_dir" -o "$build_dir/${file%.*}.o" >> "$error_log" 2>&1
+  g++ -c "$src_dir/$file" "$include_paths" "$compiler_flags" -o "$build_dir/${file%.*}.o" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
+    tput setaf 1
     echo -e "\nError compiling file: $file"
+    tput sgr0
     exit 1
   fi
 
-  g++ "$build_dir/${file%.*}.o" -o "$build_dir/${file%.*}_executable" >> "$error_log" 2>&1
+  g++ "$build_dir/${file%.*}.o" "$compiler_flags" -o "$build_dir/${file%.*}_executable" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
+    tput setaf 1
     echo -e "\nError creating executable for file: $file"
+    tput sgr0
     exit 1
   fi
 
   compiled_files+=("$file")
 done
 
+tput setaf 2
 echo -e "\nCompilation successful"
+tput sgr0
 
 # display compiled files
 echo -e "\nCompiled files:"

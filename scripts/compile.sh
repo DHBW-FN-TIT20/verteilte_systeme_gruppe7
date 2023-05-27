@@ -18,9 +18,6 @@ include_paths="-I../inc -I../inc/global"
 
 # C++ compiler flags
 cpp_standard="-std=c++11"
-warning_flags="-Wall -Wextra"
-optimization_flags="-O2"
-compiler_flags="$warning_flags $optimization_flags $cpp_standard"   # standard has to be last
 
 # create build directory, if it doesn't exist
 mkdir -p "$build_dir"
@@ -105,7 +102,7 @@ for file in "${files[@]}"; do
   ((completed_files++))
   show_progress_bar "$completed_files" "$prev_compiled_files"
 
-  g++ -c "$src_dir/$file" "$include_paths" "$compiler_flags" -o "$build_dir/${file%.*}.o" >> "$error_log" 2>&1
+  g++ -c "$src_dir/$file" "$include_paths" "$cpp_standard" -o "$build_dir/${file%.*}.o" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setaf 1
     echo -e "\nError compiling file: $file"
@@ -113,7 +110,7 @@ for file in "${files[@]}"; do
     exit 1
   fi
 
-  g++ "$build_dir/${file%.*}.o" "$compiler_flags" -o "$build_dir/${file%.*}_executable" >> "$error_log" 2>&1
+  g++ "$build_dir/${file%.*}.o" "$cpp_standard" -o "$build_dir/${file%.*}_executable" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setaf 1
     echo -e "\nError creating executable for file: $file"

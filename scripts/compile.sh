@@ -45,7 +45,7 @@ while IFS= read -r -d '' file; do
   files+=("${file#$src_dir}")
 done < <(find "$src_dir" -type f -name "*.cpp" -print0)
 
-while getopts ":pbs" opt; do
+while getopts ":pbsr" opt; do
   case $opt in
     p)
       files=(
@@ -62,6 +62,11 @@ while getopts ":pbs" opt; do
     s)
       files=(
         "subscriber.cpp"
+        "request_parser.cpp"
+      )
+      ;;
+    r)
+      files=(
         "request_parser.cpp"
       )
       ;;

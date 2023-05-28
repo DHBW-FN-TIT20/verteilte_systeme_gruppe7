@@ -3,18 +3,17 @@
   * @file    request_parser.cpp
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
   * @date    28-May-2023
-  * @brief   Unit tests for class MESSAGE_PARSER
+  * @brief   Implementation for class RequestParser
   *************************************************************************************************
   */
 
  /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "../inc/request_parser.h"
-#include <iostream>
+#include "request_parser.h"
 
-using namespace std;
-
-string REQUEST_PARSER::encode(T_Request request) const {
+std::string RequestParser::encode(T_Request request) const {
   return "";
 }
+
+int main() {}

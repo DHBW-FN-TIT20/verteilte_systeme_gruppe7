@@ -17,11 +17,11 @@
  * Unit tests
  *************************************************************************************************/
 void TEST_encode() {
-  REQUEST_PARSER tempParser;
+  RequestParser tempParser;
 }
 
 
 int main() {
-  std::cout << "All tests for class MESSAGE_PARSER passed" << std::endl;
+  std::cout << "All tests for class RequestParser passed" << std::endl;
   return 0;
 }

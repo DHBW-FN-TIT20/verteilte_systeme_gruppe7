@@ -15,5 +15,3 @@
 std::string RequestParser::encode(T_Request request) const {
   return "";
 }
-
-int main() {}

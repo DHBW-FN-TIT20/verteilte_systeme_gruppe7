@@ -14,10 +14,19 @@ build_dir="../build"
 error_log="error_log.txt"
 
 # include paths
-include_paths="-I../inc -I../inc/global"
+include_paths=(
+  "-I../inc"
+  "-I../inc/global"
+)
 
-# C++ compiler flags
+# compiler flags
 cpp_standard="-std=c++11"
+cpp_flags=(
+  "$cpp_standard"
+  "-Wall"
+  "-Wextra"
+  "-O2"
+)
 
 # create build directory, if it doesn't exist
 mkdir -p "$build_dir"
@@ -25,31 +34,35 @@ mkdir -p "$build_dir"
 # support colors
 tput init
 
-files=(
-  "publisher.cpp"
-  "subscriber.cpp"
-  "broker.cpp"
-  "message_parser.cpp"
-)
+# array for sourcefiles
+files=()
+
+# array to store compiled files
+compiled_files=()
+
+# get all files from src folder and store them in the array
+while IFS= read -r -d '' file; do
+  files+=("${file#$src_dir}")
+done < <(find "$src_dir" -type f -name "*.cpp" -print0)
 
 while getopts ":pbs" opt; do
   case $opt in
     p)
       files=(
         "publisher.cpp"
-        "message_parser.cpp"
+        "request_parser.cpp"
       )
       ;;
     b)
       files=(
         "broker.cpp"
-        "message_parser.cpp"
+        "request_parser.cpp"
       )
       ;;
     s)
       files=(
         "subscriber.cpp"
-        "message_parser.cpp"
+        "request_parser.cpp"
       )
       ;;
     \?)
@@ -58,9 +71,6 @@ while getopts ":pbs" opt; do
       ;;
   esac
 done
-
-# array to store compiled files
-compiled_files=()
 
 # reset error log file
 if [ -f "$error_log" ]; then
@@ -77,7 +87,6 @@ show_progress_bar() {
 
   local prev_progress="$2"
   local prev_num_chars=$(( (prev_progress * bar_length) / total_files ))
-  #local prev_bar_length=$((num_chars - prev_num_chars))
 
   for (( i=0; i<prev_num_chars; i++ )); do
     bar+="="
@@ -92,6 +101,20 @@ show_progress_bar() {
 
 }
 
+print_error_log() {
+  if [ -s "$error_log" ]; then
+    echo -e "\n\n------------------------------"
+    tput setaf 9
+    echo -e "Errors:\n"
+    tput sgr0
+    cat "$error_log"
+  fi
+}
+
+remove_object_files() {
+  rm "$build_dir"/*.o >> "$error_log" 2>&1
+}
+
 # compile files
 total_files=${#files[@]}
 completed_files=0
@@ -102,37 +125,40 @@ for file in "${files[@]}"; do
   ((completed_files++))
   show_progress_bar "$completed_files" "$prev_compiled_files"
 
-  g++ -c "$src_dir/$file" "$include_paths" "$cpp_standard" -o "$build_dir/${file%.*}.o" >> "$error_log" 2>&1
+  g++ -c "$src_dir/$file" ${include_paths[@]} ${cpp_flags[@]} -o "$build_dir/${file%.*}.o" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setaf 1
     echo -e "\nError compiling file: $file"
     tput sgr0
+    print_error_log
+    remove_object_files
     exit 1
   fi
 
-  g++ "$build_dir/${file%.*}.o" "$cpp_standard" -o "$build_dir/${file%.*}_executable" >> "$error_log" 2>&1
+  g++ "$build_dir/${file%.*}.o" ${cpp_flags[@]} -o "$build_dir/${file%.*}_executable" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setaf 1
     echo -e "\nError creating executable for file: $file"
     tput sgr0
+    print_error_log
+    remove_object_files
     exit 1
   fi
 
   compiled_files+=("$file")
 done
 
-tput setaf 2
+tput setaf 10
 echo -e "\nCompilation successful"
 tput sgr0
 
 # display compiled files
 echo -e "\nCompiled files:"
 for compiled_file in "${compiled_files[@]}"; do
-  echo "- $compiled_file"
+  echo "- ${compiled_file#/}"
 done
 
-# remove .o files
-rm "$build_dir"/*.o
+remove_object_files
 
 # delete error log file if there are no errors
 if [ ! -s "$error_log" ]; then

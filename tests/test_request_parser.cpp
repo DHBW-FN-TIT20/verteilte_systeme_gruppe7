@@ -10,18 +10,29 @@
  /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "../src/request_parser.cpp"
+#include "../inc/request_parser.h"
+#include "T_Request.h"
 #include <iostream>
+#include <cassert>
 
  /*************************************************************************************************
  * Unit tests
  *************************************************************************************************/
 void TEST_encode() {
   RequestParser tempParser;
+  T_Request tempRequest = {
+    ACTION_ENUM::SUBSCRIBE_TOPIC,
+    {{"topicName", "Topic1"}},
+    12345678
+  };
+
+  assert(tempParser.encode(tempRequest) == R"({"Action":"SUBSCRIBE_TOPIC","Timestamp":12345678,"ParameterList":{"topicName":"Topic1"}})");
 }
 
 
 int main() {
+  TEST_encode();
+
   std::cout << "All tests for class RequestParser passed" << std::endl;
   return 0;
 }

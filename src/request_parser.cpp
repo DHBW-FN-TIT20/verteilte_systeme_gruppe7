@@ -14,5 +14,11 @@
 #include "nlohmann/json.hpp"
 
 std::string RequestParser::encode(T_Request request) const {
-  return "";
+  nlohmann::json jsonRequest = {
+    {"Action_t", request.Action_t.toString()},
+    {"ParameterList", request.ParameterList},
+    {"Timestamp", request.Timestamp}
+  };
+
+  return jsonRequest.dump();
 }

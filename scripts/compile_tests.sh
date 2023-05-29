@@ -17,6 +17,8 @@ error_log="unit_test_error_log.txt"
 include_paths=(
   "-I../inc"
   "-I../inc/global"
+  "-I../src"
+  "-I../lib"
 )
 
 # compiler flags

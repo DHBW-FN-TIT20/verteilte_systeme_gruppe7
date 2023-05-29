@@ -25,7 +25,7 @@ void TestEncode() {
     {{"topicName", "Topic1"}},
     12345678
   };
-  assert(tempParser.encode(tempRequest) == R"({"Action_t":"SUBSCRIBE_TOPIC","ParameterList":{"topicName":"Topic1"},"Timestamp":12345678})");
+  assert(tempParser.encode(tempRequest) == R"({"Action_t":0,"ParameterList":{"topicName":"Topic1"},"Timestamp":12345678})");
 }
 
 void TestDecode() {
@@ -35,13 +35,12 @@ void TestDecode() {
     {{"topicName", "Topic1"}},
     12345678
   };
-  std::string tempJsonString = R"({"Action_t":"SUBSCRIBE_TOPIC","ParameterList":{"topicName":"Topic1"},"Timestamp":12345678})";
+  std::string tempJsonString = R"({"Action_t":0,"ParameterList":{"topicName":"Topic1"},"Timestamp":12345678})";
   
   T_Request resultRequest = tempParser.decode(tempJsonString);
   assert(resultRequest.Action_t == tempExpectedRequest.Action_t);
   assert(resultRequest.Timestamp == tempExpectedRequest.Timestamp); 
   assert(resultRequest.ParameterList == tempExpectedRequest.ParameterList);
-
 }
 
 int main() {

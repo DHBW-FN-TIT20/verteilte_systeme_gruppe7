@@ -15,7 +15,7 @@
 
 std::string RequestParser::encode(T_Request request) const {
   nlohmann::json jsonRequest = {
-    {"Action_t", request.Action_t.toString()},
+    {"Action_t", static_cast<int>(request.Action_t)},
     {"ParameterList", request.ParameterList},
     {"Timestamp", request.Timestamp}
   };
@@ -27,7 +27,7 @@ T_Request RequestParser::decode(std::string requestString) const {
   nlohmann::json jsonRequest = nlohmann::json::parse(requestString);
   
   T_Request request;
-  request.Action_t.fromString(jsonRequest["Action_t"]);
+  request.Action_t = static_cast<ACTION_ENUM::Action>(jsonRequest["Action_t"]);
   request.ParameterList = jsonRequest["ParameterList"];
   request.Timestamp = jsonRequest["Timestamp"];
 

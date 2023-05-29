@@ -10,7 +10,7 @@
  /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "../inc/request_parser.h"
+#include "request_parser.cpp"
 #include "T_Request.h"
 #include <iostream>
 #include <cassert>
@@ -25,8 +25,7 @@ void TEST_encode() {
     {{"topicName", "Topic1"}},
     12345678
   };
-
-  assert(tempParser.encode(tempRequest) == R"({"Action":"SUBSCRIBE_TOPIC","Timestamp":12345678,"ParameterList":{"topicName":"Topic1"}})");
+  assert(tempParser.encode(tempRequest) == R"({"Action_t":"SUBSCRIBE_TOPIC","ParameterList":{"topicName":"Topic1"},"Timestamp":12345678})");
 }
 
 

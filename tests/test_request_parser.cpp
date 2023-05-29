@@ -18,7 +18,7 @@
  /*************************************************************************************************
  * Unit tests
  *************************************************************************************************/
-void TEST_encode() {
+void TestEncode() {
   RequestParser tempParser;
   T_Request tempRequest = {
     ACTION_ENUM::SUBSCRIBE_TOPIC,
@@ -28,9 +28,8 @@ void TEST_encode() {
   assert(tempParser.encode(tempRequest) == R"({"Action_t":"SUBSCRIBE_TOPIC","ParameterList":{"topicName":"Topic1"},"Timestamp":12345678})");
 }
 
-
 int main() {
-  TEST_encode();
+  TestEncode();
 
   std::cout << "All tests for class RequestParser passed" << std::endl;
   return 0;

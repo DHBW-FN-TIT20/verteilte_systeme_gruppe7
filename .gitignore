@@ -32,5 +32,10 @@
 *.app
 /build
 
+# Compiler configs
+c_cpp_properties.json
+compile_commands.json
+.cache
+
 # Script logs
 scripts/error_log.txt

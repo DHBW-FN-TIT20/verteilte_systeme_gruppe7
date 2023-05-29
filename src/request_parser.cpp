@@ -11,6 +11,7 @@
  * Include Header Files
  *************************************************************************************************/
 #include "request_parser.h"
+#include "nlohmann/json.hpp"
 
 std::string RequestParser::encode(T_Request request) const {
   return "";

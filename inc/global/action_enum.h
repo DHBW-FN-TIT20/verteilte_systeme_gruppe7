@@ -2,7 +2,7 @@
   *************************************************************************************************
   * @file    action_enum.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    24-May-2023
+  * @date    29-May-2023
   * @brief   
   *************************************************************************************************
   */
@@ -51,6 +51,15 @@ class ACTION_ENUM {
         default:
           return "Error";
       }
+    }
+
+    void fromString(std::string valueString) {
+      if(valueString=="SUBSCRIBE_TOPIC") m_Action = SUBSCRIBE_TOPIC;
+      else if(valueString=="UNSUBSCRIBE_TOPIC") m_Action = UNSUBSCRIBE_TOPIC;
+      else if(valueString=="PUBLISH_TOPIC") m_Action = PUBLISH_TOPIC;
+      else if(valueString=="LIST_TOPICS") m_Action = LIST_TOPICS;
+      else if(valueString=="GET_TOPIC_STATUS") m_Action = GET_TOPIC_STATUS;
+      else if(valueString=="UPDATE_TOPIC") m_Action = UPDATE_TOPIC;
     }
 
   private:

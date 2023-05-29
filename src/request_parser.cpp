@@ -2,7 +2,7 @@
   *************************************************************************************************
   * @file    request_parser.cpp
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    28-May-2023
+  * @date    29-May-2023
   * @brief   Implementation for class RequestParser
   *************************************************************************************************
   */
@@ -21,4 +21,15 @@ std::string RequestParser::encode(T_Request request) const {
   };
 
   return jsonRequest.dump();
+}
+
+T_Request RequestParser::decode(std::string requestString) const {
+  nlohmann::json jsonRequest = nlohmann::json::parse(requestString);
+  
+  T_Request request;
+  request.Action_t.fromString(jsonRequest["Action_t"]);
+  request.ParameterList = jsonRequest["ParameterList"];
+  request.Timestamp = jsonRequest["Timestamp"];
+
+  return request;
 }

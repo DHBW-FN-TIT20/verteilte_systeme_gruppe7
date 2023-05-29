@@ -32,21 +32,23 @@ add parameters to compile individual files:
 ```
 
 ### :test_tube: unit tests
-
-grant execute permission to the files:
+navigate to /scripts directory:
 
 ```
+cd scripts/
+```
+
+grant execute permission to the files:
+```shell
 chmod +x compile_tests.sh run_tests.sh
 ```
 
 compile all unit tests:
-
-```
+```shell
 ./compile_tests.sh
 ```
 
 run all unit tests:
-
 ```
 ./run_tests.sh
 ```

@@ -31,7 +31,7 @@ add parameters to compile individual files:
 -r request_parser.cpp
 ```
 
-### unit tests
+### :test_tube: unit tests
 
 grant execute permission to the files:
 

@@ -2,8 +2,8 @@
   *************************************************************************************************
   * @file    subscriber.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    16-May-2023
-  * @brief   
+  * @date    29-May-2023
+  * @brief   Prototype for class Subscriber
   *************************************************************************************************
   */
 
@@ -13,12 +13,10 @@
 /* C++ Libs */
 #include <string>
 #include <vector>
+#include <cstdint>
 
 /* Own Libs / datatypes */
 #include "topic_status_type.h"
-
-using std::string;
-using std::vector;
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
@@ -28,7 +26,7 @@ using std::vector;
  * Public - Class prototype
  *************************************************************************************************/
 
-class SUBSCRIBER {
+class Subscriber {
   private:
     /**
      * @brief Register subscriber to the topic. If it doesn't exist, it will be created.
@@ -37,7 +35,7 @@ class SUBSCRIBER {
      * @return true Subscriber registered successfully
      * @return false Error: invalid parameters
      */
-    bool subscribeTopic(string topicName) const;
+    bool subscribeTopic(std::string topicName) const;
 
     /**
      * @brief Unsubscribe subscriber from the topic.
@@ -47,7 +45,7 @@ class SUBSCRIBER {
      * @return true 
      * @return false 
      */
-    bool unsubscribeTopic(string topicName) const;
+    bool unsubscribeTopic(std::string topicName) const;
 
     /**
      * @brief Publish new information on a topic
@@ -57,14 +55,14 @@ class SUBSCRIBER {
      * @return true Topic updated successfully
      * @return false Error: Topic doesn't exist / invalid parameters
      */
-    bool publishTopic(string topicName, string &msg) const;
+    bool publishTopic(std::string topicName, std::string &msg) const;
 
     /**
      * @brief Request list of available topics.
      * 
      * @return vector<string>* Pointer to list of topics
      */
-    vector<string>* listTopics(void) const;
+    std::vector<std::string>* listTopics(void) const;
 
     /**
      * @brief Get the topic status object
@@ -72,7 +70,7 @@ class SUBSCRIBER {
      * @param topicName Topic name
      * @return TOPIC_STATUS Current status of the topic
      */
-    T_TopicStatus getTopicStatus(string topicName) const;
+    T_TopicStatus getTopicStatus(std::string topicName) const;
 
     /**
      * @brief Send the content of a topic to all subscribers.
@@ -81,16 +79,16 @@ class SUBSCRIBER {
      * @param msg Message
      * @param timestamp timestamp of latest update
      */
-    void updateTopic(string topicName, string &msg, int32_t timestamp) const;
+    void updateTopic(std::string topicName, std::string &msg, int32_t timestamp) const;
 
   public:
     
-    SUBSCRIBER(string address, int port);
+    Subscriber(std::string address, int port);
 
     /**
-     * @brief Default destructor for class SUBSCRIBER
+     * @brief Default destructor for class Subscriber
      * 
      */
-    ~SUBSCRIBER();
+    ~Subscriber();
 
 };

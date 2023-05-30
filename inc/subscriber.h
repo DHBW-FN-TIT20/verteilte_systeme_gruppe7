@@ -11,9 +11,12 @@
  * Include Header Files
  *************************************************************************************************/
 /* C++ Libs */
+#include <iostream>
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <chrono>
+#include <iomanip>
 
 /* Own Libs / datatypes */
 #include "topic_status_type.h"
@@ -27,7 +30,7 @@
  *************************************************************************************************/
 
 class Subscriber {
-  private:
+  protected:
     /**
      * @brief Register subscriber to the topic. If it doesn't exist, it will be created.
      * 
@@ -58,13 +61,6 @@ class Subscriber {
     bool publishTopic(std::string topicName, std::string &msg) const;
 
     /**
-     * @brief Request list of available topics.
-     * 
-     * @return vector<string>* Pointer to list of topics
-     */
-    std::vector<std::string>* listTopics(void) const;
-
-    /**
      * @brief Get the topic status object
      * 
      * @param topicName Topic name
@@ -79,7 +75,7 @@ class Subscriber {
      * @param msg Message
      * @param timestamp timestamp of latest update
      */
-    void updateTopic(std::string topicName, std::string &msg, int32_t timestamp) const;
+    void updateTopic(std::string topicName, std::string &msg, std::time_t timestamp) const;
 
   public:
     

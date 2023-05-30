@@ -14,6 +14,7 @@
  *************************************************************************************************/
 #include <map>
 #include <string>
+#include <ctime>
 #include "action_enum.h"
 
 
@@ -23,5 +24,5 @@
 typedef struct {
   ACTION_ENUM                             Action_t;
   std::map<std::string, std::string>      ParameterList;
-  int32_t                                 Timestamp;
+  std::time_t                             Timestamp;
 } T_Request; /*!< type definition for request for communication between publisher/subscriber and broker */

@@ -65,7 +65,6 @@ void TEST_updateTopic(void) {
   testUpdateTopic.updateTopic(tempTopicName, tempMsg, tempTimestamp);
   std::cout.rdbuf(oldCoutBuffer);
   std::string output = buffer.str();
-  std::cout << output << std::endl;
   assert(output == "30.05.2023 08:28:35: topic name: >>topic msg<<\n");
 }
 

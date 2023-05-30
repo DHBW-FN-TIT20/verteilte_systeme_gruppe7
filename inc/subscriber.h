@@ -79,20 +79,13 @@ class Subscriber {
     void updateTopic(std::string topicName, std::string &msg, std::time_t timestamp) const;
 
     /**
-     * @brief Get the current timestamp
-     * 
-     * @return std::time_t timestamp
-     */
-    std::time_t getTimestamp(void) const;
-
-    /**
      * @brief Send a request to the broker via TCP
      * 
      * @param request Request to be sent to the broker
      * @return int 0: successfully sent
      *            >0: error
      */
-    int sendRequest(T_Request request) const;
+    std::string sendRequest(RequestType request) const;
 
   public:
     

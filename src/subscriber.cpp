@@ -17,11 +17,10 @@
  *************************************************************************************************/
 
 /* private/protected member functions */
-ACTION_STATUS_ENUM Subscriber::unsubscribeTopic([[maybe_unused]]std::string topicName) const {
-  T_Request requestUnsubscribeTopic = {
+void Subscriber::unsubscribeTopic([[maybe_unused]]std::string topicName) const {
+  RequestType requestUnsubscribeTopic = {
     ACTION_ENUM::UNSUBSCRIBE_TOPIC,
-    {{"topicName", topicName}},
-    getTimestamp()
+    {{"topicName", topicName}}
   };
   
   if(0U == sendRequest(requestUnsubscribeTopic)) {
@@ -52,10 +51,6 @@ void Subscriber::updateTopic(std::string topicName, std::string &msg, std::time_
 
   /* print topic message */
   std::cout << ">>" << msg << "<<" << std::endl;
-}
-
-std::time_t Subscriber::getTimestamp(void) const {
-  return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 }
 
 /* public member functions */

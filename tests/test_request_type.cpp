@@ -26,7 +26,7 @@ void TestRequestType(void) {
   assert(testSetTimestampManually.mTimestamp == static_cast<std::time_t>(1234567890));
 
   RequestType testDefaultTimestamp(ACTION_ENUM::SUBSCRIBE_TOPIC, {{"param1", "value1"}, {"param2", "value2"}});
-  std::time_t testTimestamp = testDefaultTimestamp.getTimestamp();
+  std::time_t testTimestamp = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   assert(testDefaultTimestamp.mAction == ACTION_ENUM::SUBSCRIBE_TOPIC);
   assert(testDefaultTimestamp.mParameterList == tempParameterList);
   assert(testDefaultTimestamp.mTimestamp == testTimestamp);

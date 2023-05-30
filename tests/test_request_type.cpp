@@ -35,6 +35,6 @@ void TestRequestType(void) {
 int main() {
   TestRequestType();
 
-  std::cout << "All tests for class Request passed." << std::endl;
+  std::cout << "All tests for class RequestType passed." << std::endl;
   return 0;
 }

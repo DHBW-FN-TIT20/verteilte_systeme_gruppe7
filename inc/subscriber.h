@@ -16,6 +16,7 @@
 #include <vector>
 #include <cstdint>
 #include <chrono>
+#include <ctime>
 #include <iomanip>
 
 /* Own Libs / datatypes */

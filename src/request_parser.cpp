@@ -13,23 +13,23 @@
 #include "request_parser.h"
 #include "nlohmann/json.hpp"
 
-std::string RequestParser::encode(T_Request request) const {
+std::string RequestParser::encode(RequestType request) const {
   nlohmann::json jsonRequest = {
-    {"Action_t", static_cast<int>(request.Action_t)},
-    {"ParameterList", request.ParameterList},
-    {"Timestamp", request.Timestamp}
+    {"mAction", static_cast<int>(request.mAction)},
+    {"mParameterList", request.mParameterList},
+    {"mTimestamp", request.mTimestamp}
   };
 
   return jsonRequest.dump();
 }
 
-T_Request RequestParser::decode(std::string requestString) const {
+RequestType RequestParser::decode(std::string requestString) const {
   nlohmann::json jsonRequest = nlohmann::json::parse(requestString);
   
-  T_Request request;
-  request.Action_t = static_cast<ACTION_ENUM::Action>(jsonRequest["Action_t"]);
-  request.ParameterList = jsonRequest["ParameterList"];
-  request.Timestamp = jsonRequest["Timestamp"];
+  RequestType request;
+  request.mAction = static_cast<ACTION_ENUM::Action>(jsonRequest["mAction"]);
+  request.mParameterList = jsonRequest["mParameterList"];
+  request.mTimestamp = jsonRequest["mTimestamp"];
 
   return request;
 }

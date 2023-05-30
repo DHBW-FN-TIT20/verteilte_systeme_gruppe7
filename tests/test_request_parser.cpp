@@ -11,7 +11,7 @@
  * Include Header Files
  *************************************************************************************************/
 #include "request_parser.cpp"
-#include "T_Request.h"
+#include "request_type.h"
 #include <iostream>
 #include <cassert>
 
@@ -20,27 +20,27 @@
  *************************************************************************************************/
 void TestEncode() {
   RequestParser tempParser;
-  T_Request tempRequest = {
+  RequestType tempRequest = {
     ACTION_ENUM::SUBSCRIBE_TOPIC,
     {{"topicName", "Topic1"}},
     12345678
   };
-  assert(tempParser.encode(tempRequest) == R"({"Action_t":0,"ParameterList":{"topicName":"Topic1"},"Timestamp":12345678})");
+  assert(tempParser.encode(tempRequest) == R"({"mAction":0,"mParameterList":{"topicName":"Topic1"},"mTimestamp":12345678})");
 }
 
 void TestDecode() {
   RequestParser tempParser;
-  T_Request tempExpectedRequest = {
+  RequestType tempExpectedRequest = {
     ACTION_ENUM::SUBSCRIBE_TOPIC,
     {{"topicName", "Topic1"}},
     12345678
   };
-  std::string tempJsonString = R"({"Action_t":0,"ParameterList":{"topicName":"Topic1"},"Timestamp":12345678})";
+  std::string tempJsonString = R"({"mAction":0,"mParameterList":{"topicName":"Topic1"},"mTimestamp":12345678})";
   
-  T_Request resultRequest = tempParser.decode(tempJsonString);
-  assert(resultRequest.Action_t == tempExpectedRequest.Action_t);
-  assert(resultRequest.Timestamp == tempExpectedRequest.Timestamp); 
-  assert(resultRequest.ParameterList == tempExpectedRequest.ParameterList);
+  RequestType resultRequest = tempParser.decode(tempJsonString);
+  assert(resultRequest.mAction == tempExpectedRequest.mAction);
+  assert(resultRequest.mTimestamp == tempExpectedRequest.mTimestamp); 
+  assert(resultRequest.mParameterList == tempExpectedRequest.mParameterList);
 }
 
 int main() {

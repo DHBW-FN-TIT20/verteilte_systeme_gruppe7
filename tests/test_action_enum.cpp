@@ -18,7 +18,7 @@
  * Unit tests
  *************************************************************************************************/
 
-void TEST_toString() {
+void TestToString() {
   ACTION_ENUM testSubscribeTopic = ACTION_ENUM::SUBSCRIBE_TOPIC;
   assert(testSubscribeTopic.toString() == "SUBSCRIBE_TOPIC");
 
@@ -41,15 +41,15 @@ void TEST_toString() {
   assert(testError.toString() == "Error");
 }
 
-void TEST_conversionOperator() {
+void TestConversionOperator() {
   ACTION_ENUM action = ACTION_ENUM::SUBSCRIBE_TOPIC;
   action = ACTION_ENUM::UNSUBSCRIBE_TOPIC;
   assert(action == ACTION_ENUM::UNSUBSCRIBE_TOPIC);
 }
 
 int main() {
-  TEST_toString();
-  TEST_conversionOperator();
+  TestToString();
+  TestConversionOperator();
 
   std::cout << "All tests for class ACTION_ENUM passed" << std::endl;
   return 0;

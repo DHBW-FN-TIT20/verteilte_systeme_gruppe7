@@ -22,6 +22,11 @@
  * Public - typedefs / structs / enums
  *************************************************************************************************/
 class RequestType {
+  private:
+    std::time_t getTimestamp(void) {
+      return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    }
+    
   public:
     ACTION_ENUM                             mAction;
     std::map<std::string, std::string>      mParameterList;
@@ -30,8 +35,4 @@ class RequestType {
     RequestType() = default;
     RequestType(ACTION_ENUM action, std::map<std::string, std::string> parameterList, std::time_t timestamp) : mAction(action), mParameterList(parameterList), mTimestamp(timestamp) {}
     RequestType(ACTION_ENUM action, std::map<std::string, std::string> parameterList) : mAction(action), mParameterList(parameterList), mTimestamp(getTimestamp()) {}
-
-    std::time_t getTimestamp(void) {
-      return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    }
 };

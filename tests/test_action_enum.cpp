@@ -41,38 +41,6 @@ void TEST_toString() {
   assert(testError.toString() == "Error");
 }
 
-void TEST_fromString() {
-  std::string tempStringSubscribeTopic = "SUBSCRIBE_TOPIC";
-  ACTION_ENUM testSubscribeTopic;
-  testSubscribeTopic.fromString(tempStringSubscribeTopic);
-  assert(testSubscribeTopic == 0U);
-
-  std::string tempStringUnsubscribeTopic = "UNSUBSCRIBE_TOPIC";
-  ACTION_ENUM testUnsubscribeTopic;
-  testUnsubscribeTopic.fromString(tempStringUnsubscribeTopic);
-  assert(testUnsubscribeTopic == 1U);
-
-  std::string tempStringPublishTopic = "PUBLISH_TOPIC";
-  ACTION_ENUM testPublishTopic;
-  testPublishTopic.fromString(tempStringPublishTopic);
-  assert(testPublishTopic == 2U);
-
-  std::string tempStringListTopics = "LIST_TOPICS";
-  ACTION_ENUM testListTopics;
-  testListTopics.fromString(tempStringListTopics);
-  assert(testListTopics == 3U);
-
-  std::string tempStringGetTopicStatus = "GET_TOPIC_STATUS";
-  ACTION_ENUM testGetTopicStatus;
-  testGetTopicStatus.fromString(tempStringGetTopicStatus);
-  assert(testGetTopicStatus == 4U);
-
-  std::string tempStringUpdateTopic = "UPDATE_TOPIC";
-  ACTION_ENUM testUpdateTopic;
-  testUpdateTopic.fromString(tempStringUpdateTopic);
-  assert(testUpdateTopic == 5U);
-}
-
 void TEST_conversionOperator() {
   ACTION_ENUM action = ACTION_ENUM::SUBSCRIBE_TOPIC;
   action = ACTION_ENUM::UNSUBSCRIBE_TOPIC;
@@ -81,7 +49,6 @@ void TEST_conversionOperator() {
 
 int main() {
   TEST_toString();
-  TEST_fromString();
   TEST_conversionOperator();
 
   std::cout << "All tests for class ACTION_ENUM passed" << std::endl;

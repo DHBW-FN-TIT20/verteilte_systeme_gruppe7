@@ -53,15 +53,6 @@ class ACTION_ENUM {
       }
     }
 
-    void fromString(std::string valueString) {
-      if(valueString=="SUBSCRIBE_TOPIC") m_Action = SUBSCRIBE_TOPIC;
-      else if(valueString=="UNSUBSCRIBE_TOPIC") m_Action = UNSUBSCRIBE_TOPIC;
-      else if(valueString=="PUBLISH_TOPIC") m_Action = PUBLISH_TOPIC;
-      else if(valueString=="LIST_TOPICS") m_Action = LIST_TOPICS;
-      else if(valueString=="GET_TOPIC_STATUS") m_Action = GET_TOPIC_STATUS;
-      else if(valueString=="UPDATE_TOPIC") m_Action = UPDATE_TOPIC;
-    }
-
   private:
     Action m_Action;
 };

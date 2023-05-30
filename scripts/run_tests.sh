@@ -63,7 +63,8 @@ run_executables() {
     clear
     show_progress_bar "$completed_files" "$prev_executed_files"
 
-    printf "\n\rOutput of file: $file: %s " "$(./"$file" 2>&1)"
+    echo -e "\n"
+    "./$file" 2>&1
     if [ $? -ne 0 ]; then
       tput setaf 1
       echo -e "\nTest failed in file: $file"

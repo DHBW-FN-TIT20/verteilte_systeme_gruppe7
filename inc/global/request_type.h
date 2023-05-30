@@ -21,8 +21,18 @@
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-typedef struct {
-  ACTION_ENUM                             Action_t;
-  std::map<std::string, std::string>      ParameterList;
-  std::time_t                             Timestamp;
-} T_Request; /*!< type definition for request for communication between publisher/subscriber and broker */
+class RequestType {
+  private:
+    std::time_t getTimestamp(void) {
+      return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    }
+    
+  public:
+    ACTION_ENUM                             mAction;
+    std::map<std::string, std::string>      mParameterList;
+    std::time_t                             mTimestamp;
+    
+    RequestType() = default;
+    RequestType(ACTION_ENUM action, std::map<std::string, std::string> parameterList, std::time_t timestamp) : mAction(action), mParameterList(parameterList), mTimestamp(timestamp) {}
+    RequestType(ACTION_ENUM action, std::map<std::string, std::string> parameterList) : mAction(action), mParameterList(parameterList), mTimestamp(getTimestamp()) {}
+};

@@ -15,7 +15,7 @@
 #include <iostream>
 
 /* Own Libs */
-#include "T_Request.h"
+#include "request_type.h"
 
  /*************************************************************************************************
  * Public - Class prototype
@@ -28,11 +28,11 @@ class RequestParser {
      *
      * @param request The request which schould be encoded to a string
      */
-    std::string encode(T_Request request) const;
+    std::string encode(RequestType request) const;
     /**
      * @brief Decode the specified request string into an object of type T_Request
      *
      * @param requestString The string which should be decoded to an object
      */
-    T_Request decode(std::string requestString) const;
+    RequestType decode(std::string requestString) const;
 };

@@ -2,7 +2,7 @@
   *************************************************************************************************
   * @file    test_action_enum.cpp
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    24-May-2023
+  * @date    30-May-2023
   * @brief   Unit tests for class ACTION_ENUM
   *************************************************************************************************
   */

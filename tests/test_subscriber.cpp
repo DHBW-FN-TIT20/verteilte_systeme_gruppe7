@@ -30,10 +30,6 @@ class TestSubscriber : public Subscriber {
       return Subscriber::unsubscribeTopic(topicName);
     }
 
-    T_TopicStatus getTopicStatus(std::string topicName) const {
-      return Subscriber::getTopicStatus(topicName);
-    }
-
     void updateTopic(std::string topicName, std::string &msg, std::time_t timestamp) const {
       return Subscriber::updateTopic(topicName, msg, timestamp);
     }

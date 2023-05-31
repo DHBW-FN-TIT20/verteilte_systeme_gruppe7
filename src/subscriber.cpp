@@ -17,7 +17,7 @@
  *************************************************************************************************/
 
 /* private/protected member functions */
-void Subscriber::unsubscribeTopic([[maybe_unused]]std::string topicName) const {
+void Subscriber::unsubscribeTopic([[maybe_unused]]std::string topicName) {
   RequestType requestUnsubscribeTopic = {
     ACTION_ENUM::UNSUBSCRIBE_TOPIC,
     {{"topicName", topicName}}
@@ -30,11 +30,7 @@ void Subscriber::unsubscribeTopic([[maybe_unused]]std::string topicName) const {
   }
 }
 
-T_TopicStatus Subscriber::getTopicStatus([[maybe_unused]]std::string topicName) const {
-
-}
-
-void Subscriber::updateTopic(std::string topicName, std::string &msg, std::time_t timestamp) const {
+void Subscriber::updateTopic(std::string topicName, std::string &msg, std::time_t timestamp) {
   std::tm* timeinfo = std::localtime(&timestamp);
 
   /* print timestamp in format: DD.MM.YY HH:MM:SS: */
@@ -54,17 +50,34 @@ void Subscriber::updateTopic(std::string topicName, std::string &msg, std::time_
 }
 
 /* public member functions */
-Subscriber::Subscriber([[maybe_unused]]std::string address, [[maybe_unused]]int port) {
+Subscriber::Subscriber(std::string address, int port) : mAddress(address), mPort(port), mRequestParser(), mLogger(LOG_FILE_NAME) {
 
 }
 
 Subscriber::~Subscriber() {}
 
-ACTION_STATUS_ENUM Subscriber::subscribeTopic([[maybe_unused]]std::string topicName) const {
-  
+void Subscriber::subscribeTopic([[maybe_unused]]std::string topicName) {
+  std::string logEntry;
+  RequestType requestSubscribeTopic = {
+    ACTION_ENUM::SUBSCRIBE_TOPIC,
+    {{"topicName", topicName}}
+  };
+
+  std::string response = sendRequest(requestSubscribeTopic);
+
+  if(response == "") {
+    std::cout << response << std::endl;
+    logEntry = "Subscriber on port: " + std::to_string(mPort) + ": " + response;
+    mLogger.addLogEntry(logEntry);
+    exit(EXIT_FAILURE);
+  } else {
+    std::cout << "Successfully subscribed to topic " << topicName << std::endl;
+    logEntry = "Subscriber on port: " + std::to_string(mPort) + ": subscribed to topic >>" + topicName + "<<";
+    mLogger.addLogEntry(logEntry);
+  }
 }
 
-std::vector<std::string>* Subscriber::listTopics(void) const {
+void Subscriber::listTopics(void) {
 
 }
 

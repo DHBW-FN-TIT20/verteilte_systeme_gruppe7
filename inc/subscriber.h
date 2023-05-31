@@ -76,7 +76,7 @@ class Subscriber {
      * @param msg Message
      * @param timestamp timestamp of latest update
      */
-    void updateTopic(std::string topicName, std::string &msg, std::time_t timestamp) const;
+    void updateTopic(std::string topicName, std::string &msg, std::time_t timestamp);
 
     /**
      * @brief Send a request to the broker via TCP

@@ -22,12 +22,14 @@ void LogManager::close(void) {
 }
 
 std::string LogManager::getTimestampString(void) const {
-  std::time_t timestamp = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  auto now = std::chrono::system_clock::now();
+  auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+  std::time_t timestamp = std::chrono::system_clock::to_time_t(now);
   std::tm* timeinfo = std::localtime(&timestamp);
   std::ostringstream oss;
 
   oss << std::setfill('0') << std::setw(2) << timeinfo->tm_mday << "." << std::setw(2) << (timeinfo->tm_mon + 1U) << "." << (timeinfo->tm_year + 1900U) << " ";
-  oss << std::setw(2) << timeinfo->tm_hour << ":" << std::setw(2) << timeinfo->tm_min << ":" << std::setw(2) << timeinfo->tm_sec << ": ";
+  oss << std::setw(2) << timeinfo->tm_hour << ":" << std::setw(2) << timeinfo->tm_min << ":" << std::setw(2) << timeinfo->tm_sec << ":" << std::setw(3) << (milliseconds % 1000) << ": ";
   return oss.str();
 }
 

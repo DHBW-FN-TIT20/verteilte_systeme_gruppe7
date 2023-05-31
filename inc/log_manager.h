@@ -66,5 +66,4 @@ class LogManager {
      * @param logMessage Message to be added to log file
      */
     void addLogEntry(const std::string& logMessage);
-
 };

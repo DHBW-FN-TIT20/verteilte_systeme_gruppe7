@@ -88,6 +88,7 @@ void TestAddLogEntry(void) {
 
   std::string tempExpectedString = tempTimestampString + testLogMessage;
   assert(tempLog == tempExpectedString);
+  assert(0U == std::remove(TEMP_FILE_NAME.c_str()));
 }
 
 void TestGetTimestampString(void) {

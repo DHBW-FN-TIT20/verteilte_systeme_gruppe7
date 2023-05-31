@@ -30,7 +30,8 @@ class LogManager {
     std::ofstream mFile;
     std::mutex mLogFileMutex;
 
-    /* private member functions */
+  protected:
+    /* protected member functions */
     /**
      * @brief 
      * 

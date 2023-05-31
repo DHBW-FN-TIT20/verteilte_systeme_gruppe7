@@ -29,7 +29,7 @@ std::string LogManager::getTimestampString(void) const {
   std::ostringstream oss;
 
   oss << std::setfill('0') << std::setw(2) << timeinfo->tm_mday << "." << std::setw(2) << (timeinfo->tm_mon + 1U) << "." << (timeinfo->tm_year + 1900U) << " ";
-  oss << std::setw(2) << timeinfo->tm_hour << ":" << std::setw(2) << timeinfo->tm_min << ":" << std::setw(2) << timeinfo->tm_sec << " ";
+  oss << std::setw(2) << timeinfo->tm_hour << ":" << std::setw(2) << timeinfo->tm_min << ":" << std::setw(2) << timeinfo->tm_sec << ": ";
   return oss.str();
 }
 

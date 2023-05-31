@@ -26,12 +26,12 @@
  *************************************************************************************************/
 class TestSubscriber : public Subscriber {
   public:
-    ACTION_STATUS_ENUM unsubscribeTopic(std::string topicName) const {
-      return Subscriber::unsubscribeTopic(topicName);
+    void unsubscribeTopic(std::string topicName) {
+      Subscriber::unsubscribeTopic(topicName);
     }
 
-    void updateTopic(std::string topicName, std::string &msg, std::time_t timestamp) const {
-      return Subscriber::updateTopic(topicName, msg, timestamp);
+    void updateTopic(std::string topicName, std::string &msg, std::time_t timestamp) {
+      Subscriber::updateTopic(topicName, msg, timestamp);
     }
 
     TestSubscriber(std::string address, int port) : Subscriber::Subscriber(address, port) {}

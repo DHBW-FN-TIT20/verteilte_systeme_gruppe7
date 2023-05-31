@@ -1,11 +1,9 @@
-/**
-  *************************************************************************************************
+/**************************************************************************************************
   * @file    subscriber.cpp
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
   * @date    29-May-2023
   * @brief   Implementation for class Subscriber
-  *************************************************************************************************
-  */
+  ************************************************************************************************/
 
 /**************************************************************************************************
  * Include Header Files
@@ -17,16 +15,20 @@
  *************************************************************************************************/
 
 /* private/protected member functions */
-void Subscriber::unsubscribeTopic([[maybe_unused]]std::string topicName) {
-  RequestType requestUnsubscribeTopic = {
-    ACTION_ENUM::UNSUBSCRIBE_TOPIC,
-    {{"topicName", topicName}}
-  };
-  
-  if(0U == sendRequest(requestUnsubscribeTopic)) {
-    return ACTION_STATUS_ENUM::STATUS_OK;
+void Subscriber::unsubscribeTopic(std::string topicName) {
+  std::string logEntry;
+  const RequestType requestUnsubscribeTopic(ACTION_ENUM::UNSUBSCRIBE_TOPIC, {{"topicName", topicName}});
+  const std::string response = sendRequest(requestUnsubscribeTopic);
+
+  if(!(response == "")) {
+    std::cout << response << std::endl;
+    logEntry = "Subscriber on port: " + std::to_string(mPort) + ": unsubscribed from topic >>" + topicName + "<<";
+    mLogger.addLogEntry(logEntry);
+    exit(EXIT_FAILURE);
   } else {
-    return ACTION_STATUS_ENUM::INTERNAL_ERROR;
+    std::cout << "Successfully unsubscribed from topic >>" << topicName << "<<" << std::endl;
+    logEntry = "Subscriber on port: " + std::to_string(mPort) + ": unsubscribed from topic >>" + topicName + "<<";
+    mLogger.addLogEntry(logEntry);
   }
 }
 
@@ -49,21 +51,20 @@ void Subscriber::updateTopic(std::string topicName, std::string &msg, std::time_
   std::cout << ">>" << msg << "<<" << std::endl;
 }
 
-/* public member functions */
-Subscriber::Subscriber(std::string address, int port) : mAddress(address), mPort(port), mRequestParser(), mLogger(LOG_FILE_NAME) {
-
+std::string Subscriber::sendRequest(const RequestType& request) const {
+  return "";
 }
+
+/* public member functions */
+Subscriber::Subscriber(std::string address, int port) : mAddress(address), mPort(port), mRequestParser(), mLogger(LOG_FILE_NAME) {}
 
 Subscriber::~Subscriber() {}
 
-void Subscriber::subscribeTopic([[maybe_unused]]std::string topicName) {
+void Subscriber::subscribeTopic(std::string topicName) {
   std::string logEntry;
-  RequestType requestSubscribeTopic = {
-    ACTION_ENUM::SUBSCRIBE_TOPIC,
-    {{"topicName", topicName}}
-  };
+  const RequestType requestSubscribeTopic(ACTION_ENUM::SUBSCRIBE_TOPIC, {{"topicName", topicName}});
 
-  std::string response = sendRequest(requestSubscribeTopic);
+  const std::string response = sendRequest(requestSubscribeTopic);
 
   if(response == "") {
     std::cout << response << std::endl;
@@ -71,7 +72,7 @@ void Subscriber::subscribeTopic([[maybe_unused]]std::string topicName) {
     mLogger.addLogEntry(logEntry);
     exit(EXIT_FAILURE);
   } else {
-    std::cout << "Successfully subscribed to topic " << topicName << std::endl;
+    std::cout << "Successfully subscribed to topic >>" << topicName << "<<" << std::endl;
     logEntry = "Subscriber on port: " + std::to_string(mPort) + ": subscribed to topic >>" + topicName + "<<";
     mLogger.addLogEntry(logEntry);
   }
@@ -82,5 +83,5 @@ void Subscriber::listTopics(void) {
 }
 
 int Subscriber::messageHandler(void) {
-  
+  return 0U;
 }

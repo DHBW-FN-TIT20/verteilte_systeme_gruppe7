@@ -14,11 +14,11 @@
 
 using namespace std;
 
-string PUBLISHER::sendRequest(const RequestType &request) const {
+string Publisher::sendRequest(const RequestType &request) const {
   return "";
 }
 
-void PUBLISHER::publishTopic(const string topicName, const string &message) const {
+void Publisher::publishTopic(const string topicName, const string &message) const {
   // create message object
   map<string, string> requestParameters;
   requestParameters.insert({"message", message});

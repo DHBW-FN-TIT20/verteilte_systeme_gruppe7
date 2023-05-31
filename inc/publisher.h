@@ -23,7 +23,7 @@ using std::string;
  * Public - Class prototype
  *************************************************************************************************/
 
-class PUBLISHER {
+class Publisher {
   private:
     /**
      * @brief Send specified request to the broker

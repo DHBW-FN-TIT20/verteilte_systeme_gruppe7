@@ -15,7 +15,7 @@
  * Unit tests
  *************************************************************************************************/
 void TestPublishTopic() {
-  PUBLISHER tempPublisher;
+  Publisher tempPublisher;
   const string tempTopicName = "test-topic-name";
   const string tempMessage = "This is a test message";
 
@@ -25,6 +25,6 @@ void TestPublishTopic() {
 int main() {
   TestPublishTopic();
 
-  std::cout << "All tests for class PUBLISHER passed" << std::endl;
+  std::cout << "All tests for class Publisher passed" << std::endl;
   return 0;
 }

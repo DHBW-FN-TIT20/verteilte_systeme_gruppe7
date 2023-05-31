@@ -2,7 +2,7 @@
  *************************************************************************************************
  * @file    publisher.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    26-May-2023
+ * @date    31-May-2023
  * @brief   Implements the publisher file 
  *************************************************************************************************
  */
@@ -10,11 +10,11 @@
  /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "../inc/publisher.h"
+#include "publisher.h"
 
 using namespace std;
 
-string PUBLISHER::sendRequest(const T_Request &request) const {
+string PUBLISHER::sendRequest(const RequestType &request) const {
   return "";
 }
 
@@ -23,7 +23,7 @@ void PUBLISHER::publishTopic(const string topicName, const string &message) cons
   map<string, string> requestParameters;
   requestParameters.insert({"message", message});
 
-  const T_Request request = {
+  const RequestType request = {
     ACTION_ENUM::GET_TOPIC_STATUS,
     requestParameters,
     12345678 // dummy timestamp

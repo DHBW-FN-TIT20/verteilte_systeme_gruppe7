@@ -23,6 +23,7 @@
 #include "topic_status_type.h"
 
 
+
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
@@ -93,7 +94,7 @@ class Subscriber {
      * @return int 0: successfully sent
      *            >0: error
      */
-    std::string sendRequest(RequestType request) const;
+    std::string sendRequest(const RequestType& request) const;
 
   public:
     

@@ -59,17 +59,10 @@ void TestConstructor(void) {
 
 void TestAddLogEntry(void) {
   std::string testLogMessage = "Test log message";
-  std::time_t tempTimestamp;
-  std::string tempTimestampString;
+  std::regex tempLogPattern(R"(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2}:\d{3}: Test log message)");
   try {
     LogManager testAddLogEntry(TEMP_FILE_NAME);
     testAddLogEntry.addLogEntry(testLogMessage);
-    tempTimestamp = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::tm* timeinfo = std::localtime(&tempTimestamp);
-    std::ostringstream oss;
-    oss << std::setfill('0') << std::setw(2) << timeinfo->tm_mday << "." << std::setw(2) << (timeinfo->tm_mon + 1U) << "." << (timeinfo->tm_year + 1900U) << " ";
-    oss << std::setw(2) << timeinfo->tm_hour << ":" << std::setw(2) << timeinfo->tm_min << ":" << std::setw(2) << timeinfo->tm_sec << ": ";
-    tempTimestampString = oss.str();
   } catch(...) {
     assert(false && "Unexpected exception occcurred");
   }
@@ -84,15 +77,14 @@ void TestAddLogEntry(void) {
     readFile.close();
   }
 
-  std::string tempExpectedString = tempTimestampString + testLogMessage;
-  assert(tempLog == tempExpectedString);
+  assert(std::regex_match(tempLog, tempLogPattern));
   assert(0U == std::remove(TEMP_FILE_NAME.c_str()));
 }
 
 void TestGetTimestampString(void) {
   TestLogManager testGetTimestampString(TEMP_FILE_NAME);
   std::string testTimestamp = testGetTimestampString.getTimestampString();
-  std::regex tempTimestampPattern(R"(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2}: )");
+  std::regex tempTimestampPattern(R"(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2}:\d{3}: )");
   assert(std::regex_match(testTimestamp, tempTimestampPattern));
   assert(0U == std::remove(TEMP_FILE_NAME.c_str()));
 }

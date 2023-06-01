@@ -13,7 +13,7 @@
  * Include Header Files
  *************************************************************************************************/
 #include "T_SubscriberList.h"
-#include "action_status_enum.h"
+#include "action_status_type.h"
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
@@ -21,7 +21,7 @@
 typedef struct T_TopicStatusType {
   int32_t             Timestamp;
   T_SubscriberList    SubscriberList_t;
-  ACTION_STATUS_ENUM  ActionStatus;
+  ActionStatusType    ActionStatus;
 
   std::string toString() {
     std::string result = "Timestamp: " + std::to_string(Timestamp) + "; Subscriber: ";

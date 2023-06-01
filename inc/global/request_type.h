@@ -16,7 +16,7 @@
 #include <string>
 #include <chrono>
 #include <ctime>
-#include "action_enum.h"
+#include "action_type.h"
 
 
 /**************************************************************************************************
@@ -29,11 +29,11 @@ class RequestType {
     }
     
   public:
-    ACTION_ENUM                             mAction;
+    ActionType                              mAction;
     std::map<std::string, std::string>      mParameterList;
     std::time_t                             mTimestamp;
     
     RequestType() = default;
-    RequestType(ACTION_ENUM action, std::map<std::string, std::string> parameterList, std::time_t timestamp) : mAction(action), mParameterList(parameterList), mTimestamp(timestamp) {}
-    RequestType(ACTION_ENUM action, std::map<std::string, std::string> parameterList) : mAction(action), mParameterList(parameterList), mTimestamp(getTimestamp()) {}
+    RequestType(ActionType action, std::map<std::string, std::string> parameterList, std::time_t timestamp) : mAction(action), mParameterList(parameterList), mTimestamp(timestamp) {}
+    RequestType(ActionType action, std::map<std::string, std::string> parameterList) : mAction(action), mParameterList(parameterList), mTimestamp(getTimestamp()) {}
 };

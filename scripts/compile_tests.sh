@@ -16,8 +16,13 @@ lib_build_dir="../build/lib"
 test_lib_dir="../src"
 
 error_log="unit_test_error_log.txt"
-lib="standard_lib.a"
-test_lib="unit_test_lib.a"
+lib_std="lib_std.a"
+lib_std_ld="${lib_std#lib}"
+lib_std_ld="${lib_std_ld%.*}"
+
+test_lib="lib_unit_test.a"
+test_lib_ld="${test_lib#lib}"
+test_lib_ld="${test_lib_ld%.*}"
 
 # include paths
 include_paths=(
@@ -109,7 +114,7 @@ build_lib() {
     fi
   done
 
-  ar rcs "$lib_build_dir/$lib" "$lib_build_dir"/*.o >> "$error_log" 2>&1
+  ar rcs "$lib_build_dir/$lib_std" "$lib_build_dir"/*.o >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setab 0
     tput setaf 1
@@ -195,7 +200,7 @@ for file in "${files[@]}"; do
     exit 1
   fi
 
-  g++ "$build_dir/${file%.*}.o" "$lib_build_dir/$test_lib" ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" >> "$error_log" 2>&1
+  g++ "$build_dir/${file%.*}.o" -L${lib_build_dir} -l${test_lib_ld} -l${lib_std_ld} ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" -v >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setaf 1
     echo -e "\nError creating executable for file: $file"

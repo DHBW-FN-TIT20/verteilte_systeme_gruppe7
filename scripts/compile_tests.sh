@@ -11,7 +11,13 @@ fi
 # directories
 src_dir="../tests"
 build_dir="../build"
+lib_dir="../lib"
+lib_build_dir="../build/lib"
+test_lib_dir="../src"
+
 error_log="unit_test_error_log.txt"
+lib="standard_lib.a"
+test_lib="unit_test_lib.a"
 
 # include paths
 include_paths=(
@@ -19,6 +25,7 @@ include_paths=(
   "-I../inc/global"
   "-I../src"
   "-I../lib"
+  "-I../lib/biglib"
 )
 
 # compiler flags
@@ -32,6 +39,7 @@ cpp_flags=(
 
 # create build directory, if it doesn't exist
 mkdir -p "$build_dir"
+mkdir -p "$lib_build_dir"
 
 # global variables and arrays
 files=()            # array for sourcefiles
@@ -74,6 +82,85 @@ show_progress_bar() {
 
 }
 
+clean_up() {
+  local dir="$1"
+  rm "$dir"/*.o >> "$error_log" 2>&1
+}
+
+build_lib() {
+  lib_files=()    # array for library files
+
+  # get all files from lib folder and store them in the array
+  while IFS= read -r -d '' file; do
+    lib_files+=("${file#$lib_dir}")
+  done < <(find "$lib_dir" -type f -name "*.cpp" -print0)
+
+  # create or update library
+  for lib_file in "${lib_files[@]}"; do
+    g++ -c "$lib_dir/$lib_file" ${include_paths[@]} ${cpp_flags[@]} -o "$lib_build_dir/${lib_file%.*}.o" >> "$error_log" 2>&1
+    if [ $? -ne 0 ]; then
+      tput setab 0
+      tput setaf 1
+      echo -e "\nError compiling library file: $lib_file"
+      tput sgr0
+      print_error_log
+      clean_up $lib_build_dir
+      exit 1
+    fi
+  done
+
+  ar rcs "$lib_build_dir/$lib" "$lib_build_dir"/*.o >> "$error_log" 2>&1
+  if [ $? -ne 0 ]; then
+    tput setab 0
+    tput setaf 1
+    echo -e "\nError creating library"
+    tput sgr0
+    print_error_log
+    clean_up $lib_build_dir
+    exit 1
+  fi
+  
+  # clean up build folder
+  clean_up $lib_build_dir
+}
+
+build_test_lib() {
+  test_lib_files=()   # array for test library files
+
+  # get all files from test lib folder and store them in the array
+  while IFS= read -r -d '' file; do
+    test_lib_files+=("${file#$test_lib_dir}")
+  done < <(find "$test_lib_dir" -type f -name "*.cpp" -print0)
+
+  # create or update test library
+  for test_lib_file in "${test_lib_files[@]}"; do
+    g++ -c "$test_lib_dir/$test_lib_file" ${include_paths[@]} ${cpp_flags[@]} -o "$lib_build_dir${test_lib_file%.*}.o" >> "$error_log" 2>&1
+    if [ $? -ne 0 ]; then
+      tput setab 0
+      tput setaf 1
+      echo -e "\nError compiling unit test library file: $test_lib_file"
+      tput sgr0
+      print_error_log
+      clean_up $lib_build_dir
+      exit 1
+    fi
+  done
+
+  ar rcs "$lib_build_dir/$test_lib" "$lib_build_dir"/*.o >> "$error_log" 2>&1
+  if [ $? -ne 0 ]; then
+    tput setab 0
+    tput setaf 1
+    echo -e "\nError creating unit test library"
+    tput sgr0
+    print_error_log
+    clean_up $lib_build_dir
+    exit 1
+  fi
+
+  # clean up build folder
+  clean_up $lib_build_dir
+}
+
 print_error_log() {
   if [ -s "$error_log" ]; then
     echo -e "\n\n------------------------------"
@@ -85,11 +172,13 @@ print_error_log() {
 }
 
 remove_object_files() {
-  rm "$build_dir"/*.o >> "$error_log" 2>&1
+  clean_up $build_dir
 }
 
 # compile files
 clear
+build_lib
+build_test_lib
 
 for file in "${files[@]}"; do
   prev_compiled_files="$completed_files"
@@ -106,7 +195,7 @@ for file in "${files[@]}"; do
     exit 1
   fi
 
-  g++ "$build_dir/${file%.*}.o" ${cpp_flags[@]} -o "$build_dir/${file%.*}_executable" >> "$error_log" 2>&1
+  g++ "$build_dir/${file%.*}.o" "$lib_build_dir/$test_lib" ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setaf 1
     echo -e "\nError creating executable for file: $file"

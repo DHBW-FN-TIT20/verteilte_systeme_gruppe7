@@ -40,3 +40,6 @@ compile_commands.json
 # Script logs
 scripts/error_log.txt
 scripts/unit_test_error_log.txt
+
+# logs
+log.txt

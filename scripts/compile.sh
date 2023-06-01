@@ -55,31 +55,6 @@ while IFS= read -r -d '' file; do
   lib_files+=("${file#$lib_dir}")
 done < <(find "$lib_dir" -type f -name "*.cpp" -print0)
 
-# create or update library
-for lib_file in "${lib_files[@]}"; do
-  g++ -c "$lib_dir/$lib_file" ${include_paths[@]} ${cpp_flags[@]} -o "$lib_build_dir/${lib_file%.*}.o" >> "$error_log" 2>&1
-  if [ $? -ne 0 ]; then
-    tput setab 0
-    tput setaf 1
-    echo -e "\nError compiling library file: $lib_file"
-    tput sgr0
-    print_error_log
-    remove_object_files
-    exit 1
-  fi
-done
-
-ar rcs "$lib_build_dir/$lib" "$lib_build_dir"/*.o >> "$error_log" 2>&1
-if [ $? -ne 0 ]; then
-  tput setab 0
-  tput setaf 1
-  echo -e "\nError creating library"
-  tput sgr0
-  print_error_log
-  remove_object_files
-  exit 1
-fi
-
 while getopts ":pbsr" opt; do
   case $opt in
     p)
@@ -143,10 +118,38 @@ print_error_log() {
   fi
 }
 
-remove_object_files() {
-  rm "$build_dir"/*.o >> "$error_log" 2>&1
-  rm "$lib_build_dir"/*.o >> "$error_log" 2>&1
+clean_up() {
+  local dir="$1"
+  rm "$dir"/*.o >> "$error_log" 2>&1
 }
+
+# create or update library
+for lib_file in "${lib_files[@]}"; do
+  g++ -c "$lib_dir/$lib_file" ${include_paths[@]} ${cpp_flags[@]} -o "$lib_build_dir/${lib_file%.*}.o" >> "$error_log" 2>&1
+  if [ $? -ne 0 ]; then
+    tput setab 0
+    tput setaf 1
+    echo -e "\nError compiling library file: $lib_file"
+    tput sgr0
+    print_error_log
+    clean_up "$lib_build_dir"
+    exit 1
+  fi
+done
+
+ar rcs "$lib_build_dir/$lib" "$lib_build_dir"/*.o >> "$error_log" 2>&1
+if [ $? -ne 0 ]; then
+  tput setab 0
+  tput setaf 1
+  echo -e "\nError creating library"
+  tput sgr0
+  print_error_log
+  clean_up "$lib_build_dir"
+  exit 1
+
+  # clean up build folder
+  clean_up "$lib_build_dir"
+fi
 
 # compile files
 total_files=${#files[@]}
@@ -165,7 +168,7 @@ for file in "${files[@]}"; do
     echo -e "\nError compiling file: $file"
     tput sgr0
     print_error_log
-    remove_object_files
+    clean_up "$build_dir"
     exit 1
   fi
 
@@ -176,24 +179,27 @@ for file in "${files[@]}"; do
     echo -e "\nError creating executable for file: $file"
     tput sgr0
     print_error_log
-    remove_object_files
+    clean_up "$build_dir"
     exit 1
   fi
 
   compiled_files+=("$file")
 done
 
-tput setaf 10
+clean_up "$build_dir"
+
+tput setab 0
+tput setaf 2
 echo -e "\nCompilation successful"
 tput sgr0
 
 # display compiled files
+tput setaf 3
 echo -e "\nCompiled files:"
+tput sgr0
 for compiled_file in "${compiled_files[@]}"; do
   echo "- ${compiled_file#/}"
 done
-
-remove_object_files
 
 # delete error log file if there are no errors
 if [ ! -s "$error_log" ]; then

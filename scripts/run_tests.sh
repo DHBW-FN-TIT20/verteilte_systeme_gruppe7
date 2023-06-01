@@ -74,7 +74,8 @@ run_executables() {
     sleep 0.05
   done
   echo -e "\n\n----------------"
-  tput setaf 10
+  tput setab 0
+  tput setaf 2
   echo -e "Tests successful"
   tput sgr0
 }
@@ -82,7 +83,9 @@ run_executables() {
 run_executables "${files[@]}"
 
 # display copmiled files
+tput setaf 3
 echo -e "\nExecuted tests:"
+tput sgr0
 for file in "${files[@]}"; do
   output="${file#$build_dir}"
   output="${output#/}"

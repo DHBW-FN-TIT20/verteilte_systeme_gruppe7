@@ -213,12 +213,15 @@ for file in "${files[@]}"; do
   compiled_files+=("$file")
 done
 
-tput setaf 10
+tput setab 0
+tput setaf 2
 echo -e "\nCompilation successful"
 tput sgr0
 
 # display compiled files
+tput setaf 3
 echo -e "\nCompiled files:"
+tput sgr0
 for compiled_file in "${compiled_files[@]}"; do
   echo "- ${compiled_file#/}"
 done

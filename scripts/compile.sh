@@ -10,13 +10,18 @@ fi
 
 # directories
 src_dir="../src"
+lib_dir="../lib"
 build_dir="../build"
+lib_build_dir="../build/lib"
 error_log="error_log.txt"
+lib="standard_lib.a"
 
 # include paths
 include_paths=(
   "-I../inc"
   "-I../inc/global"
+  "-I../lib"
+  "-I../lib/biglib"
 )
 
 # compiler flags
@@ -28,46 +33,68 @@ cpp_flags=(
   "-O2"
 )
 
-# create build directory, if it doesn't exist
+# create build directories
 mkdir -p "$build_dir"
+mkdir -p "$lib_build_dir"
 
 # support colors
 tput init
 
-# array for sourcefiles
-files=()
-
-# array to store compiled files
-compiled_files=()
+# variables / arrays
+files=()              # array for sourcefiles
+lib_files=()          # array for library files
+compiled_files=()     # array to store compiled files
 
 # get all files from src folder and store them in the array
 while IFS= read -r -d '' file; do
   files+=("${file#$src_dir}")
 done < <(find "$src_dir" -type f -name "*.cpp" -print0)
 
+# get all files from lib folder and store them in the array
+while IFS= read -r -d '' file; do
+  lib_files+=("${file#$lib_dir}")
+done < <(find "$lib_dir" -type f -name "*.cpp" -print0)
+
+# create or update library
+for lib_file in "${lib_files[@]}"; do
+  g++ -c "$lib_dir/$lib_file" ${include_paths[@]} ${cpp_flags[@]} -o "$lib_build_dir/${lib_file%.*}.o" >> "$error_log" 2>&1
+  if [ $? -ne 0 ]; then
+    tput setab 0
+    tput setaf 1
+    echo -e "\nError compiling library file: $lib_file"
+    tput sgr0
+    print_error_log
+    remove_object_files
+    exit 1
+  fi
+done
+
+ar rcs "$lib_build_dir/$lib" "$lib_build_dir"/*.o >> "$error_log" 2>&1
+if [ $? -ne 0 ]; then
+  tput setab 0
+  tput setaf 1
+  echo -e "\nError creating library"
+  tput sgr0
+  print_error_log
+  remove_object_files
+  exit 1
+fi
+
 while getopts ":pbsr" opt; do
   case $opt in
     p)
       files=(
         "publisher.cpp"
-        "request_parser.cpp"
       )
       ;;
     b)
       files=(
         "broker.cpp"
-        "request_parser.cpp"
       )
       ;;
     s)
       files=(
         "subscriber.cpp"
-        "request_parser.cpp"
-      )
-      ;;
-    r)
-      files=(
-        "request_parser.cpp"
       )
       ;;
     \?)
@@ -118,6 +145,7 @@ print_error_log() {
 
 remove_object_files() {
   rm "$build_dir"/*.o >> "$error_log" 2>&1
+  rm "$lib_build_dir"/*.o >> "$error_log" 2>&1
 }
 
 # compile files
@@ -132,6 +160,7 @@ for file in "${files[@]}"; do
 
   g++ -c "$src_dir/$file" ${include_paths[@]} ${cpp_flags[@]} -o "$build_dir/${file%.*}.o" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
+    tput setab 0
     tput setaf 1
     echo -e "\nError compiling file: $file"
     tput sgr0
@@ -140,8 +169,9 @@ for file in "${files[@]}"; do
     exit 1
   fi
 
-  g++ "$build_dir/${file%.*}.o" ${cpp_flags[@]} -o "$build_dir/${file%.*}_executable" >> "$error_log" 2>&1
+  g++ "$build_dir/${file%.*}.o" "$lib_build_dir/$lib" ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
+    tput setab 0
     tput setaf 1
     echo -e "\nError creating executable for file: $file"
     tput sgr0

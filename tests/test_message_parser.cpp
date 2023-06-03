@@ -14,6 +14,7 @@
 #include "request_type.h"
 #include "message_parser.cpp"
 #include "action_status_enum.h"
+#include "T_TopicStatus.h"
 
 void TestEncodeObject() {
   MessageParser tempParser;
@@ -34,6 +35,14 @@ void TestEncodeObject() {
   std::string actionStatusResult = tempParser.encodeObject(actionStatus);
 
   assert(actionStatusResult == R"({"ActionStatus":1})");
+
+  // Test TopicStatus
+  T_TopicStatus topicStatus;
+  topicStatus.Timestamp = 12345678;
+  topicStatus.SubscriberList_t = {"subscriber-1", "subscriber-2"};
+
+  std::string topicStatusResult = tempParser.encodeObject(topicStatus);
+  assert(topicStatusResult == R"({"SubscriberList_t":["subscriber-1","subscriber-2"],"Timestamp":12345678})");
 }
 
 void TestDecodeObject() { 
@@ -58,6 +67,16 @@ void TestDecodeObject() {
 
   ACTION_STATUS_ENUM resultActionStatus = tempParser.decodeObject<ACTION_STATUS_ENUM>(tempActionStatusStirng);
   assert(resultActionStatus == ACTION_STATUS_ENUM::TOPIC_NON_EXISTENT);
+
+  // Test TopicStatus
+  T_TopicStatus tempExpectedTopicStatus;
+  tempExpectedTopicStatus.Timestamp = 12345678;
+  tempExpectedTopicStatus.SubscriberList_t = {"subscriber-1", "subscriber-2"};
+  std::string tempTopicStatusString = R"({"SubscriberList_t":["subscriber-1","subscriber-2"],"Timestamp":12345678})";
+
+  T_TopicStatus resultTopicStatus = tempParser.decodeObject<T_TopicStatus>(tempTopicStatusString);
+  assert(tempExpectedTopicStatus.Timestamp == resultTopicStatus.Timestamp);
+  assert(tempExpectedTopicStatus.SubscriberList_t == resultTopicStatus.SubscriberList_t);
 }
 
 int main() {

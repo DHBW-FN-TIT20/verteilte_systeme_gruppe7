@@ -2,7 +2,7 @@
   *************************************************************************************************
   * @file    T_Request.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    27-May-2023
+  * @date    03-June-2023
   * @brief   Type definition for request for communication between publisher/subscriber and broker 
   *************************************************************************************************
   */

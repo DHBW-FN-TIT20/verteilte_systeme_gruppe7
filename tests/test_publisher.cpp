@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    test_publisher.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    31-May-2023
+ * @date    03-June-2023
  * @brief   Unit tests for class PUBLISHER
  *************************************************************************************************/
 
@@ -15,32 +15,57 @@
 /*************************************************************************************************
  * Unit tests
  *************************************************************************************************/
-const string tempMessage = "This is a test message";
-const string tempTopicName = "test-topic-name";
-const map<string, string> expectedParameterList = {
-  {"topicName", tempTopicName},
-  {"message", tempMessage}
+const string tempPublishMessage = "This is a test message";
+const string tempPublishTopicName = "test-topic-name";
+const map<string, string> expectedPublishParameterList = {
+  {"topicName", tempPublishTopicName},
+  {"message", tempPublishMessage}
 };
 
 // mock Publisher "sendRequest" method
-class MockPublisher : public Publisher {
+class MockPublishTopicPublisher : public Publisher {
   private:
     string sendRequest(const RequestType &request) const override {
       // assert correct parameters
       assert(request.mAction == ACTION_ENUM::PUBLISH_TOPIC);
-      assert(request.mParameterList == expectedParameterList);
+      assert(request.mParameterList == expectedPublishParameterList);
       assert(request.mTimestamp == std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
       return "{MockResponse}";
     }
 };
 
 void TestPublishTopic() { 
-  MockPublisher tempPublisher; 
-  tempPublisher.publishTopic(tempTopicName, tempMessage);
+  MockPublishTopicPublisher tempPublisher; 
+  tempPublisher.publishTopic(tempPublishTopicName, tempPublishMessage);
+}
+
+// test getTopicStatus
+const string tempGetTopicTopicName = "test-topic-name";
+const map<string, string> expectedGetTopicParameterList = {
+  {"topicName", tempGetTopicTopicName},
+};
+
+// mock Publisher "sendRequest" method
+class MockGetTopicPublisher : public Publisher {
+  private:
+    string sendRequest(const RequestType &request) const override {
+      // assert correct parameters
+      assert(request.mAction == ACTION_ENUM::GET_TOPIC_STATUS);
+      assert(request.mParameterList == expectedGetTopicParameterList);
+      assert(request.mTimestamp == std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
+      return "{MockResponse}";
+    }
+};
+
+void TestGetTopicStatus() {
+  const string tempTopicName = "test-topic-name";
+  MockGetTopicPublisher tempPublisher;
+  tempPublisher.getTopicStatus(tempTopicName);
 }
 
 int main() {
   TestPublishTopic();
+  TestGetTopicStatus();
 
   std::cout << "All tests for class Publisher passed" << std::endl;
   return 0;

@@ -40,7 +40,7 @@ class Publisher {
      * @return true Topic updated successfully
      * @return false Error: Topic doesn't exist / invalid parameters
      */
-    bool publishTopic(const string topicName, const string &msg) const;
+    bool publishTopic(const string topicName, const string &message) const;
 
     /**
      * @brief Get the topic status object

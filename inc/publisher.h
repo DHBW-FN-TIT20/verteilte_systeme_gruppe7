@@ -24,13 +24,13 @@ using std::string;
  *************************************************************************************************/
 
 class Publisher {
-  private:
+  protected:
     /**
      * @brief Send specified request to the broker
      *
      * @param request The request which should be send to the broker
      */
-    string sendRequest(const RequestType &request) const;
+    virtual string sendRequest(const RequestType &request) const;
   public:
     /**
      * @brief Publish new information on a topic

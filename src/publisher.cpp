@@ -9,7 +9,6 @@
  * Include Header Files
  *************************************************************************************************/
 #include "publisher.h"
-
 using namespace std;
 
 string Publisher::sendRequest(const RequestType &request) const {
@@ -18,18 +17,13 @@ string Publisher::sendRequest(const RequestType &request) const {
 
 void Publisher::publishTopic(const string topicName, const string &message) const {
   // create message object
-  map<string, string> requestParameters;
-  requestParameters.insert({"message", message});
-
-  const RequestType request = {
-    ACTION_ENUM::GET_TOPIC_STATUS,
-    requestParameters,
-    12345678 // dummy timestamp
+  map<string, string> requestParameters = {
+    {"topicName", topicName},
+    {"message", message}
   };
+
+  const RequestType request = RequestType(ACTION_ENUM::PUBLISH_TOPIC, requestParameters);
 
   // send request
   const string responeMessage = sendRequest(request);
-
-  // parse response
-  // (parse string to action_status_enum)
 }

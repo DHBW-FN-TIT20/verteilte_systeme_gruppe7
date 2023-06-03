@@ -13,6 +13,7 @@
 #include <string>
 #include "request_type.h"
 #include "message_parser.cpp"
+#include "action_status_enum.h"
 
 void TestEncodeObject() {
   MessageParser tempParser;
@@ -26,22 +27,37 @@ void TestEncodeObject() {
   std::string result = tempParser.encodeObject(request);
   
   assert(result == R"({"mAction":2,"mParameterList":{"TestParameter":"TestParameterValue"},"mTimestamp":12345678})");
+
+  // Test ActionStatus
+  ACTION_STATUS_ENUM actionStatus = ACTION_STATUS_ENUM::TOPIC_NON_EXISTENT;
+  
+  std::string actionStatusResult = tempParser.encodeObject(actionStatus);
+
+  assert(actionStatusResult == R"({"ActionStatus":1})");
 }
 
 void TestDecodeObject() { 
   MessageParser tempParser;
 
-  RequestType tempExpectedRequest = {
+  // Test RequestType
+  RequestType tempExpectedRequestType = {
     ACTION_ENUM::PUBLISH_TOPIC,
     {{"TestParameter", "TestParameterValue"}},
     12345678
   };
-  std::string tempObjectString = R"({"mAction":2,"mParameterList":{"TestParameter":"TestParameterValue"},"mTimestamp":12345678})";
+  std::string tempRequestTypeString = R"({"mAction":2,"mParameterList":{"TestParameter":"TestParameterValue"},"mTimestamp":12345678})";
 
-  RequestType result = tempParser.decodeObject<RequestType>(tempObjectString);
-  assert(result.mAction == tempExpectedRequest.mAction);
-  assert(result.mParameterList == tempExpectedRequest.mParameterList);
-  assert(result.mTimestamp == tempExpectedRequest.mTimestamp);
+  RequestType resultResultType = tempParser.decodeObject<RequestType>(tempRequestTypeString);
+  assert(resultResultType.mAction == tempExpectedRequestType.mAction);
+  assert(resultResultType.mParameterList == tempExpectedRequestType.mParameterList);
+  assert(resultResultType.mTimestamp == tempExpectedRequestType.mTimestamp);
+
+  // Test ActionStatus
+  ACTION_STATUS_ENUM tempExpectedActionStatus = ACTION_STATUS_ENUM::TOPIC_NON_EXISTENT;
+  std::string tempActionStatusStirng = R"({"ActionStatus":1})";
+
+  ACTION_STATUS_ENUM resultActionStatus = tempParser.decodeObject<ACTION_STATUS_ENUM>(tempActionStatusStirng);
+  assert(resultActionStatus == ACTION_STATUS_ENUM::TOPIC_NON_EXISTENT);
 }
 
 int main() {

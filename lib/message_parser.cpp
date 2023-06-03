@@ -10,6 +10,7 @@
  *************************************************************************************************/
 #include "message_parser.h"
 #include "request_type.h"
+#include "action_status_enum.h"
 
 template <typename T>
 T MessageParser::decodeObject(const std::string& objectString) {
@@ -24,6 +25,7 @@ std::string MessageParser::encodeObject(const T& object) {
 }
 
 
+// RequestType
 void to_json(nlohmann::json& j, const RequestType& obj) {
     j = nlohmann::json{
       {"mAction", static_cast<int>(obj.mAction)},
@@ -36,4 +38,15 @@ void from_json(const nlohmann::json& j, RequestType& obj) {
     obj.mAction = static_cast<ACTION_ENUM::Action>(j["mAction"]);
     j.at("mParameterList").get_to(obj.mParameterList);
     j.at("mTimestamp").get_to(obj.mTimestamp);
+}
+
+// ACTION_STATUS_ENUM
+void to_json(nlohmann::json& j, const ACTION_STATUS_ENUM& obj) {
+  j = nlohmann::json{
+    {"ActionStatus", static_cast<int>(obj)}
+  };
+}
+
+void from_json(const nlohmann::json& j, ACTION_STATUS_ENUM& obj) {
+  obj = static_cast<ACTION_STATUS_ENUM::ActionStatus>(j["ActionStatus"]);
 }

@@ -1,16 +1,16 @@
 /**
   *************************************************************************************************
-  * @file    test_action_enum.cpp
+  * @file    test_action_type.cpp
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
   * @date    30-May-2023
-  * @brief   Unit tests for class ACTION_ENUM
+  * @brief   Unit tests for class ActionType
   *************************************************************************************************
   */
 
  /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "action_enum.h"
+#include "action_type.h"
 #include <iostream>
 #include <cassert>
 
@@ -19,39 +19,39 @@
  *************************************************************************************************/
 
 void TestToString() {
-  ACTION_ENUM testSubscribeTopic = ACTION_ENUM::SUBSCRIBE_TOPIC;
+  ActionType testSubscribeTopic = ActionType::SUBSCRIBE_TOPIC;
   assert(testSubscribeTopic.toString() == "SUBSCRIBE_TOPIC");
 
-  ACTION_ENUM testUnsubscribeTopic = ACTION_ENUM::UNSUBSCRIBE_TOPIC;
+  ActionType testUnsubscribeTopic = ActionType::UNSUBSCRIBE_TOPIC;
   assert(testUnsubscribeTopic.toString() == "UNSUBSCRIBE_TOPIC");
 
-  ACTION_ENUM testPublishTopic = ACTION_ENUM::PUBLISH_TOPIC;
+  ActionType testPublishTopic = ActionType::PUBLISH_TOPIC;
   assert(testPublishTopic.toString() == "PUBLISH_TOPIC");
 
-  ACTION_ENUM testListTopic = ACTION_ENUM::LIST_TOPICS;
+  ActionType testListTopic = ActionType::LIST_TOPICS;
   assert(testListTopic.toString() == "LIST_TOPICS");
 
-  ACTION_ENUM testGetTopicStatus = ACTION_ENUM::GET_TOPIC_STATUS;
+  ActionType testGetTopicStatus = ActionType::GET_TOPIC_STATUS;
   assert(testGetTopicStatus.toString() == "GET_TOPIC_STATUS");
 
-  ACTION_ENUM testUpdateTopic = ACTION_ENUM::UPDATE_TOPIC;
+  ActionType testUpdateTopic = ActionType::UPDATE_TOPIC;
   assert(testUpdateTopic.toString() == "UPDATE_TOPIC");
 
-  ACTION_ENUM testError = static_cast<ACTION_ENUM::Action>(10);
+  ActionType testError = static_cast<ActionType::Action>(10);
   assert(testError.toString() == "Error");
 }
 
 void TestConversionOperator() {
-  ACTION_ENUM action = ACTION_ENUM::SUBSCRIBE_TOPIC;
-  action = ACTION_ENUM::UNSUBSCRIBE_TOPIC;
-  assert(action == ACTION_ENUM::UNSUBSCRIBE_TOPIC);
+  ActionType action = ActionType::SUBSCRIBE_TOPIC;
+  action = ActionType::UNSUBSCRIBE_TOPIC;
+  assert(action == ActionType::UNSUBSCRIBE_TOPIC);
 }
 
 int main() {
   TestToString();
   TestConversionOperator();
 
-  std::cout << "All tests for class ACTION_ENUM passed" << std::endl;
+  std::cout << "All tests for class ActionType passed" << std::endl;
   return 0;
 }
 

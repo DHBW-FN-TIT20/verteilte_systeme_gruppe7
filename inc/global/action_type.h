@@ -2,7 +2,7 @@
   *************************************************************************************************
   * @file    action_enum.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    30-May-2023
+  * @date    01-June-2023
   * @brief   
   *************************************************************************************************
   */
@@ -17,7 +17,7 @@
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-class ACTION_ENUM {
+class ActionType {
   public:
     enum Action : uint8_t {
       SUBSCRIBE_TOPIC,
@@ -28,8 +28,8 @@ class ACTION_ENUM {
       UPDATE_TOPIC
     };
 
-    ACTION_ENUM() = default;
-    constexpr ACTION_ENUM(Action action) : m_Action(action) {}
+    ActionType() = default;
+    constexpr ActionType(Action action) : m_Action(action) {}
 
     constexpr operator Action() const {return m_Action;}    //enable switch(Action) use case
     explicit operator bool() const = delete;

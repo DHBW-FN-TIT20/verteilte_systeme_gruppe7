@@ -2,8 +2,8 @@
   *************************************************************************************************
   * @file    test_request_parser.cpp
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    29-May-2023
-  * @brief   Unit tests for class MESSAGE_PARSER
+  * @date    01-June-2023
+  * @brief   Unit tests for class RequestParser
   *************************************************************************************************
   */
 
@@ -21,7 +21,7 @@
 void TestEncode() {
   RequestParser tempParser;
   RequestType tempRequest = {
-    ACTION_ENUM::SUBSCRIBE_TOPIC,
+    ActionType::SUBSCRIBE_TOPIC,
     {{"topicName", "Topic1"}},
     12345678
   };
@@ -31,7 +31,7 @@ void TestEncode() {
 void TestDecode() {
   RequestParser tempParser;
   RequestType tempExpectedRequest = {
-    ACTION_ENUM::SUBSCRIBE_TOPIC,
+    ActionType::SUBSCRIBE_TOPIC,
     {{"topicName", "Topic1"}},
     12345678
   };

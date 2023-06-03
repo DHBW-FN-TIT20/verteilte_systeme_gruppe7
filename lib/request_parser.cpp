@@ -2,7 +2,7 @@
   *************************************************************************************************
   * @file    request_parser.cpp
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    29-May-2023
+  * @date    01-June-2023
   * @brief   Implementation for class RequestParser
   *************************************************************************************************
   */
@@ -27,7 +27,7 @@ RequestType RequestParser::decode(std::string requestString) const {
   nlohmann::json jsonRequest = nlohmann::json::parse(requestString);
   
   RequestType request;
-  request.mAction = static_cast<ACTION_ENUM::Action>(jsonRequest["mAction"]);
+  request.mAction = static_cast<ActionType::Action>(jsonRequest["mAction"]);
   request.mParameterList = jsonRequest["mParameterList"];
   request.mTimestamp = jsonRequest["mTimestamp"];
 

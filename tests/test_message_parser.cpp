@@ -12,7 +12,7 @@
 #include <map>
 #include <string>
 #include "request_type.h"
-#include "action_status_enum.h"
+#include "action_status_type.h"
 #include "T_TopicStatus.h"
 #include "message_parser.cpp"
 
@@ -23,14 +23,14 @@ void TestEncodeObject() {
   std::map<std::string, std::string> tempParamlist = {
     {"TestParameter", "TestParameterValue"}
   };
-  RequestType request = RequestType(ACTION_ENUM::PUBLISH_TOPIC, tempParamlist, 12345678);
+  RequestType request = RequestType(ActionType::PUBLISH_TOPIC, tempParamlist, 12345678);
 
   std::string result = tempParser.encodeObject(request);
   
   assert(result == R"({"mAction":2,"mParameterList":{"TestParameter":"TestParameterValue"},"mTimestamp":12345678})");
 
   // Test ActionStatus
-  ACTION_STATUS_ENUM tempActionStatus = ACTION_STATUS_ENUM::TOPIC_NON_EXISTENT;
+  ActionStatusType tempActionStatus = ActionStatusType::TOPIC_NON_EXISTENT;
   
   std::string actionStatusResult = tempParser.encodeObject(tempActionStatus);
 
@@ -59,7 +59,7 @@ void TestDecodeObject() {
 
   // Test RequestType
   RequestType tempExpectedRequestType = {
-    ACTION_ENUM::PUBLISH_TOPIC,
+    ActionType::PUBLISH_TOPIC,
     {{"TestParameter", "TestParameterValue"}},
     12345678
   };
@@ -71,11 +71,11 @@ void TestDecodeObject() {
   assert(resultResultType.mTimestamp == tempExpectedRequestType.mTimestamp);
 
   // Test ActionStatus
-  ACTION_STATUS_ENUM tempExpectedActionStatus = ACTION_STATUS_ENUM::TOPIC_NON_EXISTENT;
+  ActionStatusType tempExpectedActionStatus = ActionStatusType::TOPIC_NON_EXISTENT;
   std::string tempActionStatusStirng = R"({"ActionStatus":1})";
 
-  ACTION_STATUS_ENUM resultActionStatus = tempParser.decodeObject<ACTION_STATUS_ENUM>(tempActionStatusStirng);
-  assert(resultActionStatus == ACTION_STATUS_ENUM::TOPIC_NON_EXISTENT);
+  ActionStatusType resultActionStatus = tempParser.decodeObject<ActionStatusType>(tempActionStatusStirng);
+  assert(resultActionStatus == ActionStatusType::TOPIC_NON_EXISTENT);
 
   // Test TopicStatus
   T_TopicStatus tempExpectedTopicStatus;

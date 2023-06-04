@@ -10,7 +10,7 @@
  *************************************************************************************************/
 #include "message_parser.h"
 #include "request_type.h"
-#include "action_status_enum.h"
+#include "action_status_type.h"
 #include "T_TopicStatus.h"
 
 template <typename T>
@@ -36,20 +36,20 @@ void to_json(nlohmann::json& j, const RequestType& obj) {
 }
 
 void from_json(const nlohmann::json& j, RequestType& obj) {
-    obj.mAction = static_cast<ACTION_ENUM::Action>(j["mAction"]);
+    obj.mAction = static_cast<ActionType::Action>(j["mAction"]);
     j.at("mParameterList").get_to(obj.mParameterList);
     j.at("mTimestamp").get_to(obj.mTimestamp);
 }
 
 // ACTION_STATUS_ENUM
-void to_json(nlohmann::json& j, const ACTION_STATUS_ENUM& obj) {
+void to_json(nlohmann::json& j, const ActionStatusType& obj) {
   j = nlohmann::json{
     {"ActionStatus", static_cast<int>(obj)}
   };
 }
 
-void from_json(const nlohmann::json& j, ACTION_STATUS_ENUM& obj) {
-  obj = static_cast<ACTION_STATUS_ENUM::ActionStatus>(j["ActionStatus"]);
+void from_json(const nlohmann::json& j, ActionStatusType& obj) {
+  obj = static_cast<ActionStatusType::ActionStatus>(j["ActionStatus"]);
 }
 
 // TopicStatus

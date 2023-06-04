@@ -15,7 +15,9 @@ lib_dir="../lib"
 lib_build_dir="../build/lib"
 test_lib_dir="../src"
 
+# files
 error_log="unit_test_error_log.txt"
+
 lib_std="lib_std.a"
 lib_std_ld="${lib_std#lib}"
 lib_std_ld="${lib_std_ld%.*}"

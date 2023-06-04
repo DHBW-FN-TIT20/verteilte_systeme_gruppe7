@@ -43,6 +43,15 @@ void TestEncodeObject() {
 
   std::string topicStatusResult = tempParser.encodeObject(topicStatus);
   assert(topicStatusResult == R"({"SubscriberList_t":["subscriber-1","subscriber-2"],"Timestamp":12345678})");
+
+  // Test TopicStringList
+  std::vector<std::string> topicList = {
+    "topic-one", "topic-two"
+  };
+
+  std::string topicListResult = tempParser.encodeObject(topicList);
+
+  assert(topicListResult == R"(["topic-one","topic-two"])");
 }
 
 void TestDecodeObject() { 
@@ -77,6 +86,18 @@ void TestDecodeObject() {
   T_TopicStatus resultTopicStatus = tempParser.decodeObject<T_TopicStatus>(tempTopicStatusString);
   assert(tempExpectedTopicStatus.Timestamp == resultTopicStatus.Timestamp);
   assert(tempExpectedTopicStatus.SubscriberList_t == resultTopicStatus.SubscriberList_t);
+
+  // Test TopicStingList
+  std::vector<std::string> tempExpectedTopicStringList = {
+    "topic-one", "topic-two"
+  };
+  std::string tempTopicStringListString = R"(["topic-one", "topic-two"])";
+
+  std::vector<std::string> resultTopicStringList = tempParser.decodeObject<std::vector<std::string>>(tempTopicStringListString);
+  std::cout << tempParser.encodeObject(resultTopicStringList) << std::endl;
+  std::cout << tempParser.encodeObject(tempExpectedTopicStringList) << std::endl;
+
+  assert(resultTopicStringList == tempExpectedTopicStringList);
 }
 
 int main() {

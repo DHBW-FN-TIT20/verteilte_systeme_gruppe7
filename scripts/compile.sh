@@ -178,7 +178,7 @@ for file in "${files[@]}"; do
     exit 1
   fi
 
-  g++ "$build_dir/${file%.*}.o" -L${lib_build_dir} -l${lib_std_ld} ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" -v >> "$error_log" 2>&1
+  g++ "$build_dir/${file%.*}.o" -L${lib_build_dir} -l${lib_std_ld} ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setab 0
     tput setaf 1

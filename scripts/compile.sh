@@ -13,8 +13,13 @@ src_dir="../src"
 lib_dir="../lib"
 build_dir="../build"
 lib_build_dir="../build/lib"
+
+# files
 error_log="error_log.txt"
-lib="standard_lib.a"
+
+lib_std="lib_std.a"
+lib_std_ld="${lib_std#lib}"
+lib_std_ld="${lib_std_ld%.*}"
 
 # include paths
 include_paths=(
@@ -137,7 +142,7 @@ for lib_file in "${lib_files[@]}"; do
   fi
 done
 
-ar rcs "$lib_build_dir/$lib" "$lib_build_dir"/*.o >> "$error_log" 2>&1
+ar rcs "$lib_build_dir/$lib_std" "$lib_build_dir"/*.o >> "$error_log" 2>&1
 if [ $? -ne 0 ]; then
   tput setab 0
   tput setaf 1
@@ -146,10 +151,11 @@ if [ $? -ne 0 ]; then
   print_error_log
   clean_up "$lib_build_dir"
   exit 1
-
-  # clean up build folder
-  clean_up "$lib_build_dir"
 fi
+
+# clean up build folder
+clean_up "$lib_build_dir"
+
 
 # compile files
 total_files=${#files[@]}
@@ -172,7 +178,7 @@ for file in "${files[@]}"; do
     exit 1
   fi
 
-  g++ "$build_dir/${file%.*}.o" "$lib_build_dir/$lib" ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" >> "$error_log" 2>&1
+  g++ "$build_dir/${file%.*}.o" -L${lib_build_dir} -l${lib_std_ld} ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" -v >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setab 0
     tput setaf 1

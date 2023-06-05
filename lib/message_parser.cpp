@@ -1,9 +1,10 @@
 /**************************************************************************************************
  * @file    message_parser.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    03-June-2023
- * @brief   
- **************************************************************************************************/
+ * @date    05-June-2023
+ * @brief   This file contains the implementation for class MessageParser and function overloads
+ *          for converting own datatypes.
+ *************************************************************************************************/
 
 /**************************************************************************************************
  * Include Header Files
@@ -13,6 +14,10 @@
 #include "action_status_type.h"
 #include "T_TopicStatus.h"
 
+
+/**************************************************************************************************
+ * Class implementation
+ *************************************************************************************************/
 template <typename T>
 T MessageParser::decodeObject(const std::string& objectString) {
   nlohmann::json j = nlohmann::json::parse(objectString);
@@ -41,7 +46,7 @@ void from_json(const nlohmann::json& j, RequestType& obj) {
     j.at("mTimestamp").get_to(obj.mTimestamp);
 }
 
-// ACTION_STATUS_ENUM
+// ActionStatusType
 void to_json(nlohmann::json& j, const ActionStatusType& obj) {
   j = nlohmann::json{
     {"ActionStatus", static_cast<int>(obj)}

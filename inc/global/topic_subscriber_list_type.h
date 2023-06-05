@@ -1,8 +1,8 @@
 /**
   *************************************************************************************************
-  * @file    T_TopicList.h
+  * @file    topic_subscriber_list_type.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    24-May-2023
+  * @date    05-June-2023
   * @brief   
   *************************************************************************************************
   */
@@ -12,10 +12,11 @@
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include <vector>
-#include "T_Topic.h"
+#include <map>
+#include <string>
+#include "subscriber_list_type.h"
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-typedef std::vector<T_Topic>  T_TopicList;    /*!< type definition for list of topics */
+typedef std::map<std::string, T_SubscriberList>   T_TopicSubscriberList;    /*!< type definition for list of topics with all their respective subscribers */

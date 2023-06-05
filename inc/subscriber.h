@@ -15,7 +15,7 @@
 #include <vector>
 
 /* Own Libs / datatypes */
-#include "T_TopicStatus.h"
+#include "topic_status_type.h"
 
 using std::string;
 using std::vector;

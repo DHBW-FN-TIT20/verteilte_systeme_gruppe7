@@ -1,11 +1,9 @@
-/**
- *************************************************************************************************
+/**************************************************************************************************
  * @file    publisher.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
  * @date    05-June-2023
- * @brief   
- *************************************************************************************************
- */
+ * @brief   Prototype for class Publisher
+ **************************************************************************************************/
 
 /**************************************************************************************************
  * Include Header Files
@@ -16,8 +14,6 @@
 /* Own Libs / datatypes */
 #include "topic_status_type.h"
 #include "request_type.h"
-
-using std::string;
 
 /*************************************************************************************************
  * Public - Class prototype
@@ -30,24 +26,20 @@ class Publisher {
      *
      * @param request The request which should be send to the broker
      */
-    virtual string sendRequest(const RequestType &request) const;
+    virtual std::string sendRequest(const RequestType &request) const;
+
   public:
     /**
      * @brief Publish new information on a topic
      * 
-     * @param topic Topic name
-     * @param msg Message to publish
-     * @return true Topic updated successfully
-     * @return false Error: Topic doesn't exist / invalid parameters
+     * @param topicName Topic name where the message should be published to
+     * @param msg The message which should be published
      */
-    bool publishTopic(const string topicName, const string &message) const;
-
+    void publishTopic(const std::string topicName, const std::string &message) const;
     /**
-     * @brief Get the topic status object
-     * 
-     * @param topic Topic name
-     * @return TOPIC_STATUS Current status of the topic
+     * @brief Get info about the specified topic
+     *
+     * @param topicName Topic name for which information is requested
      */
-    T_TopicStatus getTopicStatus(const string topicName) const;
-
+    void getTopicStatus(const std::string topicName) const;
 };

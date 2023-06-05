@@ -17,19 +17,19 @@
 /* private/protected member functions */
 void Subscriber::unsubscribeTopic(std::string topicName) {
   std::string logEntry;
-  const RequestType requestUnsubscribeTopic(ACTION_ENUM::UNSUBSCRIBE_TOPIC, {{"topicName", topicName}});
-  const std::string response = sendRequest(requestUnsubscribeTopic);
+  const RequestType requestUnsubscribeTopic(ActionType::UNSUBSCRIBE_TOPIC, {{"topicName", topicName}});
+  //const std::string response = sendRequest(requestUnsubscribeTopic);
 
-  if(!(response == "")) {
-    std::cout << response << std::endl;
-    logEntry = "Subscriber on port: " + std::to_string(mPort) + ": unsubscribed from topic >>" + topicName + "<<";
-    mLogger.addLogEntry(logEntry);
-    exit(EXIT_FAILURE);
-  } else {
-    std::cout << "Successfully unsubscribed from topic >>" << topicName << "<<" << std::endl;
-    logEntry = "Subscriber on port: " + std::to_string(mPort) + ": unsubscribed from topic >>" + topicName + "<<";
-    mLogger.addLogEntry(logEntry);
-  }
+  //if(!(response == "")) {
+  //  std::cout << response << std::endl;
+  //  logEntry = "Subscriber on port: " + std::to_string(mPort) + ": unsubscribed from topic >>" + topicName + "<<";
+  //  mLogger.addLogEntry(logEntry);
+  //  exit(EXIT_FAILURE);
+  //} else {
+  //  std::cout << "Successfully unsubscribed from topic >>" << topicName << "<<" << std::endl;
+  //  logEntry = "Subscriber on port: " + std::to_string(mPort) + ": unsubscribed from topic >>" + topicName + "<<";
+  //  mLogger.addLogEntry(logEntry);
+  //}
 }
 
 void Subscriber::updateTopic(std::string topicName, std::string &msg, std::time_t timestamp) {
@@ -51,34 +51,37 @@ void Subscriber::updateTopic(std::string topicName, std::string &msg, std::time_
   std::cout << ">>" << msg << "<<" << std::endl;
 }
 
-std::string Subscriber::sendRequest(const RequestType& request) const {
-  return "";
-}
+//std::string Subscriber::sendRequest(const RequestType& request) const {
+//  return "";
+//}
 
 /* public member functions */
-Subscriber::Subscriber(std::string address, int port) : mAddress(address), mPort(port), mRequestParser(), mLogger(LOG_FILE_NAME) {}
+Subscriber::Subscriber(std::string address, int port) : mAddress(address), mPort(port), mMessageParser(), mLogger(LOG_FILE_NAME) {}
 
 Subscriber::~Subscriber() {}
 
 void Subscriber::subscribeTopic(std::string topicName) {
   std::string logEntry;
-  const RequestType requestSubscribeTopic(ACTION_ENUM::SUBSCRIBE_TOPIC, {{"topicName", topicName}});
+  const RequestType requestSubscribeTopic(ActionType::SUBSCRIBE_TOPIC, {{"topicName", topicName}});
 
-  const std::string response = sendRequest(requestSubscribeTopic);
+  //const std::string response = sendRequest(requestSubscribeTopic);
 
-  if(response == "") {
-    std::cout << response << std::endl;
-    logEntry = "Subscriber on port: " + std::to_string(mPort) + ": " + response;
-    mLogger.addLogEntry(logEntry);
-    exit(EXIT_FAILURE);
-  } else {
-    std::cout << "Successfully subscribed to topic >>" << topicName << "<<" << std::endl;
-    logEntry = "Subscriber on port: " + std::to_string(mPort) + ": subscribed to topic >>" + topicName + "<<";
-    mLogger.addLogEntry(logEntry);
-  }
+  //if(response == "") {
+  //  std::cout << response << std::endl;
+  //  logEntry = "Subscriber on port: " + std::to_string(mPort) + ": " + response;
+  //  mLogger.addLogEntry(logEntry);
+  //  exit(EXIT_FAILURE);
+  //} else {
+  //  std::cout << "Successfully subscribed to topic >>" << topicName << "<<" << std::endl;
+  //  logEntry = "Subscriber on port: " + std::to_string(mPort) + ": subscribed to topic >>" + topicName + "<<";
+  //  mLogger.addLogEntry(logEntry);
+  //}
 }
 
 void Subscriber::listTopics(void) {
+  RequestType requestListTopics(ActionType::LIST_TOPICS, {});
+
+  //const std::string response = sendRequest(requestListTopics);
 
 }
 

@@ -87,15 +87,13 @@ void TestDecodeObject() {
   assert(tempExpectedTopicStatus.Timestamp == resultTopicStatus.Timestamp);
   assert(tempExpectedTopicStatus.SubscriberList_t == resultTopicStatus.SubscriberList_t);
 
-  // Test TopicStingList
+  // Test TopicStringList
   std::vector<std::string> tempExpectedTopicStringList = {
     "topic-one", "topic-two"
   };
   std::string tempTopicStringListString = R"(["topic-one", "topic-two"])";
 
   std::vector<std::string> resultTopicStringList = tempParser.decodeObject<std::vector<std::string>>(tempTopicStringListString);
-  std::cout << tempParser.encodeObject(resultTopicStringList) << std::endl;
-  std::cout << tempParser.encodeObject(tempExpectedTopicStringList) << std::endl;
 
   assert(resultTopicStringList == tempExpectedTopicStringList);
 }

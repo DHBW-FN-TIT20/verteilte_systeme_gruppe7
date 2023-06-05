@@ -10,10 +10,7 @@
  * Include Header Files
  *************************************************************************************************/
 #include "message_parser.h"
-#include "request_type.h"
-#include "action_status_type.h"
-#include "T_TopicStatus.h"
-
+#include "nlohmann/json.hpp"
 
 /**************************************************************************************************
  * Class implementation

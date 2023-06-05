@@ -10,17 +10,36 @@
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
+/* C++ Libs */
 #include <string>
-#include "nlohmann/json.hpp"
+
+/* Own Libs / datatypes */
+#include "request_type.h"
+#include "action_status_type.h"
+#include "T_TopicStatus.h"
 
 /**************************************************************************************************
  * Public - classes
  *************************************************************************************************/
 class MessageParser {
   public:
+    /**
+     * @brief function template for decoding json to different datatypes
+     * 
+     * @tparam T type to decode json string into
+     * @param objectString json string
+     * @return T object of type T that holds the respective data from the json string
+     */
     template <typename T>
     T decodeObject(const std::string& objectString);
 
+    /**
+     * @brief function template to encode different datatypes to json
+     * 
+     * @tparam T datatype to convert into json
+     * @param object object of type T to encode
+     * @return std::string json string with the data of the respective object
+     */
     template <typename T>
     std::string encodeObject(const T& object);
 };

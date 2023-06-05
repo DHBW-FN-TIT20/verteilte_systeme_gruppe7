@@ -1,35 +1,11 @@
-/**************************************************************************************************
- * @file    send_request.hpp
- * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    09-June-2023
- * @brief   Implementation for sendRequest.
- *************************************************************************************************/
 
-#pragma once
-
-/**************************************************************************************************
- * Include Header Files
- *************************************************************************************************/
-/* C++ Libs */
-
-
-/* Own Libs / datatypes */
-#include "request_type.h"
-
-#include "message_parser.h"
-#include "tcp/tcp_client.hpp"
-
-/**************************************************************************************************
- * Public - Function implementation
- *************************************************************************************************/
-
-template<typename T>
-T sendRequest(std::shared_ptr<TcpClient> client, RequestType &request) {
-  //normal implementation
-  
-}
-
+/**
+ * @brief send a request without expecting an answer (message)
+ * 
+ * @param request request to be converted to json and sent to the network
+ * @param pt_NetworkHandler Pointer to network handler to be used for the transmission
+ */
 template<>
-void sendRequest<void>(std::shared_ptr<TcpClient> client, RequestType &request) {
+void sendRequest<void>(RequestType request, INetworkHandler* pt_NetworkHandler) {
   //void-specific implementation
 }

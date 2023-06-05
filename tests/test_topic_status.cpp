@@ -10,7 +10,7 @@
  /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "T_TopicStatus.h"
+#include "topic_status_type.h"
 #include "action_status_type.h"
 #include <iostream>
 #include <cassert>

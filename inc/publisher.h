@@ -2,7 +2,7 @@
  *************************************************************************************************
  * @file    publisher.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    17-May-2023
+ * @date    05-June-2023
  * @brief   
  *************************************************************************************************
  */
@@ -14,7 +14,7 @@
 #include <string>
 
 /* Own Libs / datatypes */
-#include "T_TopicStatus.h"
+#include "topic_status_type.h"
 
 using std::string;
 

@@ -75,7 +75,7 @@ void TestDecodeObject() {
   std::string tempActionStatusStirng = R"({"ActionStatus":1})";
 
   ActionStatusType resultActionStatus = tempParser.decodeObject<ActionStatusType>(tempActionStatusStirng);
-  assert(resultActionStatus == ActionStatusType::TOPIC_NON_EXISTENT);
+  assert(resultActionStatus == tempExpectedActionStatus);
 
   // Test TopicStatus
   T_TopicStatus tempExpectedTopicStatus;

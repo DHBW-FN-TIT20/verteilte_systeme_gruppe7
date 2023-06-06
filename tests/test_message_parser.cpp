@@ -13,7 +13,7 @@
 #include <string>
 #include "request_type.h"
 #include "action_status_type.h"
-#include "T_TopicStatus.h"
+#include "topic_status_type.h"
 #include "message_parser.cpp"
 
 void TestEncodeObject() {

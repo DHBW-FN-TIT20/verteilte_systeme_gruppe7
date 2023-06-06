@@ -9,6 +9,7 @@
  * Include Header Files
  *************************************************************************************************/
 #include <iostream>
+#include <cassert>
 #include "broker.h"
 #include "topic_list_type.h"
 #include "action_type.h"

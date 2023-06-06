@@ -40,7 +40,7 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
   private:
     tcp::socket             mSocket;                            /* socket for this connection */
     std::array<char, 1024>  mBuffer;                            /* buffer for incoming data */
-    std::function<void(const std::string&)> messageHandler;
+    std::function<void(std::shared_ptr<TcpConnection>, const std::string&)> messageHandler;
 
     /**
      * @brief Default constructor for class TcpConnection.
@@ -68,7 +68,7 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
      * @brief Entry point for communication between client and server
      * 
      */
-    void start(std::function<void(const std::string)> callback) {
+    void start(std::function<void(std::shared_ptr<TcpConnection>, const std::string)> callback) {
       messageHandler = callback;
       // read and write data
       startRead();
@@ -78,8 +78,18 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
       auto self(shared_from_this());
       mSocket.async_read_some(asio::buffer(mBuffer), [this, self](asio::error_code ec, std::size_t length) {
         if(!ec) {
-          messageHandler(std::string(mBuffer.data(), length));
+          messageHandler(self, std::string(mBuffer.data(), length));
           startRead();
+        } else {
+          //TODO: Error
+        }
+      });
+    }
+
+    void sendResponse(const std::string& response) {
+      asio::async_write(mSocket, asio::buffer(response), [self = shared_from_this()](const asio::error_code &ec, std::size_t) {
+        if(ec) {
+          //TODO: Error
         }
       });
     }
@@ -91,7 +101,7 @@ class TcpServer {
     io_service mIoContext;
     tcp::endpoint mTcpEndpoint;
     tcp::acceptor mTcpAcceptor;
-    std::function<void(const std::string)> mMessageHandler;
+    std::function<void(std::shared_ptr<TcpConnection>, const std::string)> mMessageHandler;
 
   public:
 
@@ -100,7 +110,7 @@ class TcpServer {
      * 
      * @param endpoint address of the server and port to listen to for client connection requests
      */
-    TcpServer(T_Endpoint endpoint, std::function<void(const std::string)> callback) : mTcpEndpoint(tcp::endpoint(tcp::v4(), static_cast<uint16_t>(std::stoi(endpoint.port)))), mTcpAcceptor(mIoContext, mTcpEndpoint), mMessageHandler(callback) {}
+    TcpServer(T_Endpoint endpoint, std::function<void(std::shared_ptr<TcpConnection>, const std::string)> callback) : mTcpEndpoint(tcp::endpoint(tcp::v4(), static_cast<uint16_t>(std::stoi(endpoint.port)))), mTcpAcceptor(mIoContext, mTcpEndpoint), mMessageHandler(callback) {}
 
     /**
      * @brief asynchronously start accepting clients.
@@ -120,6 +130,8 @@ class TcpServer {
       if(!ec) {
         newConnection->start(mMessageHandler);       //accept the client -> start connection in instance of class TcpConnection
         std::cout << "Accepted connection: " << newConnection->socket().remote_endpoint() << std::endl;   //display ip and port of client in the terminal
+      } else {
+        //TODO: Error
       }
     }
 
@@ -132,6 +144,9 @@ class TcpServer {
       mIoContext.run();
     }
 };
+
+
+/* example for using the server (don't execute this): */
 
 //#define RUN_TCP_SERVER
 #ifdef RUN_TCP_SERVER

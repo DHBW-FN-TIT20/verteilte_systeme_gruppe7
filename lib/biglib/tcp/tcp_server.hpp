@@ -1,13 +1,10 @@
 
 /**************************************************************************************************
- * @file    network_handler_interface.h
+ * @file    tcp_server.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    05-June-2023
- * @brief   This file contains the generic network handler interface for flexible network
- *          communication.
+ * @date    06-June-2023
+ * @brief   This file contains the implementation for the tcp server.
  *************************************************************************************************/
-
-#pragma once
 
 /**************************************************************************************************
  * Include Header Files
@@ -18,6 +15,7 @@
 #include <cstdlib>
 #include <memory>
 #include <cstdint>
+#include <cstring>
 #include <array>
 #include <functional>
 
@@ -156,7 +154,7 @@ class TcpServer {
  * 
  * @param message received data string
  */
-void messageHandler(const std::string message) {
+void messageHandler(std::shared_ptr<TcpConnection> conn, const std::string message) {
   std::cout << "message handler: " << message << std::endl;
 }
 

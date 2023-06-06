@@ -27,6 +27,7 @@ include_paths=(
   "-I../inc/global"
   "-I../lib"
   "-I../lib/biglib"
+  "-I../lib/biglib/asio"
 )
 
 # compiler flags

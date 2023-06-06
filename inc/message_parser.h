@@ -16,7 +16,7 @@
 /* Own Libs / datatypes */
 #include "request_type.h"
 #include "action_status_type.h"
-#include "T_TopicStatus.h"
+#include "topic_status_type.h"
 
 /**************************************************************************************************
  * Public - classes

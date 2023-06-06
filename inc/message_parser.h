@@ -1,9 +1,9 @@
 /**************************************************************************************************
  * @file    message_parser.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    05-June-2023
+ * @date    06-June-2023
  * @brief   Prototype for class MessageParser.
- **************************************************************************************************
+ *************************************************************************************************/
 
 #pragma once
 
@@ -16,7 +16,7 @@
 /* Own Libs / datatypes */
 #include "request_type.h"
 #include "action_status_type.h"
-#include "T_TopicStatus.h"
+#include "topic_status_type.h"
 
 /**************************************************************************************************
  * Public - classes

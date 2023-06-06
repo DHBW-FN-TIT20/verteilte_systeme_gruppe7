@@ -1,9 +1,9 @@
 /**************************************************************************************************
  * @file    test_message_parser.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    04-June-2023
+ * @date    06-June-2023
  * @brief   
- **************************************************************************************************/
+ *************************************************************************************************/
 
 /**************************************************************************************************
  * Include Header Files
@@ -13,7 +13,7 @@
 #include <string>
 #include "request_type.h"
 #include "action_status_type.h"
-#include "T_TopicStatus.h"
+#include "topic_status_type.h"
 #include "message_parser.cpp"
 
 void TestEncodeObject() {
@@ -75,7 +75,7 @@ void TestDecodeObject() {
   std::string tempActionStatusStirng = R"({"ActionStatus":1})";
 
   ActionStatusType resultActionStatus = tempParser.decodeObject<ActionStatusType>(tempActionStatusStirng);
-  assert(resultActionStatus == ActionStatusType::TOPIC_NON_EXISTENT);
+  assert(resultActionStatus == tempExpectedActionStatus);
 
   // Test TopicStatus
   T_TopicStatus tempExpectedTopicStatus;

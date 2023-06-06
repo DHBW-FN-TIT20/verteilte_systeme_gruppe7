@@ -12,7 +12,7 @@
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include "asio.hpp"
+/* C++ Libs */
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -20,6 +20,12 @@
 #include <cstdint>
 #include <array>
 #include <functional>
+
+/* Own Libs / datatypes */
+#include "endpoint_type.h"
+
+/* dependencies */
+#include "asio.hpp"
 
 using namespace asio;
 using namespace asio::ip;

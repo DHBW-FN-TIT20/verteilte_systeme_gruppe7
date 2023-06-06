@@ -18,4 +18,4 @@
 typedef struct {
   std::string address;
   std::string port;
-} EndpointType;
+} T_Endpoint;

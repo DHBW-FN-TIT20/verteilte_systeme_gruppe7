@@ -14,9 +14,7 @@
 /**************************************************************************************************
  * Class implementation
  *************************************************************************************************/
-Broker::Broker(const T_TopicList& topicList) {
-  mTopicList = topicList;
-}
+Broker::Broker(const T_TopicList& topicList) : mTopicList(topicList) {}
 
 std::vector<std::string> Broker::listTopics() const {
   std::vector<std::string> keys;

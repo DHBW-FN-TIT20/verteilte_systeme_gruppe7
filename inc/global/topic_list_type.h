@@ -12,10 +12,10 @@
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
-#include <vector>
+#include <map>
 #include "topic_type.h"
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-typedef std::vector<T_Topic>  T_TopicList;    /*!< type definition for list of topics */
+typedef std::map<std::string, T_Topic>  T_TopicList;    /*!< type definition for list of topics */

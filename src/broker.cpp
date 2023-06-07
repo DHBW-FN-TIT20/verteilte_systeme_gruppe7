@@ -25,6 +25,8 @@ bool Broker::hasSubscriber(std::string &topicName, T_Endpoint &subscriber) const
 }
 
 ActionStatusType Broker::subscribeTopic(std::string topicName, T_Endpoint subscriber) {
+  std::lock_guard<std::mutex> lock(mTopicListMutex);
+
   if(isTopicExistent(topicName)) {
     mTopicList.at(topicName).SubscriberList.push_back(subscriber);
   } else {
@@ -33,6 +35,8 @@ ActionStatusType Broker::subscribeTopic(std::string topicName, T_Endpoint subscr
 }
 
 ActionStatusType Broker::unsubscribeTopic(std::string topicName, T_Endpoint subscriber) {
+  std::lock_guard<std::mutex> lock(mTopicListMutex);
+
   if(isTopicExistent(topicName)) {
     if(hasSubscriber(topicName, subscriber)) {
       T_SubscriberList &subscriberList = mTopicList.at(topicName).SubscriberList;
@@ -51,13 +55,19 @@ ActionStatusType Broker::unsubscribeTopic(std::string topicName, T_Endpoint subs
 }
 
 ActionStatusType Broker::publishTopic(std::string topicName, std::string &message) const {
-  //check if topic exists
-    //yes: generate timestamp and call update topic(), then return success
-    //no: return respective error type
+  std::lock_guard<std::mutex> lock(mTopicListMutex);
+
+  if(isTopicExistent(topicName)) {
+    //generate timestamp and call update topic(), then return success
+  } else {
+    return ActionStatusType::TOPIC_NON_EXISTENT;
+  }
 }
 
 std::vector<std::string> Broker::listTopics() const {
+  std::lock_guard<std::mutex> lock(mTopicListMutex);
   std::vector<std::string> keys;
+  
   keys.reserve(mTopicList.size());
 
   for (const auto& pair : mTopicList) {
@@ -67,6 +77,7 @@ std::vector<std::string> Broker::listTopics() const {
 }
 
 T_TopicStatus Broker::getTopicStatus(std::string topicName) const {
+  std::lock_guard<std::mutex> lock(mTopicListMutex);
   //check if topic exists
     //yes: return T_Topic object from topic list that matches given topicName
     //no: return respective error type

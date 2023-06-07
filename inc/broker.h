@@ -16,10 +16,12 @@
 #include <memory>
 #include <chrono>
 #include <ctime>
+#include <algorithm>
 
 /* Own Libs / datatypes */
 #include "topic_list_type.h"
 #include "topic_status_type.h"
+#include "subscriber_list_type.h"
 #include "tcp/tcp_server.hpp"
 
 /**************************************************************************************************
@@ -30,7 +32,24 @@ class Broker{
     T_TopicList mTopicList;
 
   protected:
-    bool isTopicExistent(std::string topicName) const;
+    /**
+     * @brief Check if a specific topic exists in the topic list
+     * 
+     * @param topicName Topic of which existence is to be checked
+     * @return true Topic is in list
+     * @return false Topic is not in list
+     */
+    bool isTopicExistent(std::string &topicName) const;
+
+    /**
+     * @brief Check if a specific subscriber is in the subscriber list of a specific topic in the topic list
+     * 
+     * @param topicName Topic of which to check subscriber list for subscriber
+     * @param subscriber Subscriber whose existence in the subscriber list is to be checked
+     * @return true Subscriber exists in the subscriber list of the given topic
+     * @return false Subscriber does not exist in the subscriber list of the given topic
+     */
+    bool hasSubscriber(std::string &topicName, T_Endpoint &subscriber) const;
 
     /**
      * @brief Add subscriber to subscriber list of the given topic

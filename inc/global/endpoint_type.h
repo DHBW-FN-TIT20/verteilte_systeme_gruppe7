@@ -37,9 +37,24 @@ struct T_Endpoint {
 
 
   bool isValid() const {
-    std::regex ip4_regex("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+    static const std::regex ip4_regex("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
 
-    return std::stoi(port) > 49151 && std::stoi(port) < 65536 && std::regex_match(address, ip4_regex);
+    try {
+      int portInt = std::stoi(port);
+      if(portInt <= 49151 || portInt >= 65536)
+        return false;
+    } catch (const std::invalid_argument& e) {
+      //conversion failed
+      return false;
+    } catch (const std::out_of_range& e) {
+      //out of valid range
+      return false;
+    }
+    
+    if(!std::regex_match(address, ip4_regex))
+      return false;
+    
+    return true;
   }
 };
 

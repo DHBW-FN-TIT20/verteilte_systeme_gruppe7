@@ -54,6 +54,21 @@ void from_json(const nlohmann::json& j, ActionStatusType& obj) {
   obj = static_cast<ActionStatusType::ActionStatus>(j["ActionStatus"]);
 }
 
+// SubscriberList
+void to_json(nlohmann::json& j, const T_SubscriberList& obj) {
+  j = nlohmann::json::array();
+  for(const auto& endpoint : obj) {
+    j.push_back(endpoint.toString());
+  }
+}
+
+void from_json(const nlohmann::json& j, T_SubscriberList& obj) {
+  obj.clear();
+  for(const auto& item : j) {
+    obj.push_back(StringToEndpoint(item.get<std::string>()));
+  }
+}
+
 // TopicStatus
 void to_json(nlohmann::json& j, const T_TopicStatus& obj) {
   j = {

@@ -21,9 +21,9 @@
  * Unit tests
  *************************************************************************************************/
 
-void TEST_toString() {
+void TestToString() {
   int32_t tempTimestamp = 12345678;
-  T_SubscriberList tempSubscriberList = {"subscriber1", "subscriber2", "subscriber3"};
+  T_SubscriberList tempSubscriberList = {{"0.0.0.1", "1"}, {"0.0.0.2", "2"}, {"0.0.0.3", "3"}};
   ActionStatusType tempActionStatus = ActionStatusType::STATUS_OK;
   
   T_TopicStatus testTopicStatus_t = {
@@ -31,12 +31,12 @@ void TEST_toString() {
     tempSubscriberList,
     tempActionStatus
   };
-  assert(testTopicStatus_t.toString() == "Timestamp: 12345678; Subscriber: subscriber1, subscriber2, subscriber3; Action Status: STATUS_OK");
+  assert(testTopicStatus_t.toString() == "Timestamp: 12345678; Subscriber: 0.0.0.1:1, 0.0.0.2:2, 0.0.0.3:3; Action Status: STATUS_OK");
 }
 
 
 int main() {
-  TEST_toString();
+  TestToString();
 
   std::cout << "All tests for struct T_TopicStatus passed" << std::endl;
   return 0;

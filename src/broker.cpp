@@ -15,22 +15,39 @@
  *************************************************************************************************/
 
 /* private/protected member functions */
-bool Broker::isTopicExistent(std::string topicName) const {
+bool Broker::isTopicExistent(std::string &topicName) const {
   return mTopicList.count(topicName) > 0U;
 }
 
+bool Broker::hasSubscriber(std::string &topicName, T_Endpoint &subscriber) const {
+  T_SubscriberList subscriberList = mTopicList.at(topicName).SubscriberList;
+  return std::find(subscriberList.begin(), subscriberList.end(), subscriber) != subscriberList.end();
+}
+
 ActionStatusType Broker::subscribeTopic(std::string topicName, T_Endpoint subscriber) {
-  //check if topic exists
-    //yes: add endpoint of subscriber to subscriber list of the topic
-    //no: return respective error type
+  if(isTopicExistent(topicName)) {
+    mTopicList.at(topicName).SubscriberList.push_back(subscriber);
+  } else {
+    return ActionStatusType::TOPIC_NON_EXISTENT;
+  }
 }
 
 ActionStatusType Broker::unsubscribeTopic(std::string topicName, T_Endpoint subscriber) {
-  //check if topic exists
-    //yes: check if subscriber exists in subscriber list of the topic
-      //yes: delete subscriber from the list, return success
-      //no: return respective error type
-    //no: return respective error type
+  if(isTopicExistent(topicName)) {
+    if(hasSubscriber(topicName, subscriber)) {
+      T_SubscriberList &subscriberList = mTopicList.at(topicName).SubscriberList;
+      subscriberList.erase(std::remove(subscriberList.begin(), subscriberList.end(), subscriber), subscriberList.end());
+      if(subscriberList.empty()) {
+        mTopicList.erase(topicName);
+      }
+      return ActionStatusType::STATUS_OK;     //Subscriber successfully unsubscribed; topic removed if applicable
+    } else {
+      return ActionStatusType::INTERNAL_ERROR;  //subscriber was not in the subscriber list of the respective topic
+    }
+  } else {
+    return ActionStatusType::TOPIC_NON_EXISTENT;    //topic was not in the topic list of the broker
+  }
+
 }
 
 ActionStatusType Broker::publishTopic(std::string topicName, std::string &message) const {

@@ -12,6 +12,7 @@
  *************************************************************************************************/
 /* C++ Libs */
 #include <vector>
+#include <string>
 #include <memory>
 #include <chrono>
 #include <ctime>
@@ -29,13 +30,15 @@ class Broker{
     T_TopicList mTopicList;
 
   protected:
+    bool isTopicExistent(std::string topicName) const;
+
     /**
      * @brief Add subscriber to subscriber list of the given topic
      * 
      * @param topicName 
      * @return ActionStatusType 
      */
-    ActionStatusType subscribeTopic(std::string topicName);
+    ActionStatusType subscribeTopic(std::string topicName, T_Endpoint subscriber);
 
     /**
      * @brief Delete subscriber from subscriber list of the giben topic.
@@ -44,7 +47,7 @@ class Broker{
      * @param topicName Topic to unsubscribe from
      * @return ActionStatusType Action status
      */
-    ActionStatusType unsubscribeTopic(std::string topicName);
+    ActionStatusType unsubscribeTopic(std::string topicName, T_Endpoint subscriber);
 
     /**
      * @brief Publish a topic with the given message
@@ -53,7 +56,7 @@ class Broker{
      * @param message Message to publish
      * @return ActionStatusType Action status
      */
-    ActionStatusType publishTopic(std::string topicName, std::string &message);
+    ActionStatusType publishTopic(std::string topicName, std::string &message) const;
 
     /**
      * @brief Get a list of all existing topics
@@ -77,7 +80,7 @@ class Broker{
      * @param message Message to send
      * @param timestamp Timestamp of the current topic update
      */
-    void updateTopic(std::string topicName, std::string &message, std::time_t timestamp);
+    void updateTopic(std::string topicName, std::string &message, std::time_t timestamp) const;
 
 
   public:
@@ -85,7 +88,7 @@ class Broker{
      * @brief Default constructor for class Broker
      * 
      */
-    Broker(void);
+    Broker(void) = default;
 
     /**
      * @brief Construct a new Broker object with an initial topic list.
@@ -94,6 +97,12 @@ class Broker{
      * @param topicList Initial topic list
      */
     Broker(const T_TopicList& topicList);
+
+    /**
+     * @brief Default destructor for class Broker
+     * 
+     */
+    ~Broker(void);
 
     /**
      * @brief Handle incoming messages from clients

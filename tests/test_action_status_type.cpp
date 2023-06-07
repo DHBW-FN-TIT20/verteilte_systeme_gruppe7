@@ -1,24 +1,22 @@
-/**
-  *************************************************************************************************
+/**************************************************************************************************
   * @file    test_action_status_type.cpp
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
   * @date    07-June-2023
   * @brief   Unit tests for class ActionStatusType
-  *************************************************************************************************
-  */
+  ************************************************************************************************/
 
- /**************************************************************************************************
+/**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
 #include "action_status_type.h"
 #include <iostream>
 #include <cassert>
 
- /*************************************************************************************************
+/**************************************************************************************************
  * Unit tests
  *************************************************************************************************/
 
-void TEST_toString() {
+void TestToString() {
   ActionStatusType testStatusOk = ActionStatusType::STATUS_OK;
   assert(testStatusOk.toString() == "STATUS_OK");
 
@@ -35,15 +33,15 @@ void TEST_toString() {
   assert(testError.toString() == "Error");
 }
 
-void TEST_conversionOperator() {
+void TestConversionOperator() {
   ActionStatusType actionStatus = ActionStatusType::STATUS_OK;
   actionStatus = ActionStatusType::TOPIC_NON_EXISTENT;
   assert(actionStatus == ActionStatusType::TOPIC_NON_EXISTENT);
 }
 
 int main() {
-  TEST_toString();
-  TEST_conversionOperator();
+  TestToString();
+  TestConversionOperator();
 
   std::cout << "All tests for class ActionStatusType passed" << std::endl;
   return 0;

@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    broker.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    06-June-2023
+ * @date    07-June-2023
  * @brief   Prototype for class Broker
  *************************************************************************************************/
 
@@ -82,11 +82,24 @@ class Broker{
 
   public:
     /**
-     * @brief Construct a new Broker object
+     * @brief Default constructor for class Broker
      * 
-     * @param topicList 
+     */
+    Broker(void);
+
+    /**
+     * @brief Construct a new Broker object with an initial topic list.
+     * This constructor is used for unit tests.
+     * 
+     * @param topicList Initial topic list
      */
     Broker(const T_TopicList& topicList);
 
+    /**
+     * @brief Handle incoming messages from clients
+     * 
+     * @param conn Tcp connection to client
+     * @param message Message from client
+     */
     void messageHandler(std::shared_ptr<TcpConnection> conn, const std::string message);
 };

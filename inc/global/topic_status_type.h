@@ -20,7 +20,7 @@
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-typedef struct T_TopicStatusType {
+struct T_TopicStatus {
   std::time_t         Timestamp;
   T_SubscriberList    SubscriberList_t;
   ActionStatusType    ActionStatus;
@@ -38,4 +38,4 @@ typedef struct T_TopicStatusType {
 
     return result;
   }
-} T_TopicStatus;
+};

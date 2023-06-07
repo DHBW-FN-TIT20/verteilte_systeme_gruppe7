@@ -17,6 +17,10 @@
 #include "topic_status_type.h"
 #include "message_parser.cpp"
 
+/**************************************************************************************************
+ * Unit tests
+ *************************************************************************************************/
+
 void TestEncodeObject() {
   MessageParser tempParser;
 
@@ -104,4 +108,5 @@ int main() {
   TestDecodeObject();
 
   std::cout << "All tests for class MessageParser passed" << std::endl;
+  return 0;
 }

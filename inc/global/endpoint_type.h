@@ -43,7 +43,7 @@ struct T_Endpoint {
   }
 };
 
-T_Endpoint StringToEndpoint(std::string endpointString) {
+inline T_Endpoint StringToEndpoint(std::string endpointString) {
   T_Endpoint endpoint;
 
   std::size_t pos = endpointString.find(':');

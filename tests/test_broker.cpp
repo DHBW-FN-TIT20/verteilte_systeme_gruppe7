@@ -19,23 +19,22 @@
  *************************************************************************************************/
 class MockBroker : public Broker {
   public:
+    MockBroker(const T_TopicList& topicList) : Broker::Broker(topicList) {}
+
     std::vector<std::string> listTopics() {
       return Broker::listTopics();
     }
-    MockBroker(const T_TopicList& topicList) : Broker::Broker(topicList) {}
 };
 
 void TestListTopics(){
-  MockBroker tempBroker = MockBroker(
+  MockBroker tempBroker(
     {
       {"topicName1", {"topicName1", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}, {"param2", "value2"}})}},
       {"topicName2", {"topicName2", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}, {"param2", "value2"}})}}
     }
   );
 
-  std::vector<std::string> expectedTopicList = {
-    "topicName1", "topicName2"
-  };
+  std::vector<std::string> expectedTopicList = {"topicName1", "topicName2"};
 
   std::vector<std::string> resultTopicList = tempBroker.listTopics();
 

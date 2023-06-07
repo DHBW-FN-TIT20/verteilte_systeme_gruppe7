@@ -34,6 +34,7 @@ include_paths=(
   "-I../lib"
   "-I../lib/biglib"
   "-I../lib/biglib/asio"
+  "-I../lib/biglib/tcp"
 )
 
 # compiler flags

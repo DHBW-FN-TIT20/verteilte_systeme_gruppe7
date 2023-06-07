@@ -9,6 +9,7 @@
  * Include Header Files
  *************************************************************************************************/
 #include <iostream>
+#include <cassert>
 #include <map>
 #include <string>
 #include "request_type.h"
@@ -39,10 +40,10 @@ void TestEncodeObject() {
   // Test TopicStatus
   T_TopicStatus tempTopicStatus;
   tempTopicStatus.Timestamp = 12345678;
-  tempTopicStatus.SubscriberList_t = {"subscriber-1", "subscriber-2"};
+  tempTopicStatus.SubscriberList_t = {StringToEndpoint("0.0.0.1:1"), StringToEndpoint("0.0.0.2:2")};
 
   std::string topicStatusResult = tempParser.encodeObject(tempTopicStatus);
-  assert(topicStatusResult == R"({"SubscriberList_t":["subscriber-1","subscriber-2"],"Timestamp":12345678})");
+  assert(topicStatusResult == R"({"SubscriberList_t":["0.0.0.1:1","0.0.0.2:2"],"Timestamp":12345678})");
 
   // Test TopicStringList
   std::vector<std::string> tempTopicList = {
@@ -80,8 +81,8 @@ void TestDecodeObject() {
   // Test TopicStatus
   T_TopicStatus tempExpectedTopicStatus;
   tempExpectedTopicStatus.Timestamp = 12345678;
-  tempExpectedTopicStatus.SubscriberList_t = {"subscriber-1", "subscriber-2"};
-  std::string tempTopicStatusString = R"({"SubscriberList_t":["subscriber-1","subscriber-2"],"Timestamp":12345678})";
+  tempExpectedTopicStatus.SubscriberList_t = {StringToEndpoint("0.0.0.1:1"), StringToEndpoint("0.0.0.2:2")};
+  std::string tempTopicStatusString = R"({"SubscriberList_t":["0.0.0.1:1","0.0.0.2:2"],"Timestamp":12345678})";
 
   T_TopicStatus resultTopicStatus = tempParser.decodeObject<T_TopicStatus>(tempTopicStatusString);
   assert(tempExpectedTopicStatus.Timestamp == resultTopicStatus.Timestamp);

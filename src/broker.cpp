@@ -32,6 +32,7 @@ ActionStatusType Broker::subscribeTopic(std::string topicName, T_Endpoint subscr
   } else {
     return ActionStatusType::TOPIC_NON_EXISTENT;
   }
+  return ActionStatusType::STATUS_OK;
 }
 
 ActionStatusType Broker::unsubscribeTopic(std::string topicName, T_Endpoint subscriber) {
@@ -54,7 +55,7 @@ ActionStatusType Broker::unsubscribeTopic(std::string topicName, T_Endpoint subs
 
 }
 
-ActionStatusType Broker::publishTopic(std::string topicName, std::string &message) const {
+ActionStatusType Broker::publishTopic(std::string topicName, [[maybe_unused]]std::string &message) const {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
 
   if(isTopicExistent(topicName)) {
@@ -62,6 +63,7 @@ ActionStatusType Broker::publishTopic(std::string topicName, std::string &messag
   } else {
     return ActionStatusType::TOPIC_NON_EXISTENT;
   }
+  return ActionStatusType::STATUS_OK;
 }
 
 std::vector<std::string> Broker::listTopics() const {
@@ -76,14 +78,16 @@ std::vector<std::string> Broker::listTopics() const {
   return keys;
 }
 
-T_TopicStatus Broker::getTopicStatus(std::string topicName) const {
+T_TopicStatus Broker::getTopicStatus([[maybe_unused]]std::string topicName) const {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
   //check if topic exists
     //yes: return T_Topic object from topic list that matches given topicName
     //no: return respective error type
+  
+  return {1,{},ActionStatusType::STATUS_OK};
 }
 
-void Broker::updateTopic(std::string topicName, std::string &message, std::time_t timestamp) const {
+void Broker::updateTopic([[maybe_unused]]std::string topicName, [[maybe_unused]]std::string &message, [[maybe_unused]]std::time_t timestamp) const {
   //send request (RequestType) with topicName, message and timestamp to every subscriber
   //in the subscriber list of the given topic using udp!
 }
@@ -91,11 +95,11 @@ void Broker::updateTopic(std::string topicName, std::string &message, std::time_
 /* public member functions */
 Broker::Broker(void) {}
 
-Broker::Broker(const T_TopicList& topicList) : mTopicList(topicList) {}
+Broker::Broker(const T_TopicList &topicList) : mTopicList(topicList) {}
 
 Broker::~Broker(void) {}
 
-void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::string message) {
+void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, [[maybe_unused]]const std::string message) {
   tcp::endpoint endpoint = conn->socket().remote_endpoint();
   T_Endpoint clientEndpoint {
     endpoint.address().to_string(),
@@ -103,7 +107,7 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
   };
 
   //parse message
-  
+
   //decide which function to call based on the message's body
 
   //call the function

@@ -1,8 +1,8 @@
 /**
   *************************************************************************************************
-  * @file    test_action_type.cpp
+  * @file    test_action_status_type.cpp
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    01-June-2023
+  * @date    07-June-2023
   * @brief   Unit tests for class ActionStatusType
   *************************************************************************************************
   */

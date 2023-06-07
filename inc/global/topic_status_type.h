@@ -29,7 +29,7 @@ typedef struct T_TopicStatusType {
     std::string result = "Timestamp: " + std::to_string(Timestamp) + "; Subscriber: ";
 
     for(size_t i = 0; i < SubscriberList_t.size(); i++) {
-      result += SubscriberList_t.at(i).address + ":" + SubscriberList_t.at(i).port;
+      result += SubscriberList_t.at(i).toString();
 
       result += (i != SubscriberList_t.size() - 1)? ", " : "; ";
     }

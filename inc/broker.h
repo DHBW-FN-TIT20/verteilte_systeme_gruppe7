@@ -111,7 +111,7 @@ class Broker{
      * @brief Default constructor for class Broker
      * 
      */
-    Broker(void) = default;
+    Broker(void);
 
     /**
      * @brief Construct a new Broker object with an initial topic list.
@@ -119,7 +119,7 @@ class Broker{
      * 
      * @param topicList Initial topic list
      */
-    Broker(const T_TopicList& topicList);
+    Broker(const T_TopicList &topicList);
 
     /**
      * @brief Default destructor for class Broker

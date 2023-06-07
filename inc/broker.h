@@ -17,6 +17,7 @@
 #include <chrono>
 #include <ctime>
 #include <algorithm>
+#include <mutex>
 
 /* Own Libs / datatypes */
 #include "topic_list_type.h"
@@ -30,10 +31,12 @@
 class Broker{
   private:
     T_TopicList mTopicList;
+    mutable std::mutex mTopicListMutex;
 
   protected:
     /**
-     * @brief Check if a specific topic exists in the topic list
+     * @brief Check if a specific topic exists in the topic list.
+     * ! Invoke only when mutex is locked !
      * 
      * @param topicName Topic of which existence is to be checked
      * @return true Topic is in list
@@ -43,6 +46,7 @@ class Broker{
 
     /**
      * @brief Check if a specific subscriber is in the subscriber list of a specific topic in the topic list
+     * ! invoke only when mutex is locked !
      * 
      * @param topicName Topic of which to check subscriber list for subscriber
      * @param subscriber Subscriber whose existence in the subscriber list is to be checked

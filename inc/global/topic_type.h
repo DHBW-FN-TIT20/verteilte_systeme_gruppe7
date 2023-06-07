@@ -14,6 +14,7 @@
  *************************************************************************************************/
 #include <string>
 #include "request_type.h"
+#include "subscriber_list_type.h"
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
@@ -21,4 +22,5 @@
 typedef struct {
   std::string       TopicName;
   RequestType       Request;
+  T_SubscriberList  SubscriberList;
 } T_Topic;  /*!< type definition for topic */

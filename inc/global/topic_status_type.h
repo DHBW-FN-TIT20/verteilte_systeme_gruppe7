@@ -12,6 +12,8 @@
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
+#include <string>
+#include <ctime>
 #include "subscriber_list_type.h"
 #include "action_status_type.h"
 
@@ -19,7 +21,7 @@
  * Public - typedefs / structs / enums
  *************************************************************************************************/
 typedef struct T_TopicStatusType {
-  int32_t             Timestamp;
+  std::time_t         Timestamp;
   T_SubscriberList    SubscriberList_t;
   ActionStatusType    ActionStatus;
 
@@ -27,7 +29,7 @@ typedef struct T_TopicStatusType {
     std::string result = "Timestamp: " + std::to_string(Timestamp) + "; Subscriber: ";
 
     for(size_t i = 0; i < SubscriberList_t.size(); i++) {
-      result += SubscriberList_t.at(i);
+      result += SubscriberList_t.at(i).address + ":" + SubscriberList_t.at(i).port;
 
       result += (i != SubscriberList_t.size() - 1)? ", " : "; ";
     }

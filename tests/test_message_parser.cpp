@@ -44,7 +44,7 @@ void TestEncodeObject() {
   // Test TopicStatus
   T_TopicStatus tempTopicStatus;
   tempTopicStatus.Timestamp = 12345678;
-  tempTopicStatus.SubscriberList_t = {{{"0.0.0.1", "1"}, nullptr}, {{"0.0.0.2", "2"}, nullptr}};
+  tempTopicStatus.SubscriberList = {{{"0.0.0.1", "1"}, nullptr}, {{"0.0.0.2", "2"}, nullptr}};
 
   std::string topicStatusResult = tempParser.encodeObject(tempTopicStatus);
   assert(topicStatusResult == R"({"SubscriberList_t":["0.0.0.1:1","0.0.0.2:2"],"Timestamp":12345678})");
@@ -85,12 +85,12 @@ void TestDecodeObject() {
   // Test TopicStatus
   T_TopicStatus tempExpectedTopicStatus;
   tempExpectedTopicStatus.Timestamp = 12345678;
-  tempExpectedTopicStatus.SubscriberList_t = {StringToSubsciber("0.0.0.1:1"), StringToSubsciber("0.0.0.2:2")};
+  tempExpectedTopicStatus.SubscriberList = {StringToSubsciber("0.0.0.1:1"), StringToSubsciber("0.0.0.2:2")};
   std::string tempTopicStatusString = R"({"SubscriberList_t":["0.0.0.1:1","0.0.0.2:2"],"Timestamp":12345678})";
 
   T_TopicStatus resultTopicStatus = tempParser.decodeObject<T_TopicStatus>(tempTopicStatusString);
   assert(tempExpectedTopicStatus.Timestamp == resultTopicStatus.Timestamp);
-  assert(tempExpectedTopicStatus.SubscriberList_t == resultTopicStatus.SubscriberList_t);
+  assert(tempExpectedTopicStatus.SubscriberList == resultTopicStatus.SubscriberList);
 
   // Test TopicStringList
   std::vector<std::string> tempExpectedTopicStringList = {

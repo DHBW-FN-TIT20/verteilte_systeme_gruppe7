@@ -22,14 +22,12 @@
 void TestToString() {
   int32_t tempTimestamp = 12345678;
   T_SubscriberList tempSubscriberList = {{{"0.0.0.1", "1"}, nullptr}, {{"0.0.0.2", "2"}, nullptr}, {{"0.0.0.3", "3"}, nullptr}};
-  ActionStatusType tempActionStatus = ActionStatusType::STATUS_OK;
   
   T_TopicStatus testTopicStatus_t = {
     tempTimestamp,
-    tempSubscriberList,
-    tempActionStatus
+    tempSubscriberList
   };
-  assert(testTopicStatus_t.toString() == "Timestamp: 12345678; Subscriber: 0.0.0.1:1, 0.0.0.2:2, 0.0.0.3:3; Action Status: STATUS_OK");
+  assert(testTopicStatus_t.toString() == "Timestamp: 12345678; Subscriber: 0.0.0.1:1, 0.0.0.2:2, 0.0.0.3:3;");
 }
 
 

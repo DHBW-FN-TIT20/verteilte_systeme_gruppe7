@@ -87,11 +87,13 @@ std::vector<std::string> Broker::listTopics(void) const {
 
 T_TopicStatus Broker::getTopicStatus(const std::string &topicName) const {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
-  //check if topic exists
-    //yes: return T_Topic object from topic list that matches given topicName
-    //no: return respective error type
-  
-  return {1,{},ActionStatusType::STATUS_OK};
+  if(isTopicExistent(topicName)) {
+    T_TopicStatus topicStatus;
+    topicStatus.Timestamp = mTopicList.at(topicName).Request.mTimestamp;
+    topicStatus.SubscriberList = mTopicList.at(topicName).SubscriberList;
+    return topicStatus;
+  }
+  return {};
 }
 
 void Broker::updateTopic(const RequestType &requestToSubscriber) const {

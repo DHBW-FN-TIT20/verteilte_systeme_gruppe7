@@ -20,9 +20,16 @@
 #include <mutex>
 
 /* Own Libs / datatypes */
+#include "topic_type.h"
 #include "topic_list_type.h"
 #include "topic_status_type.h"
+#include "subscriber_type.h"
 #include "subscriber_list_type.h"
+#include "endpoint_type.h"
+#include "request_type.h"
+
+#include "log_manager.h"
+#include "message_parser.h"
 #include "tcp/tcp_server.hpp"
 
 /**************************************************************************************************
@@ -31,6 +38,9 @@
 class Broker{
   protected:
     T_TopicList mTopicList;
+    T_Endpoint mOwnEndpoint;
+    LogManager mLogger;
+    MessageParser mMessageParser;
     mutable std::mutex mTopicListMutex;
 
     /**
@@ -52,7 +62,7 @@ class Broker{
      * @return true Subscriber exists in the subscriber list of the given topic
      * @return false Subscriber does not exist in the subscriber list of the given topic
      */
-    bool hasSubscriber(const std::string &topicName, const T_Endpoint &subscriber) const;
+    bool hasSubscriber(const std::string &topicName, const T_Subscriber &subscriber) const;
 
     /**
      * @brief Add subscriber to subscriber list of the given topic
@@ -60,7 +70,7 @@ class Broker{
      * @param topicName 
      * @return ActionStatusType 
      */
-    ActionStatusType subscribeTopic(const std::string &topicName, const T_Endpoint &subscriber);
+    ActionStatusType subscribeTopic(const std::string &topicName, const T_Subscriber &subscriber);
 
     /**
      * @brief Delete subscriber from subscriber list of the giben topic.
@@ -69,16 +79,17 @@ class Broker{
      * @param topicName Topic to unsubscribe from
      * @return ActionStatusType Action status
      */
-    ActionStatusType unsubscribeTopic(const std::string &topicName, const T_Endpoint &subscriber);
+    ActionStatusType unsubscribeTopic(const std::string &topicName, const T_Subscriber &subscriber);
 
     /**
-     * @brief Publish a topic with the given message
+     * @brief Publish a topic with the given message. Update the latest request of the topic in the topic list with the new request from the publisher.
+     * If the topic doesn't exist, it will be created.
      * 
-     * @param topicName Topic to publish on
-     * @param message Message to publish
+     * @param conn Open TCP connection to subscribera
+     * 
      * @return ActionStatusType Action status
      */
-    ActionStatusType publishTopic(const std::string &topicName, const std::string &message) const;
+    ActionStatusType publishTopic(RequestType &requestFromPublisher);
 
     /**
      * @brief Get a list of all existing topics
@@ -102,15 +113,23 @@ class Broker{
      * @param message Message to send
      * @param timestamp Timestamp of the current topic update
      */
-    void updateTopic(const std::string &topicName, const std::string &message, const std::time_t &timestamp) const;
+    void updateTopic(const RequestType &requestToSubscriber) const;
 
 
   public:
     /**
-     * @brief Default constructor for class Broker
+     * @brief No default constructor for class Broker
      * 
      */
-    Broker(void);
+    Broker() = delete;
+
+    /**
+     * @brief Default constructor for class Broker
+     * 
+     * @param address IPv4 address of the Broker
+     * @param port Port the broker will listen on
+     */
+    Broker(const std::string address, const std::string port);
 
     /**
      * @brief Default destructor for class Broker

@@ -19,7 +19,7 @@
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-class RequestType {
+struct RequestType {
   private:
     std::time_t getTimestamp(void) {
       return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -33,4 +33,18 @@ class RequestType {
     RequestType() = default;
     RequestType(ActionType action, std::map<std::string, std::string> parameterList, std::time_t timestamp) : mAction(action), mParameterList(parameterList), mTimestamp(timestamp) {}
     RequestType(ActionType action, std::map<std::string, std::string> parameterList) : mAction(action), mParameterList(parameterList), mTimestamp(getTimestamp()) {}
+    RequestType(const RequestType &other) : mAction(other.mAction), mParameterList(other.mParameterList), mTimestamp(other.mTimestamp) {}
+
+    RequestType &operator=(const RequestType &other) {
+      if(this != &other) {
+        mAction = other.mAction;
+        mParameterList = other.mParameterList;
+        mTimestamp = other.mTimestamp;
+      }
+      return *this;
+    }
+
+    bool operator==(const RequestType &other) const {
+      return mAction == other.mAction && mParameterList == other.mParameterList && mTimestamp == other.mTimestamp;
+    }
 };

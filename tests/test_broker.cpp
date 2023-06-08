@@ -19,28 +19,37 @@
  *************************************************************************************************/
 class MockBroker : public Broker {
   public:
-    MockBroker(const T_TopicList& topicList) : Broker::Broker() {
+    MockBroker(const T_TopicList& topicList) : Broker::Broker("localhost", "8080") {
       mTopicList = topicList;
+    }
+
+    /**
+     * @brief Getter function for topic list of class Broker.
+     * 
+     * @return T_TopicList Topic list of class Broker
+     */
+    T_TopicList getBrokerTopicList(void) const {
+      return mTopicList;
     }
 
     bool isTopicExistent(const std::string &topicName) const {
       return Broker::isTopicExistent(topicName);
     }
 
-    bool hasSubscriber(const std::string &topicName, const T_Endpoint &subscriber) const {
+    bool hasSubscriber(const std::string &topicName, const T_Subscriber &subscriber) const {
       return Broker::hasSubscriber(topicName, subscriber);
     }
 
-    ActionStatusType subscribeTopic(const std::string &topicName, const T_Endpoint &subscriber) {
+    ActionStatusType subscribeTopic(const std::string &topicName, const T_Subscriber &subscriber) {
       return Broker::subscribeTopic(topicName, subscriber);
     }
 
-    ActionStatusType unsubscribeTopic(const std::string &topicName, const T_Endpoint &subscriber) {
+    ActionStatusType unsubscribeTopic(const std::string &topicName, const T_Subscriber &subscriber) {
       return Broker::unsubscribeTopic(topicName, subscriber);
     }
 
-    ActionStatusType publishTopic(const std::string &topicName, const std::string &message) const {
-      return Broker::publishTopic(topicName, message);
+    ActionStatusType publishTopic(RequestType &requestFromPublisher) {
+      return Broker::publishTopic(requestFromPublisher);
     }
 
     std::vector<std::string> listTopics(void) const {
@@ -51,8 +60,8 @@ class MockBroker : public Broker {
       return Broker::getTopicStatus(topicName);
     }
 
-    void updateTopic(const std::string &topicName, const std::string &message, const std::time_t &timestamp) const {
-      return Broker::updateTopic(topicName, message, timestamp);
+    void updateTopic(const RequestType &requestToSubscriber) const {
+      return Broker::updateTopic(requestToSubscriber);
     }
 };
 
@@ -66,28 +75,42 @@ void TestIsTopicExistent(void) {
 }
 
 void TestHasSubscriber(void) {
-  MockBroker testHasSubscriber({{"topicName", {"topicName", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}}), {{"127.0.0.1", "5000"}}}}});
-  assert(testHasSubscriber.hasSubscriber("topicName", {"127.0.0.1", "5000"}) == true);
-  assert(testHasSubscriber.hasSubscriber("topicName", {"0.0.0.0", "0"}) == false);
+  MockBroker testHasSubscriber({{"topicName", {"topicName", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}}), {{{"127.0.0.1", "5000"}, nullptr}}}}});
+  assert(testHasSubscriber.hasSubscriber("topicName", {{"127.0.0.1", "5000"}, nullptr}) == true);
+  assert(testHasSubscriber.hasSubscriber("topicName", {{"0.0.0.0", "0"}, nullptr}) == false);
 }
 
 void TestSubscribeTopic(void) {
   MockBroker testSubscribeTopic({{"topicName", {"topicName", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}}), {/*subscriber list*/}}}});
-  assert(testSubscribeTopic.subscribeTopic("wrongTopicName", {"0.0.0.0", "0"}) == ActionStatusType::TOPIC_NON_EXISTENT);
-  assert(testSubscribeTopic.subscribeTopic("topicName", {"0.0.0.0", "0"}) == ActionStatusType::STATUS_OK);
-  assert(testSubscribeTopic.subscribeTopic("topicName", {"0.0.0.0", "0"}) == ActionStatusType::INTERNAL_ERROR); //subscriber already exists now
+  assert(testSubscribeTopic.subscribeTopic("wrongTopicName", {{"0.0.0.0", "0"}, nullptr}) == ActionStatusType::TOPIC_NON_EXISTENT);
+  assert(testSubscribeTopic.subscribeTopic("topicName", {{"0.0.0.0", "0"}, nullptr}) == ActionStatusType::STATUS_OK);
+  assert(testSubscribeTopic.subscribeTopic("topicName", {{"0.0.0.0", "0"}, nullptr}) == ActionStatusType::INTERNAL_ERROR); //subscriber already exists now
 }
 
 void TestUnsubscribeTopic(void) {
-  MockBroker testUnsubscribeTopic({{"topicName", {"topicName", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}}), {{"0.0.0.0", "0"}}}}});
-  assert(testUnsubscribeTopic.unsubscribeTopic("wrongTopicName", {"0.0.0.0", "0"}) == ActionStatusType::TOPIC_NON_EXISTENT);
-  assert(testUnsubscribeTopic.unsubscribeTopic("wrongTopicName", {"0.0.0.0", "1"}) == ActionStatusType::INTERNAL_ERROR);
-
-
+  MockBroker testUnsubscribeTopic({{"topicName", {"topicName", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}}), {{{"0.0.0.0", "0"}, nullptr}, {{"0.0.0.1", "0"}, nullptr}}}}});
+  assert(testUnsubscribeTopic.unsubscribeTopic("wrongTopicName", {{"0.0.0.0", "0"}, nullptr}) == ActionStatusType::TOPIC_NON_EXISTENT);
+  assert(testUnsubscribeTopic.unsubscribeTopic("topicName", {{"0.0.0.0", "1"}, nullptr}) == ActionStatusType::INTERNAL_ERROR);
+  assert(testUnsubscribeTopic.unsubscribeTopic("topicName", {{"0.0.0.1", "0"}, nullptr}) == ActionStatusType::STATUS_OK);
+  assert(testUnsubscribeTopic.unsubscribeTopic("topicName", {{"0.0.0.1", "0"}, nullptr}) == ActionStatusType::INTERNAL_ERROR); //subscriber already unsubscribed
+  assert(testUnsubscribeTopic.unsubscribeTopic("topicName", {{"0.0.0.0", "0"}, nullptr}) == ActionStatusType::STATUS_OK);
+  assert(testUnsubscribeTopic.unsubscribeTopic("topicName", {{"0.0.0.0", "0"}, nullptr}) == ActionStatusType::TOPIC_NON_EXISTENT); //no subscribers left -> topic got deleted
+  assert(testUnsubscribeTopic.getBrokerTopicList().empty() == true); //topic list should now be empty
 }
 
 void TestPublishTopic(void) {
-
+  MockBroker testPublishTopic({{"existingTopic", {"existingTopic", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}}), {/*subscriber list*/}}}});
+  RequestType updateRequestOfExistingTopic(ActionType::PUBLISH_TOPIC, {{"topicName", "existingTopic"}, {"message", "Test message for existing topic"}}, 1234567890);
+  RequestType checkUpdatedRequestOfExistingTopic(ActionType::PUBLISH_TOPIC, {{"topicName", "existingTopic"}, {"message", "Test message for existing topic"}}, 1234567890);
+  RequestType requestPublishNewTopic(ActionType::PUBLISH_TOPIC, {{"topicName", "newTopic"}, {"message", "Test message for new topic"}}, 1234567890);
+  RequestType updateRequestOfNewTopic(ActionType::PUBLISH_TOPIC, {{"topicName", "newTopic"}, {"message", "Updated message for new topic"}}, 12345);
+  RequestType checkUpdatedRequestOfNewTopic(ActionType::PUBLISH_TOPIC, {{"topicName", "newTopic"}, {"message", "Updated message for new topic"}}, 12345);
+  assert(testPublishTopic.publishTopic(updateRequestOfExistingTopic) == ActionStatusType::STATUS_OK);  //publish existing topic
+  assert(testPublishTopic.getBrokerTopicList().at("existingTopic").Request == checkUpdatedRequestOfExistingTopic);   //check if request of existing topic has been updated
+  assert(testPublishTopic.publishTopic(requestPublishNewTopic) == ActionStatusType::STATUS_OK);   //publish new topic
+  assert(testPublishTopic.getBrokerTopicList().count("newTopic") > 0);  //check if new topic has been added to the topic list
+  assert(testPublishTopic.publishTopic(updateRequestOfNewTopic) == ActionStatusType::STATUS_OK);  //publish message on new topic
+  assert(testPublishTopic.getBrokerTopicList().at("newTopic").Request == checkUpdatedRequestOfNewTopic);  //check if request of new topic has been updated
 }
 
 void TestListTopics(){

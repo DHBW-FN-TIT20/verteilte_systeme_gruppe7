@@ -17,6 +17,7 @@
 #include "request_type.h"
 #include "action_status_type.h"
 #include "topic_status_type.h"
+#include "subscriber_type.h"
 #include "subscriber_list_type.h"
 
 /**************************************************************************************************

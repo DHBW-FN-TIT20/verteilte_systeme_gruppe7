@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    broker.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    07-June-2023
+ * @date    08-June-2023
  * @brief   Implementation for class Broker
  *************************************************************************************************/
 
@@ -19,12 +19,12 @@ bool Broker::isTopicExistent(const std::string &topicName) const {
   return mTopicList.count(topicName) > 0U;
 }
 
-bool Broker::hasSubscriber(const std::string &topicName, const T_Endpoint &subscriber) const {
+bool Broker::hasSubscriber(const std::string &topicName, const T_Subscriber &subscriber) const {
   T_SubscriberList subscriberList = mTopicList.at(topicName).SubscriberList;
   return std::find(subscriberList.begin(), subscriberList.end(), subscriber) != subscriberList.end();
 }
 
-ActionStatusType Broker::subscribeTopic(const std::string &topicName, const T_Endpoint &subscriber) {
+ActionStatusType Broker::subscribeTopic(const std::string &topicName, const T_Subscriber &subscriber) {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
 
   if(isTopicExistent(topicName)) {
@@ -39,7 +39,7 @@ ActionStatusType Broker::subscribeTopic(const std::string &topicName, const T_En
   return ActionStatusType::STATUS_OK;
 }
 
-ActionStatusType Broker::unsubscribeTopic(const std::string &topicName, const T_Endpoint &subscriber) {
+ActionStatusType Broker::unsubscribeTopic(const std::string &topicName, const T_Subscriber &subscriber) {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
 
   if(isTopicExistent(topicName)) {
@@ -59,13 +59,16 @@ ActionStatusType Broker::unsubscribeTopic(const std::string &topicName, const T_
 
 }
 
-ActionStatusType Broker::publishTopic(const std::string &topicName, const std::string &message) const {
+ActionStatusType Broker::publishTopic(RequestType &requestFromPublisher) {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
 
+  std::string topicName = requestFromPublisher.mParameterList.at("topicName");
   if(isTopicExistent(topicName)) {
-    //generate timestamp and call update topic(), then return success
+    mTopicList.at(topicName).Request = requestFromPublisher;  //update request of topic in topic list
+    requestFromPublisher.mAction = ActionType::UPDATE_TOPIC;  //change action to udpate topic
+    updateTopic(requestFromPublisher);  //publish updated topic
   } else {
-    return ActionStatusType::TOPIC_NON_EXISTENT;
+    mTopicList.insert(std::pair<std::string, T_Topic>(topicName, {topicName, requestFromPublisher, {}}));   //add new topic to list
   }
   return ActionStatusType::STATUS_OK;
 }
@@ -91,22 +94,22 @@ T_TopicStatus Broker::getTopicStatus(const std::string &topicName) const {
   return {1,{},ActionStatusType::STATUS_OK};
 }
 
-void Broker::updateTopic(const std::string &topicName, const std::string &message, const std::time_t &timestamp) const {
-  //send request (RequestType) with topicName, message and timestamp to every subscriber
-  //in the subscriber list of the given topic using udp!
+void Broker::updateTopic(const RequestType &requestToSubscriber) const {
+  //send the request to every subscriber in the subscriber list of the topic using the open tcp connection
 }
 
 /* public member functions */
-Broker::Broker(void) {}
+Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint({address, port}), mLogger("log.txt"), mMessageParser() {}
 
 Broker::~Broker(void) {}
 
-void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, [[maybe_unused]]const std::string message) {
+void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::string message) {
   tcp::endpoint endpoint = conn->socket().remote_endpoint();
   T_Endpoint clientEndpoint {
     endpoint.address().to_string(),
     std::to_string(endpoint.port())
   };
+
 
   //parse message
 

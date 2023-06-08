@@ -19,8 +19,8 @@
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-typedef struct {
+struct T_Topic {
   std::string       TopicName;
   RequestType       Request;
   T_SubscriberList  SubscriberList;
-} T_Topic;  /*!< type definition for topic */
+};  /*!< type definition for topic */

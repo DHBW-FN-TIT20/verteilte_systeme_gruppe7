@@ -29,11 +29,10 @@
  * Public - Class prototype
  *************************************************************************************************/
 class Broker{
-  private:
+  protected:
     T_TopicList mTopicList;
     mutable std::mutex mTopicListMutex;
 
-  protected:
     /**
      * @brief Check if a specific topic exists in the topic list.
      * ! Invoke only when mutex is locked !
@@ -42,7 +41,7 @@ class Broker{
      * @return true Topic is in list
      * @return false Topic is not in list
      */
-    bool isTopicExistent(std::string &topicName) const;
+    bool isTopicExistent(const std::string &topicName) const;
 
     /**
      * @brief Check if a specific subscriber is in the subscriber list of a specific topic in the topic list
@@ -53,7 +52,7 @@ class Broker{
      * @return true Subscriber exists in the subscriber list of the given topic
      * @return false Subscriber does not exist in the subscriber list of the given topic
      */
-    bool hasSubscriber(std::string &topicName, T_Endpoint &subscriber) const;
+    bool hasSubscriber(const std::string &topicName, const T_Endpoint &subscriber) const;
 
     /**
      * @brief Add subscriber to subscriber list of the given topic
@@ -61,7 +60,7 @@ class Broker{
      * @param topicName 
      * @return ActionStatusType 
      */
-    ActionStatusType subscribeTopic(std::string topicName, T_Endpoint subscriber);
+    ActionStatusType subscribeTopic(const std::string &topicName, const T_Endpoint &subscriber);
 
     /**
      * @brief Delete subscriber from subscriber list of the giben topic.
@@ -70,7 +69,7 @@ class Broker{
      * @param topicName Topic to unsubscribe from
      * @return ActionStatusType Action status
      */
-    ActionStatusType unsubscribeTopic(std::string topicName, T_Endpoint subscriber);
+    ActionStatusType unsubscribeTopic(const std::string &topicName, const T_Endpoint &subscriber);
 
     /**
      * @brief Publish a topic with the given message
@@ -79,7 +78,7 @@ class Broker{
      * @param message Message to publish
      * @return ActionStatusType Action status
      */
-    ActionStatusType publishTopic(std::string topicName, std::string &message) const;
+    ActionStatusType publishTopic(const std::string &topicName, const std::string &message) const;
 
     /**
      * @brief Get a list of all existing topics
@@ -94,7 +93,7 @@ class Broker{
      * @param topicName Topic to get status from
      * @return T_TopicStatus Status of the topic
      */
-    T_TopicStatus getTopicStatus(std::string topicName) const;
+    T_TopicStatus getTopicStatus(const std::string &topicName) const;
 
     /**
      * @brief Update the topic by sending it to all subscribers of the topic with the given message and timestamp
@@ -103,7 +102,7 @@ class Broker{
      * @param message Message to send
      * @param timestamp Timestamp of the current topic update
      */
-    void updateTopic(std::string topicName, std::string &message, std::time_t timestamp) const;
+    void updateTopic(const std::string &topicName, const std::string &message, const std::time_t &timestamp) const;
 
 
   public:
@@ -112,14 +111,6 @@ class Broker{
      * 
      */
     Broker(void);
-
-    /**
-     * @brief Construct a new Broker object with an initial topic list.
-     * This constructor is used for unit tests.
-     * 
-     * @param topicList Initial topic list
-     */
-    Broker(const T_TopicList &topicList);
 
     /**
      * @brief Default destructor for class Broker

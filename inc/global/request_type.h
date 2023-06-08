@@ -1,11 +1,9 @@
-/**
-  *************************************************************************************************
+/**************************************************************************************************
   * @file    T_Request.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
   * @date    03-June-2023
   * @brief   Type definition for request for communication between publisher/subscriber and broker 
-  *************************************************************************************************
-  */
+  ************************************************************************************************/
 
 #pragma once
 
@@ -17,7 +15,6 @@
 #include <chrono>
 #include <ctime>
 #include "action_type.h"
-
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums

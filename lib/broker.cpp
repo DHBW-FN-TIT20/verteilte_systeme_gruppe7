@@ -15,27 +15,31 @@
  *************************************************************************************************/
 
 /* private/protected member functions */
-bool Broker::isTopicExistent(std::string &topicName) const {
+bool Broker::isTopicExistent(const std::string &topicName) const {
   return mTopicList.count(topicName) > 0U;
 }
 
-bool Broker::hasSubscriber(std::string &topicName, T_Endpoint &subscriber) const {
+bool Broker::hasSubscriber(const std::string &topicName, const T_Endpoint &subscriber) const {
   T_SubscriberList subscriberList = mTopicList.at(topicName).SubscriberList;
   return std::find(subscriberList.begin(), subscriberList.end(), subscriber) != subscriberList.end();
 }
 
-ActionStatusType Broker::subscribeTopic(std::string topicName, T_Endpoint subscriber) {
+ActionStatusType Broker::subscribeTopic(const std::string &topicName, const T_Endpoint &subscriber) {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
 
   if(isTopicExistent(topicName)) {
-    mTopicList.at(topicName).SubscriberList.push_back(subscriber);
+    if(!hasSubscriber(topicName, subscriber)) {
+      mTopicList.at(topicName).SubscriberList.push_back(subscriber);
+    } else {
+      return ActionStatusType::INTERNAL_ERROR;  //subscriber already subscribed to this topic
+    }
   } else {
     return ActionStatusType::TOPIC_NON_EXISTENT;
   }
   return ActionStatusType::STATUS_OK;
 }
 
-ActionStatusType Broker::unsubscribeTopic(std::string topicName, T_Endpoint subscriber) {
+ActionStatusType Broker::unsubscribeTopic(const std::string &topicName, const T_Endpoint &subscriber) {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
 
   if(isTopicExistent(topicName)) {
@@ -55,7 +59,7 @@ ActionStatusType Broker::unsubscribeTopic(std::string topicName, T_Endpoint subs
 
 }
 
-ActionStatusType Broker::publishTopic(std::string topicName, [[maybe_unused]]std::string &message) const {
+ActionStatusType Broker::publishTopic(const std::string &topicName, const std::string &message) const {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
 
   if(isTopicExistent(topicName)) {
@@ -66,7 +70,7 @@ ActionStatusType Broker::publishTopic(std::string topicName, [[maybe_unused]]std
   return ActionStatusType::STATUS_OK;
 }
 
-std::vector<std::string> Broker::listTopics() const {
+std::vector<std::string> Broker::listTopics(void) const {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
   std::vector<std::string> keys;
   
@@ -78,7 +82,7 @@ std::vector<std::string> Broker::listTopics() const {
   return keys;
 }
 
-T_TopicStatus Broker::getTopicStatus([[maybe_unused]]std::string topicName) const {
+T_TopicStatus Broker::getTopicStatus(const std::string &topicName) const {
   std::lock_guard<std::mutex> lock(mTopicListMutex);
   //check if topic exists
     //yes: return T_Topic object from topic list that matches given topicName
@@ -87,15 +91,13 @@ T_TopicStatus Broker::getTopicStatus([[maybe_unused]]std::string topicName) cons
   return {1,{},ActionStatusType::STATUS_OK};
 }
 
-void Broker::updateTopic([[maybe_unused]]std::string topicName, [[maybe_unused]]std::string &message, [[maybe_unused]]std::time_t timestamp) const {
+void Broker::updateTopic(const std::string &topicName, const std::string &message, const std::time_t &timestamp) const {
   //send request (RequestType) with topicName, message and timestamp to every subscriber
   //in the subscriber list of the given topic using udp!
 }
 
 /* public member functions */
 Broker::Broker(void) {}
-
-Broker::Broker(const T_TopicList &topicList) : mTopicList(topicList) {}
 
 Broker::~Broker(void) {}
 

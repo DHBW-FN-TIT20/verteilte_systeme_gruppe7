@@ -1,11 +1,9 @@
-/**
-  *************************************************************************************************
+/**************************************************************************************************
   * @file    topic_status_type.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
   * @date    05-June-2023
   * @brief   
-  *************************************************************************************************
-  */
+  ************************************************************************************************/
 
 #pragma once
 
@@ -29,7 +27,7 @@ struct T_TopicStatus {
     std::string result = "Timestamp: " + std::to_string(Timestamp) + "; Subscriber: ";
 
     for(size_t i = 0; i < SubscriberList_t.size(); i++) {
-      result += SubscriberList_t.at(i).toString();
+      result += SubscriberList_t.at(i).endpoint.toString();
 
       result += (i != SubscriberList_t.size() - 1)? ", " : "; ";
     }

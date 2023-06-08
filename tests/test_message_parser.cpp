@@ -15,7 +15,7 @@
 #include "request_type.h"
 #include "action_status_type.h"
 #include "topic_status_type.h"
-#include "message_parser.cpp"
+#include "parser/message_parser.hpp"
 
 /**************************************************************************************************
  * Unit tests

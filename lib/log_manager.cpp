@@ -14,7 +14,7 @@
  * Public - Class implementation
  *************************************************************************************************/
 
-/* private member functions */
+/* protected member functions */
 void LogManager::close(void) {
   if(mFile.is_open()) {
     mFile.close();

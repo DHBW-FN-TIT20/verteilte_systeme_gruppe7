@@ -73,11 +73,11 @@ void from_json(const nlohmann::json& j, T_SubscriberList& obj) {
 void to_json(nlohmann::json& j, const T_TopicStatus& obj) {
   j = {
     {"Timestamp", obj.Timestamp},
-    {"SubscriberList_t", obj.SubscriberList_t}
+    {"SubscriberList_t", obj.SubscriberList}
   };
 }
 
 void from_json(const nlohmann::json& j, T_TopicStatus& obj) {
   j.at("Timestamp").get_to(obj.Timestamp);
-  j.at("SubscriberList_t").get_to(obj.SubscriberList_t);
+  j.at("SubscriberList_t").get_to(obj.SubscriberList);
 }

@@ -120,16 +120,15 @@ void TestListTopics(){
       {"topicName2", {"topicName2", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}, {"param2", "value2"}}), {/*subscriber list*/}}}
     }
   );
-
   std::vector<std::string> expectedTopicList = {"topicName1", "topicName2"};
-
   std::vector<std::string> resultTopicList = testListTopics.listTopics();
-
   assert(resultTopicList == expectedTopicList);
 }
 
 void TestGetTopicStatus(void) {
-
+  MockBroker testGetTopicStatus({{"topicName", {"topicName", RequestType(ActionType::PUBLISH_TOPIC, {{"param1", "value1"}}, static_cast<std::time_t>(1234567890)), {{{"0.0.0.1", "1"}, nullptr}, {{"0.0.0.2", "2"}, nullptr}}}}});
+  T_TopicStatus expectedTopicStatus = {1234567890, {{{"0.0.0.1", "1"}, nullptr}, {{"0.0.0.2", "2"}, nullptr}}};
+  assert(testGetTopicStatus.getTopicStatus("topicName") == expectedTopicStatus);
 }
 
 void TestUpdateTopic(void) {

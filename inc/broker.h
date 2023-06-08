@@ -29,7 +29,7 @@
 #include "request_type.h"
 
 #include "log_manager.h"
-#include "message_parser.h"
+#include "parser/message_parser.hpp"
 #include "tcp/tcp_server.hpp"
 
 /**************************************************************************************************
@@ -82,11 +82,11 @@ class Broker{
     ActionStatusType unsubscribeTopic(const std::string &topicName, const T_Subscriber &subscriber);
 
     /**
-     * @brief Publish a topic with the given message. Update the latest request of the topic in the topic list with the new request from the publisher.
+     * @brief Publish a topic with the message specified in the request. Update the request and forward it to the subscribers.
+     * Update the latest request of the topic in the topic list with the new request from the publisher.
      * If the topic doesn't exist, it will be created.
      * 
-     * @param conn Open TCP connection to subscribera
-     * 
+     * @param requestFromPublisher
      * @return ActionStatusType Action status
      */
     ActionStatusType publishTopic(RequestType &requestFromPublisher);
@@ -107,13 +107,11 @@ class Broker{
     T_TopicStatus getTopicStatus(const std::string &topicName) const;
 
     /**
-     * @brief Update the topic by sending it to all subscribers of the topic with the given message and timestamp
+     * @brief Update the topic by sending it to all subscribers of the topic specified in the request
      * 
-     * @param topicName Topic to update
-     * @param message Message to send
-     * @param timestamp Timestamp of the current topic update
+     * @param requestToSubscriber Request to be sent to all subscribers of the topis
      */
-    void updateTopic(const RequestType &requestToSubscriber) const;
+    void updateTopic(RequestType &requestToSubscriber);
 
 
   public:

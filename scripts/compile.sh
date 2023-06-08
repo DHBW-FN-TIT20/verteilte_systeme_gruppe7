@@ -31,7 +31,7 @@ include_paths=(
 )
 
 # compiler flags
-cpp_standard="-std=c++11"
+cpp_standard="-std=c++14"
 cpp_flags=(
   "$cpp_standard"
   "-Wall"

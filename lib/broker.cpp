@@ -96,8 +96,13 @@ T_TopicStatus Broker::getTopicStatus(const std::string &topicName) const {
   return {};
 }
 
-void Broker::updateTopic(const RequestType &requestToSubscriber) const {
+void Broker::updateTopic(RequestType &requestToSubscriber) {
   //send the request to every subscriber in the subscriber list of the topic using the open tcp connection
+  std::string response = mMessageParser.encodeObject(requestToSubscriber);
+
+  for(T_Subscriber subscriber : mTopicList.at(requestToSubscriber.mParameterList.at("topicName")).SubscriberList) {
+    subscriber.connection->sendResponse(response);
+  }
 }
 
 /* public member functions */
@@ -112,14 +117,44 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
     std::to_string(endpoint.port())
   };
 
+  /* parse message */
+  RequestType request = mMessageParser.decodeObject<RequestType>(message);
 
-  //parse message
+  /* decide which function to call based on the request */
+  ActionStatusType actionStatus;
+  std::vector<std::string> topicList;
+  T_TopicStatus topicStatus;
+  std::string response;
 
-  //decide which function to call based on the message's body
+  switch(request.mAction) {
+    case ActionType::SUBSCRIBE_TOPIC:
+      actionStatus = subscribeTopic(request.mParameterList.at("topicName"), {clientEndpoint, conn});
+      response = mMessageParser.encodeObject(actionStatus) + "\n";
+      break;
+    case ActionType::UNSUBSCRIBE_TOPIC:
+      actionStatus = unsubscribeTopic(request.mParameterList.at("topicName"), {clientEndpoint, conn});
+      response = mMessageParser.encodeObject(actionStatus) + "\n";
+      break;
+    case ActionType::PUBLISH_TOPIC:
+      actionStatus = publishTopic(request);
+      response = mMessageParser.encodeObject(actionStatus) + "\n";
+      break;
+    case ActionType::LIST_TOPICS:
+      topicList = listTopics();
+      actionStatus = ActionStatusType::STATUS_OK;
+      response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicList) + "\n";
+      break;
+    case ActionType::GET_TOPIC_STATUS:
+      topicStatus = getTopicStatus(request.mParameterList.at("topicName"));
+      actionStatus = ActionStatusType::STATUS_OK;
+      response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicStatus) + "\n";
+      break;
+    default:
+      actionStatus = ActionStatusType::INVALID_PARAMETERS;
+      response = mMessageParser.encodeObject(actionStatus) + "\n";
+      break;
+  }
 
-  //call the function
+  conn->sendResponse(response);
 
-  //encode the return value of the function; add the action status; add delimiter and "\n" at the end of the response message
-
-  //send the response back to the client
 }

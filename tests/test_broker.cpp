@@ -60,7 +60,7 @@ class MockBroker : public Broker {
       return Broker::getTopicStatus(topicName);
     }
 
-    void updateTopic(const RequestType &requestToSubscriber) const {
+    void updateTopic(RequestType &requestToSubscriber) {
       return Broker::updateTopic(requestToSubscriber);
     }
 };

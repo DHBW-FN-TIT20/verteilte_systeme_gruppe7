@@ -6,6 +6,9 @@
  * @brief   This file contains the implementation for the tcp server.
  *************************************************************************************************/
 
+#ifndef TCP_SERVER_HPP_
+#define TCP_SERVER_HPP_
+
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
@@ -78,6 +81,8 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
         if(!ec) {
           messageHandler(self, std::string(mBuffer.data(), length));
           startRead();
+        } else if (ec == asio::error::eof) {
+          //connection closed by client
         } else {
           //TODO: Error
         }
@@ -169,3 +174,5 @@ int main() {
 }
 
 #endif
+
+#endif /* TCP_SERVER_HPP_ */

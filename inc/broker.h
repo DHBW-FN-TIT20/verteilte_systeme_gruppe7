@@ -18,6 +18,7 @@
 #include <ctime>
 #include <algorithm>
 #include <mutex>
+#include <csignal>
 
 /* Own Libs / datatypes */
 #include "topic_type.h"
@@ -41,6 +42,7 @@ class Broker{
     T_Endpoint mOwnEndpoint;
     LogManager mLogger;
     MessageParser mMessageParser;
+    TcpServer brokerTcpServer;
     mutable std::mutex mTopicListMutex;
 
     /**
@@ -115,6 +117,8 @@ class Broker{
 
 
   public:
+    static Broker* instance;
+    
     /**
      * @brief No default constructor for class Broker
      * 
@@ -142,4 +146,11 @@ class Broker{
      * @param message Message from client
      */
     void messageHandler(std::shared_ptr<TcpConnection> conn, const std::string message);
+
+    /**
+     * @brief 
+     * 
+     * @param signum 
+     */
+    static void signalHandler(int signum);
 };

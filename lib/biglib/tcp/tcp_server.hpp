@@ -52,6 +52,12 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
     TcpConnection(asio::io_context &ioContext) : mSocket(ioContext) {}
 
   public:
+    /**
+     * @brief Create new shared pointer on TcpConnection object
+     * 
+     * @param ioContext IO context to use for the socket
+     * @return std::shared_ptr<TcpConnection> shared pointer on new TcpConnection object
+     */
     static std::shared_ptr<TcpConnection> create(asio::io_context &ioContext) {
       return std::shared_ptr<TcpConnection>(new TcpConnection(ioContext));
     }
@@ -61,7 +67,7 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
      * 
      * @return tcp::socket& socket for the respective connection
      */
-    tcp::socket &socket() {
+    tcp::socket &socket(void) {
       return mSocket;
     }
 
@@ -145,6 +151,14 @@ class TcpServer {
     void run(void) {
       startAccept();
       mIoContext.run();
+    }
+
+    void close(void) {
+      mTcpAcceptor.cancel();
+      mTcpAcceptor.close();
+      if(!mIoContext.stopped()) {
+        mIoContext.stop();
+      }
     }
 };
 

@@ -105,10 +105,18 @@ void Broker::updateTopic(RequestType &requestToSubscriber) {
   }
 }
 
-/* public member functions */
-Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint({address, port}), mLogger("log.txt"), mMessageParser() {}
 
-Broker::~Broker(void) {}
+/* public member functions */
+Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint({address, port}), mLogger("log.txt"), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
+  instance = this;
+  signal(SIGINT, signalHandler);
+  std::cout << "Server started, waiting for clients..." << std::endl;
+  brokerTcpServer.run();
+}
+
+Broker::~Broker(void) {
+  instance = nullptr;
+}
 
 void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::string message) {
   tcp::endpoint endpoint = conn->socket().remote_endpoint();
@@ -129,32 +137,43 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
   switch(request.mAction) {
     case ActionType::SUBSCRIBE_TOPIC:
       actionStatus = subscribeTopic(request.mParameterList.at("topicName"), {clientEndpoint, conn});
-      response = mMessageParser.encodeObject(actionStatus) + "\n";
+      response = mMessageParser.encodeObject(actionStatus);
       break;
     case ActionType::UNSUBSCRIBE_TOPIC:
       actionStatus = unsubscribeTopic(request.mParameterList.at("topicName"), {clientEndpoint, conn});
-      response = mMessageParser.encodeObject(actionStatus) + "\n";
+      response = mMessageParser.encodeObject(actionStatus);
       break;
     case ActionType::PUBLISH_TOPIC:
       actionStatus = publishTopic(request);
-      response = mMessageParser.encodeObject(actionStatus) + "\n";
+      response = mMessageParser.encodeObject(actionStatus);
       break;
     case ActionType::LIST_TOPICS:
       topicList = listTopics();
       actionStatus = ActionStatusType::STATUS_OK;
-      response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicList) + "\n";
+      response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicList);
       break;
     case ActionType::GET_TOPIC_STATUS:
       topicStatus = getTopicStatus(request.mParameterList.at("topicName"));
       actionStatus = ActionStatusType::STATUS_OK;
-      response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicStatus) + "\n";
+      response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicStatus);
       break;
     default:
-      actionStatus = ActionStatusType::INVALID_PARAMETERS;
-      response = mMessageParser.encodeObject(actionStatus) + "\n";
+      actionStatus = ActionStatusType::INTERNAL_ERROR;
+      response = mMessageParser.encodeObject(actionStatus);
       break;
   }
 
+  if(actionStatus != ActionType::SUBSCRIBE_TOPIC) {
+    response += "\n";
+  }
+  
   conn->sendResponse(response);
+}
 
+void Broker::signalHandler(int signum) {
+  if(instance) {
+    instance->brokerTcpServer.close();
+    std::cout << "Server closed" << std::endl;
+    exit(signum);
+  }
 }

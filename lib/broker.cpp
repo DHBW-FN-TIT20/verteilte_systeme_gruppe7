@@ -163,8 +163,9 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
       break;
   }
 
-  if(actionStatus != ActionType::SUBSCRIBE_TOPIC) {
+  if(request.mAction != ActionType::SUBSCRIBE_TOPIC) {
     response += "\n";
+    std::cout << "newline added" << std::endl;
   }
   
   conn->sendResponse(response);

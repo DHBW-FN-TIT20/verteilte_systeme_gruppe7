@@ -21,6 +21,7 @@
 #include <cstring>
 #include <array>
 #include <functional>
+#include <thread>
 
 /* Own Libs / datatypes */
 #include "endpoint_type.h"
@@ -85,7 +86,9 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
       auto self(shared_from_this());
       mSocket.async_read_some(asio::buffer(mBuffer), [this, self](asio::error_code ec, std::size_t length) {
         if(!ec) {
-          messageHandler(self, std::string(mBuffer.data(), length));
+          std::thread([this, self, length](){
+            messageHandler(self, std::string(mBuffer.data(), length));
+          }).detach();
           startRead();
         } else if (ec == asio::error::eof) {
           //connection closed by client

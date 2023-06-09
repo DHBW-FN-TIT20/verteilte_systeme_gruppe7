@@ -24,7 +24,7 @@ Broker* Broker::instance = nullptr;
  *************************************************************************************************/
 class MockBroker : public Broker {
   public:
-    MockBroker(const T_TopicList& topicList) : Broker::Broker("localhost", "8080") {
+    MockBroker(const T_TopicList& topicList) : Broker::Broker() {
       mTopicList = topicList;
     }
 

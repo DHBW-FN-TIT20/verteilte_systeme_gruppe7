@@ -113,6 +113,10 @@ Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint
   brokerTcpServer.run();
 }
 
+Broker::Broker() : mOwnEndpoint({"localhost", "8080"}), mLogger("log.txt"), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
+  instance = this;
+}
+
 Broker::~Broker(void) {
   instance = nullptr;
 }

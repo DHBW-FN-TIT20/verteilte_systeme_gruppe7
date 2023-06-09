@@ -123,7 +123,7 @@ class Broker{
      * @brief No default constructor for class Broker
      * 
      */
-    Broker() = delete;
+    Broker(void);
 
     /**
      * @brief Default constructor for class Broker

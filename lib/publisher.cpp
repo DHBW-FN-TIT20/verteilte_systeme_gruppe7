@@ -10,18 +10,16 @@
  *************************************************************************************************/
 #include "publisher.h"
 
-using namespace std;
-
 /**************************************************************************************************
  * Public - Class implementation
  *************************************************************************************************/
-string Publisher::sendRequest(const RequestType &request) const {
+std::string Publisher::sendRequest(const RequestType &request) const {
   return "";
 }
 
-void Publisher::publishTopic(const string topicName, const string &message) const {
+void Publisher::publishTopic(const std::string topicName, const std::string &message) const {
   // create message object
-  map<string, string> requestParameters = {
+  std::map<std::string, std::string> requestParameters = {
     {"topicName", topicName},
     {"message", message}
   };
@@ -29,11 +27,11 @@ void Publisher::publishTopic(const string topicName, const string &message) cons
   const RequestType request = RequestType(ActionType::PUBLISH_TOPIC, requestParameters);
 
   // send request
-  const string responeMessage = sendRequest(request);
+  const std::string responeMessage = sendRequest(request);
 }
 
-void Publisher::getTopicStatus(const string topicName) const {
-  map<string, string> requestParameters = {
+void Publisher::getTopicStatus(const std::string topicName) const {
+  std::map<std::string, std::string> requestParameters = {
     {"topicName", topicName}
   };
 

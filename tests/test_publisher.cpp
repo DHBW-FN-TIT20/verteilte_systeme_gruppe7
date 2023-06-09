@@ -15,9 +15,9 @@
 /*************************************************************************************************
  * Unit tests
  *************************************************************************************************/
-const string tempPublishMessage = "This is a test message";
-const string tempPublishTopicName = "test-topic-name";
-const map<string, string> expectedPublishParameterList = {
+const std::string tempPublishMessage = "This is a test message";
+const std::string tempPublishTopicName = "test-topic-name";
+const std::map<std::string, std::string> expectedPublishParameterList = {
   {"topicName", tempPublishTopicName},
   {"message", tempPublishMessage}
 };
@@ -25,7 +25,7 @@ const map<string, string> expectedPublishParameterList = {
 // mock Publisher "sendRequest" method
 class MockPublishTopicPublisher : public Publisher {
   private:
-    string sendRequest(const RequestType &request) const override {
+    std::string sendRequest(const RequestType &request) const override {
       // assert correct parameters
       assert(request.mAction == ActionType::PUBLISH_TOPIC);
       assert(request.mParameterList == expectedPublishParameterList);
@@ -40,15 +40,15 @@ void TestPublishTopic() {
 }
 
 // test getTopicStatus
-const string tempGetTopicTopicName = "test-topic-name";
-const map<string, string> expectedGetTopicParameterList = {
+const std::string tempGetTopicTopicName = "test-topic-name";
+const std::map<std::string, std::string> expectedGetTopicParameterList = {
   {"topicName", tempGetTopicTopicName},
 };
 
 // mock Publisher "sendRequest" method
 class MockGetTopicPublisher : public Publisher {
   private:
-    string sendRequest(const RequestType &request) const override {
+    std::string sendRequest(const RequestType &request) const override {
       // assert correct parameters
       assert(request.mAction == ActionType::GET_TOPIC_STATUS);
       assert(request.mParameterList == expectedGetTopicParameterList);
@@ -58,7 +58,7 @@ class MockGetTopicPublisher : public Publisher {
 };
 
 void TestGetTopicStatus() {
-  const string tempTopicName = "test-topic-name";
+  const std::string tempTopicName = "test-topic-name";
   MockGetTopicPublisher tempPublisher;
   tempPublisher.getTopicStatus(tempTopicName);
 }

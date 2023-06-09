@@ -27,7 +27,7 @@ class MockPublishTopicPublisher : public Publisher {
   private:
     string sendRequest(const RequestType &request) const override {
       // assert correct parameters
-      assert(request.mAction == ACTION_ENUM::PUBLISH_TOPIC);
+      assert(request.mAction == ActionType::PUBLISH_TOPIC);
       assert(request.mParameterList == expectedPublishParameterList);
       assert(request.mTimestamp == std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
       return "{MockResponse}";
@@ -50,7 +50,7 @@ class MockGetTopicPublisher : public Publisher {
   private:
     string sendRequest(const RequestType &request) const override {
       // assert correct parameters
-      assert(request.mAction == ACTION_ENUM::GET_TOPIC_STATUS);
+      assert(request.mAction == ActionType::GET_TOPIC_STATUS);
       assert(request.mParameterList == expectedGetTopicParameterList);
       assert(request.mTimestamp == std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
       return "{MockResponse}";

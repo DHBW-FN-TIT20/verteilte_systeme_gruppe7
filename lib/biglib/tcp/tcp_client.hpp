@@ -53,6 +53,10 @@ class TcpClient : public std::enable_shared_from_this<TcpClient> {
       asio::connect(mSocket, endpoint_iterator);
     }
 
+    tcp::socket &socket(void) {
+      return mSocket;
+    }
+
     void sendMessage(const std::string &message) {
       asio::write(mSocket, asio::buffer(message, message.size()));
     }

@@ -46,7 +46,8 @@ class TcpClient : public std::enable_shared_from_this<TcpClient> {
 
   public:
     TcpClient(T_Endpoint endpoint, std::function<void(const std::string)> callback) : mSocket(mIoContext), mRemoteEndpoint(endpoint), responseHandler(callback) {}
-
+    TcpClient(T_Endpoint endpoint) : mSocket(mIoContext), mRemoteEndpoint(endpoint) {}
+    
     void connect(void) {
       tcp::resolver resolver(mIoContext);
       auto endpoint_iterator = resolver.resolve(mRemoteEndpoint.address, mRemoteEndpoint.port);

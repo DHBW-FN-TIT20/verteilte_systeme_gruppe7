@@ -12,6 +12,7 @@
 #include <string>
 
 /* Own Libs / datatypes */
+#include "tcp/tcp_client.hpp"
 #include "topic_status_type.h"
 #include "request_type.h"
 
@@ -20,6 +21,8 @@
  *************************************************************************************************/
 
 class Publisher {
+  private:
+    std::shared_ptr<TcpClient> publisherTcpClient;
   protected:
     /**
      * @brief Send specified request to the broker
@@ -42,4 +45,14 @@ class Publisher {
      * @param topicName Topic name for which information is requested
      */
     void getTopicStatus(const std::string topicName) const;
+    /**
+     * @brief Default constructor for class Publisher
+     *
+     */
+    Publisher(const std::string address, const std::string port);
+    /**
+     * @brief No default constructor for class Publisher
+     *
+     */
+    Publisher(void);
 };

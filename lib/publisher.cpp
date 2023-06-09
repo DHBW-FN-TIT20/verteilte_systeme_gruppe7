@@ -40,3 +40,7 @@ void Publisher::getTopicStatus(const std::string topicName) const {
   // send request
   sendRequest(request);
 }
+
+Publisher::Publisher(void) : publisherTcpClient(std::make_shared<TcpClient>(T_Endpoint{"localhost", "8080"})) {}
+
+Publisher::Publisher(const std::string brokerAddress, const std::string brokerPort) : publisherTcpClient(std::make_shared<TcpClient>(T_Endpoint{brokerAddress, brokerPort})) {}

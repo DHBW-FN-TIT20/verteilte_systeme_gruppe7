@@ -64,10 +64,6 @@ class MockBroker : public Broker {
     T_TopicStatus getTopicStatus(const std::string &topicName) const {
       return Broker::getTopicStatus(topicName);
     }
-
-    void updateTopic(RequestType &requestToSubscriber) {
-      return Broker::updateTopic(requestToSubscriber);
-    }
 };
 
 /**************************************************************************************************
@@ -136,14 +132,6 @@ void TestGetTopicStatus(void) {
   assert(testGetTopicStatus.getTopicStatus("topicName") == expectedTopicStatus);
 }
 
-void TestUpdateTopic(void) {
-
-}
-
-void TestMessageHandler(void) {
-
-}
-
 int main() {
   TestIsTopicExistent();
   TestHasSubscriber();
@@ -152,8 +140,6 @@ int main() {
   TestPublishTopic();
   TestListTopics();
   TestGetTopicStatus();
-  TestUpdateTopic();
-  TestMessageHandler();
 
   std::cout << "All tests for class Broker passed" << std::endl;
   return 0;

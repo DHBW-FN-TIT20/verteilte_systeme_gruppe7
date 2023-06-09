@@ -110,7 +110,6 @@ void Broker::updateTopic(RequestType &requestToSubscriber) {
 Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint({address, port}), mLogger("log.txt"), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
   instance = this;
   signal(SIGINT, signalHandler);
-  std::cout << "Server started, waiting for clients..." << std::endl;
   brokerTcpServer.run();
 }
 
@@ -165,7 +164,6 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
 
   if(request.mAction != ActionType::SUBSCRIBE_TOPIC) {
     response += "\n";
-    std::cout << "newline added" << std::endl;
   }
   
   conn->sendResponse(response);
@@ -174,7 +172,7 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
 void Broker::signalHandler(int signum) {
   if(instance) {
     instance->brokerTcpServer.close();
-    std::cout << "Server closed" << std::endl;
+    std::cout << "TCP-Server closed" << std::endl;
     exit(signum);
   }
 }

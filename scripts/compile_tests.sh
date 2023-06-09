@@ -33,10 +33,12 @@ include_paths=(
   "-I../src"
   "-I../lib"
   "-I../lib/biglib"
+  "-I../lib/biglib/asio"
+  "-I../lib/biglib/tcp"
 )
 
 # compiler flags
-cpp_standard="-std=c++11"
+cpp_standard="-std=c++14"
 cpp_flags=(
   "$cpp_standard"
   "-Wall"

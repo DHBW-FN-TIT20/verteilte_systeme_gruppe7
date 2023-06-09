@@ -9,12 +9,17 @@
  * Include Header Files
  *************************************************************************************************/
 #include <iostream>
+#include <cassert>
 #include <map>
 #include <string>
 #include "request_type.h"
 #include "action_status_type.h"
 #include "topic_status_type.h"
-#include "message_parser.cpp"
+#include "parser/message_parser.hpp"
+
+/**************************************************************************************************
+ * Unit tests
+ *************************************************************************************************/
 
 void TestEncodeObject() {
   MessageParser tempParser;
@@ -39,10 +44,10 @@ void TestEncodeObject() {
   // Test TopicStatus
   T_TopicStatus tempTopicStatus;
   tempTopicStatus.Timestamp = 12345678;
-  tempTopicStatus.SubscriberList_t = {"subscriber-1", "subscriber-2"};
+  tempTopicStatus.SubscriberList = {{{"0.0.0.1", "1"}, nullptr}, {{"0.0.0.2", "2"}, nullptr}};
 
   std::string topicStatusResult = tempParser.encodeObject(tempTopicStatus);
-  assert(topicStatusResult == R"({"SubscriberList_t":["subscriber-1","subscriber-2"],"Timestamp":12345678})");
+  assert(topicStatusResult == R"({"SubscriberList_t":["0.0.0.1:1","0.0.0.2:2"],"Timestamp":12345678})");
 
   // Test TopicStringList
   std::vector<std::string> tempTopicList = {
@@ -80,12 +85,12 @@ void TestDecodeObject() {
   // Test TopicStatus
   T_TopicStatus tempExpectedTopicStatus;
   tempExpectedTopicStatus.Timestamp = 12345678;
-  tempExpectedTopicStatus.SubscriberList_t = {"subscriber-1", "subscriber-2"};
-  std::string tempTopicStatusString = R"({"SubscriberList_t":["subscriber-1","subscriber-2"],"Timestamp":12345678})";
+  tempExpectedTopicStatus.SubscriberList = {StringToSubsciber("0.0.0.1:1"), StringToSubsciber("0.0.0.2:2")};
+  std::string tempTopicStatusString = R"({"SubscriberList_t":["0.0.0.1:1","0.0.0.2:2"],"Timestamp":12345678})";
 
   T_TopicStatus resultTopicStatus = tempParser.decodeObject<T_TopicStatus>(tempTopicStatusString);
   assert(tempExpectedTopicStatus.Timestamp == resultTopicStatus.Timestamp);
-  assert(tempExpectedTopicStatus.SubscriberList_t == resultTopicStatus.SubscriberList_t);
+  assert(tempExpectedTopicStatus.SubscriberList == resultTopicStatus.SubscriberList);
 
   // Test TopicStringList
   std::vector<std::string> tempExpectedTopicStringList = {
@@ -103,4 +108,5 @@ int main() {
   TestDecodeObject();
 
   std::cout << "All tests for class MessageParser passed" << std::endl;
+  return 0;
 }

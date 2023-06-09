@@ -27,10 +27,11 @@ include_paths=(
   "-I../inc/global"
   "-I../lib"
   "-I../lib/biglib"
+  "-I../lib/biglib/asio"
 )
 
 # compiler flags
-cpp_standard="-std=c++11"
+cpp_standard="-std=c++14"
 cpp_flags=(
   "$cpp_standard"
   "-Wall"

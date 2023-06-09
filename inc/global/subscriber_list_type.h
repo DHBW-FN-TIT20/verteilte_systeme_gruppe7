@@ -13,9 +13,9 @@
  * Include Header Files
  *************************************************************************************************/
 #include <vector>
-#include <string>
+#include "subscriber_type.h"
 
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-typedef std::vector<std::string>  T_SubscriberList;   /*!< type definition for list of subscribers identified by their names */
+typedef std::vector<T_Subscriber>  T_SubscriberList;   /*!< type definition for list of subscribers identified by their names */

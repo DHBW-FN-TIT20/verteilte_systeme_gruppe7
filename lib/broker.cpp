@@ -128,6 +128,9 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
     std::to_string(endpoint.port())
   };
 
+  /* display request on terminal */
+  std::cout << mLogger.getTimestampString() << clientEndpoint.toString() << " >>" << message << "<<" << std::endl;
+
   /* parse message */
   RequestType request = mMessageParser.decodeObject<RequestType>(message);
 
@@ -171,6 +174,12 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
   }
   
   conn->sendResponse(response);
+
+  if(request.mAction != ActionType::SUBSCRIBE_TOPIC) {
+    std::cout << "Response sent: " << response << std::endl;
+  } else {
+    std::cout << "Response sent: " << response << std::endl << std::endl;
+  }
 }
 
 void Broker::signalHandler(int signum) {

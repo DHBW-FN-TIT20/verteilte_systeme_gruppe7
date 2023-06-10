@@ -13,7 +13,6 @@ src_dir="../tests"
 build_dir="../build"
 lib_dir="../lib"
 lib_build_dir="../build/lib"
-test_lib_dir="../src"
 
 # files
 error_log="unit_test_error_log.txt"
@@ -21,10 +20,6 @@ error_log="unit_test_error_log.txt"
 lib_std="lib_std.a"
 lib_std_ld="${lib_std#lib}"
 lib_std_ld="${lib_std_ld%.*}"
-
-test_lib="lib_unit_test.a"
-test_lib_ld="${test_lib#lib}"
-test_lib_ld="${test_lib_ld%.*}"
 
 # include paths
 include_paths=(
@@ -133,52 +128,6 @@ build_lib() {
   clean_up $lib_build_dir
 }
 
-build_test_lib() {
-  test_lib_files=()   # array for test library files
-
-  # get all files from test lib folder and store them in the array
-  while IFS= read -r -d '' file; do
-    test_lib_files+=("${file#$test_lib_dir}")
-  done < <(find "$test_lib_dir" -type f -name "*.cpp" -print0)
-
-  # create or update test library
-  for test_lib_file in "${test_lib_files[@]}"; do
-    g++ -c "$test_lib_dir/$test_lib_file" ${include_paths[@]} ${cpp_flags[@]} -o "$lib_build_dir${test_lib_file%.*}.o" >> "$error_log" 2>&1
-    if [ $? -ne 0 ]; then
-      tput setab 0
-      tput setaf 1
-      echo -e "\nError compiling unit test library file: $test_lib_file"
-      tput sgr0
-      print_error_log
-      clean_up $lib_build_dir
-      exit 1
-    fi
-  done
-
-  ar rcs "$lib_build_dir/$test_lib" "$lib_build_dir"/*.o >> "$error_log" 2>&1
-  if [ $? -ne 0 ]; then
-    tput setab 0
-    tput setaf 1
-    echo -e "\nError creating unit test library"
-    tput sgr0
-    print_error_log
-    clean_up $lib_build_dir
-    exit 1
-  fi
-
-  # clean up build folder
-  clean_up $lib_build_dir
-}
-
-print_error_log() {
-  if [ -s "$error_log" ]; then
-    echo -e "\n\n------------------------------"
-    tput setaf 9
-    echo -e "Errors:\n"
-    tput sgr0
-    cat "$error_log"
-  fi
-}
 
 remove_object_files() {
   clean_up $build_dir
@@ -187,7 +136,6 @@ remove_object_files() {
 # compile files
 clear
 build_lib
-build_test_lib
 
 for file in "${files[@]}"; do
   prev_compiled_files="$completed_files"
@@ -204,7 +152,7 @@ for file in "${files[@]}"; do
     exit 1
   fi
 
-  g++ "$build_dir/${file%.*}.o" -L${lib_build_dir} -l${test_lib_ld} -l${lib_std_ld} ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" >> "$error_log" 2>&1
+  g++ "$build_dir/${file%.*}.o" -L${lib_build_dir} -l${lib_std_ld} ${cpp_flags[@]} -o "$build_dir/${file%.*}_exe" >> "$error_log" 2>&1
   if [ $? -ne 0 ]; then
     tput setaf 1
     echo -e "\nError creating executable for file: $file"

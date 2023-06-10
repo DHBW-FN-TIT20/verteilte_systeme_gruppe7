@@ -19,6 +19,7 @@
 #include "topic_status_type.h"
 #include "subscriber_type.h"
 #include "subscriber_list_type.h"
+#include "topic_name_list_type.h"
 
 #include "nlohmann/json.hpp"
 
@@ -110,5 +111,20 @@ inline void to_json(nlohmann::json& j, const T_TopicStatus& obj) {
 inline void from_json(const nlohmann::json& j, T_TopicStatus& obj) {
   j.at("Timestamp").get_to(obj.Timestamp);
   j.at("SubscriberList_t").get_to(obj.SubscriberList);
+}
+
+// TopicNames
+inline void to_json(nlohmann::json& j, const T_TopicNameList& obj) {
+  j = nlohmann::json::array();
+  for(const auto& topicName : obj.TopicNameList) {
+    j.push_back(topicName);
+  }
+}
+
+inline void from_json(const nlohmann::json& j, T_TopicNameList& obj) {
+  obj.TopicNameList.clear();
+  for(const auto& item : j) {
+    obj.TopicNameList.push_back(item.get<std::string>());
+  }
 }
 

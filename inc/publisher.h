@@ -55,4 +55,9 @@ class Publisher {
      *
      */
     Publisher(void);
+    /**
+     * @brief Default destructor for class Publisher
+     *  
+     */
+    ~Publisher(void);
 };

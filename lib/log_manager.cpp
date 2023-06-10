@@ -21,7 +21,6 @@ void LogManager::close(void) {
   }
 }
 
-/* public member functions */
 std::string LogManager::getTimestampString(void) const {
   auto now = std::chrono::system_clock::now();
   auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
@@ -34,7 +33,8 @@ std::string LogManager::getTimestampString(void) const {
   return oss.str();
 }
 
-LogManager::LogManager(const std::string& filename) : mFile(filename), mLogFileMutex() {
+/* public member functions */
+LogManager::LogManager(const std::string& filename) : mFile(filename, std::ios::app), mLogFileMutex() {
   if(!mFile) {
     throw::std::runtime_error("Error trying to open log file");
   }

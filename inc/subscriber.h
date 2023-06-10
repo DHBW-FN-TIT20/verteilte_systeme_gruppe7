@@ -16,6 +16,7 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
+#include <csignal>
 
 /* Own Libs / datatypes */
 #include "action_type.h"
@@ -97,6 +98,6 @@ class Subscriber {
      * 
      * @param signum signal number
      */
-    void signalHandler(int signum);
+    static void signalHandler(int signum);
 
 };

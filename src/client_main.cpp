@@ -53,11 +53,27 @@ int main(int argc, char* argv[]) {
       Subscriber subscriber(serverEndpoint);
       subscriber.listTopics();
     } else if(action == "PUBLISH_TOPIC") {
-      //Publisher publisher(serverEndpoint);
-      
+      it = std::find(args.begin(), args.end(), "--topicName");
+      if(it != args.end() && ++it != args.end()) {
+        std::string topicName = *it;
+        it = std::find(args.begin(), args.end(), "--message");
+        if(it != args.end() && ++it != args.end()) {
+          //Publisher publisher(serverEndpoint);
+          //publisher.publishTopic(topicName, *it);
+        } else {
+          throw std::invalid_argument("No message found");
+        }
+      } else {
+        throw std::invalid_argument("No topic name found");
+      }
     } else if(action == "GET_TOPIC_STATUS") {
-      //Publisher publisher(serverEndpoint);
-
+      it = std::find(args.begin(), args.end(), "--topicName");
+      if(it != args.end() && ++it != args.end()) {
+        //Publisher publisher(serverEndpoint);
+        //publisher.getTopicStatus(*it);
+      } else {
+        throw std::invalid_argument("No topic name found");
+      }
     } else {
       throw std::invalid_argument("Action invalid\n\nOptions are:\n> SUBSCRIBE_TOPIC\n> LIST_TOPICS\n> PUBLISH_TOPIC\n> GET_TOPIC_STATUS\n");
     }

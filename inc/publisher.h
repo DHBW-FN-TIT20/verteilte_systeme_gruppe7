@@ -44,7 +44,7 @@ class Publisher {
      *
      * @param topicName Topic name for which information is requested
      */
-    void getTopicStatus(const std::string topicName) const;
+    T_TopicStatus getTopicStatus(const std::string topicName) const;
     /**
      * @brief Default constructor for class Publisher
      *

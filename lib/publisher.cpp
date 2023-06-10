@@ -9,6 +9,7 @@
  * Include Header Files
  *************************************************************************************************/
 #include "publisher.h"
+#include "send_request.hpp"
 
 /**************************************************************************************************
  * Public - Class implementation
@@ -24,21 +25,21 @@ void Publisher::publishTopic(const std::string topicName, const std::string &mes
     {"message", message}
   };
 
-  const RequestType request = RequestType(ActionType::PUBLISH_TOPIC, requestParameters);
+  RequestType request = RequestType(ActionType::PUBLISH_TOPIC, requestParameters);
 
   // send request
-  const std::string responeMessage = sendRequest(request);
+  network::sendRequestWithoutResponse(publisherTcpClient, request);
 }
 
-void Publisher::getTopicStatus(const std::string topicName) const {
+T_TopicStatus Publisher::getTopicStatus(const std::string topicName) const {
   std::map<std::string, std::string> requestParameters = {
     {"topicName", topicName}
   };
 
-  const RequestType request = RequestType(ActionType::GET_TOPIC_STATUS, requestParameters);
+  RequestType request = RequestType(ActionType::GET_TOPIC_STATUS, requestParameters);
 
   // send request
-  sendRequest(request);
+  return network::sendRequest<T_TopicStatus>(publisherTcpClient, request);
 }
 
 Publisher::Publisher(void) : publisherTcpClient(std::make_shared<TcpClient>(T_Endpoint{"localhost", "8080"})) {}

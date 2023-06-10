@@ -14,23 +14,24 @@
  * Class implementation
  *************************************************************************************************/
 /* private/protected member functions */
-void Subscriber::unsubscribeTopic(const std::string &topicName) const {
+void Subscriber::unsubscribeTopic(const std::string &topicName) {
   RequestType request(ActionType::UNSUBSCRIBE_TOPIC, {{"topicName", topicName}});
 
-  //(void)sendRequestWithoutResponse(subscriberTcpClient, request);
+  (void)network::sendRequestWithoutResponse(mTcpClient, request);
 
   /* successfully unsubscribed */
   std::cout << "Successfully unsubscribed from topic >>" << topicName << "<<" << std::endl;
-  //log
-
+  mLogger.addLogEntry(mOwnEndpoint.toString() + ": unsubscribed from topic >>" + topicName + "<<");
 }
 
-void Subscriber::updateTopic(const std::string &topicName, const std::string &msg, const std::time_t &timestamp) const {
-  
+void Subscriber::updateTopic(const std::string &topicName, const std::string &msg, const std::time_t &timestamp) {
+  std::cout << mLogger.getTimestampString() << "received topic >>" << topicName << "<<" << std::endl;
+  std::cout << "> Topic message: " << msg << std::endl;
+  std::cout << "> Timestamp: " << timestamp << std::endl << std::endl;
 }
 
 /* public member functions */
-Subscriber::Subscriber(const std::string &address, const std::string &port) : mServerEndpoint(T_Endpoint{address, port}), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, messageHandler)) {}
+Subscriber::Subscriber(const std::string &address, const std::string &port) : mServerEndpoint(T_Endpoint{address, port}), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, messageHandler)), mOwnEndpoint(T_Endpoint{mTcpClient->socket().local_endpoint().address().to_string(), std::to_string(mTcpClient->socket().local_endpoint().port())}) {}
 
 Subscriber::~Subscriber() {}
 
@@ -42,8 +43,24 @@ void Subscriber::listTopics(void) {
 
 }
 
-void Subscriber::messageHandler(const std::string message) const {
-  
+void Subscriber::messageHandler(const std::string message) {
+  /* parse message */
+  RequestType request = mMessageParser.decodeObject<RequestType>(message);
+
+  /* extract relevant information from response */
+  const std::string topicName = request.mParameterList.at("topicName");
+  const std::string topicMessage = request.mParameterList.at("message");
+  std::time_t topicTimestamp;
+  try {
+    topicTimestamp = static_cast<std::time_t>(std::stol(request.mParameterList.at("timestamp")));
+  } catch(const std::invalid_argument &ia) {
+    std::cerr << "Invalid timestamp: " << ia.what() << std::endl;
+  } catch(const std::out_of_range &oor) {
+    std::cerr << "Timestamp out of range: " << oor.what() << std::endl;
+  }
+
+  /* update topic member function call */
+  updateTopic(topicName, topicMessage, topicTimestamp);  
 }
 
 void Subscriber::signalHandler(int signum) {

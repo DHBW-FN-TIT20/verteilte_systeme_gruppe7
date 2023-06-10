@@ -28,6 +28,7 @@
 #include "tcp/tcp_client.hpp"
 #include "log_manager.h"
 #include "parser/message_parser.hpp"
+#include "send_request.hpp"
 
 /**************************************************************************************************
  * Public - Class prototype
@@ -35,10 +36,12 @@
 
 class Subscriber {
   private:
-  T_Endpoint                      mServerEndpoint;
-  MessageParser                   mMessageParser;
-  LogManager                      mLogger;
-  std::shared_ptr<TcpClient>      mTcpClient;
+    T_Endpoint                      mServerEndpoint;
+    T_Endpoint                      mOwnEndpoint;
+    MessageParser                   mMessageParser;
+    LogManager                      mLogger;
+    std::shared_ptr<TcpClient>      mTcpClient;
+
   protected:
 
     /**
@@ -47,7 +50,7 @@ class Subscriber {
      * 
      * @param topicName Topic name
      */
-    void unsubscribeTopic(const std::string &topicName) const;
+    void unsubscribeTopic(const std::string &topicName);
 
     /**
      * @brief Send the content of a topic to all subscribers.
@@ -56,7 +59,7 @@ class Subscriber {
      * @param msg Message
      * @param timestamp timestamp of latest update
      */
-    void updateTopic(const std::string &topicName, const std::string &msg, const std::time_t &timestamp) const;
+    void updateTopic(const std::string &topicName, const std::string &msg, const std::time_t &timestamp);
 
   public:
     static Subscriber* instance;
@@ -87,7 +90,7 @@ class Subscriber {
      * 
      * @param message response from server
      */
-    void messageHandler(const std::string message) const;
+    void messageHandler(const std::string message);
 
     /**
      * @brief catch and handle OS signals

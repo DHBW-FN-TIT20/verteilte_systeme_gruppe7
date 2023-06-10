@@ -11,23 +11,22 @@
 #include "send_request.hpp"
 #include <iostream>
 #include <cassert>
+#include <string>
 
 /**************************************************************************************************
  * Unit tests
  *************************************************************************************************/
-/* Test request with response */
-void TestSendRequestNormal(void) {
+void mockMessageHandler(std::string mockMessage) {} //callback function for tcp client (only definition needed)
 
+void TestSplitAndRemoveNewline(void) {
+  std::string inputString = "{element:1};{element:2}\n";
+  std::vector<std::string> expectedVector = {"{element:1}", "{element:2}"};
+  assert(splitAndRemoveNewline(inputString) == expectedVector);
 }
 
-/* Test request without response */
-void TestSendRequestVoid(void) {
-
-}
 
 int main() {
-  TestSendRequestNormal();
-  TestSendRequestVoid();
+  TestSplitAndRemoveNewline();
 
   std::cout << "All tests for sendRequest functions passed" << std::endl;
   return 0;

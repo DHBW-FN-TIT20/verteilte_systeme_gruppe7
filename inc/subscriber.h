@@ -68,7 +68,7 @@ class Subscriber {
   public:
     static Subscriber* instance;
     
-    Subscriber(const std::string &address, const std::string &port);
+    Subscriber(const T_Endpoint &endpoint);
 
     /**
      * @brief Default destructor for class Subscriber

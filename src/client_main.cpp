@@ -37,9 +37,6 @@ int main(int argc, char* argv[]) {
     throw std::invalid_argument("No server-address found");
   }
 
-  /* start Subscriber and tcp client */
-  Subscriber subscriber(serverEndpoint.address, serverEndpoint.port);
-
   /* get action */
   it = std::find(args.begin(), args.end(), "--action");
   if(it != args.end() && ++it != args.end()) {
@@ -47,14 +44,22 @@ int main(int argc, char* argv[]) {
     if(action == "SUBSCRIBE_TOPIC") {
       it = std::find(args.begin(), args.end(), "--topicName");
       if(it != args.end() && ++it != args.end()) {
+        Subscriber subscriber(serverEndpoint);
         subscriber.subscribeTopic(*it);
       } else {
         throw std::invalid_argument("No topic name found");
       }
     } else if(action == "LIST_TOPICS") {
+      Subscriber subscriber(serverEndpoint);
       subscriber.listTopics();
+    } else if(action == "PUBLISH_TOPIC") {
+      //Publisher publisher(serverEndpoint);
+      
+    } else if(action == "GET_TOPIC_STATUS") {
+      //Publisher publisher(serverEndpoint);
+
     } else {
-      throw std::invalid_argument("Action invalid; options are SUBSCRIBE_TOPIC and LIST_TOPICS");
+      throw std::invalid_argument("Action invalid\n\nOptions are:\n> SUBSCRIBE_TOPIC\n> LIST_TOPICS\n> PUBLISH_TOPIC\n> GET_TOPIC_STATUS\n");
     }
   } else {
     throw std::invalid_argument("No action found");

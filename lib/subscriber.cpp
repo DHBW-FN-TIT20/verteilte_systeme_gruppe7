@@ -31,7 +31,7 @@ void Subscriber::updateTopic(const std::string &topicName, const std::string &ms
 }
 
 /* public member functions */
-Subscriber::Subscriber(const std::string &address, const std::string &port) : mServerEndpoint(T_Endpoint{address, port}), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, [this](const std::string message) {this->messageHandler(message);})) {
+Subscriber::Subscriber(const T_Endpoint &endpoint) : mServerEndpoint(endpoint), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, [this](const std::string message) {this->messageHandler(message);})) {
   instance = this;
   signal(SIGINT, signalHandler);
   mTcpClient->connect();

@@ -79,6 +79,14 @@ class TcpClient : public std::enable_shared_from_this<TcpClient> {
       });
     }
 
+    tcp::socket &socket(void) {
+      return mSocket;
+    }
+
+    void run(void) {
+      mIoContext.run();
+    }
+
     void close(void) {
       mSocket.close();
     }

@@ -34,7 +34,7 @@ std::string LogManager::getTimestampString(void) const {
 }
 
 /* public member functions */
-LogManager::LogManager(const std::string& filename) : mFile(filename), mLogFileMutex() {
+LogManager::LogManager(const std::string& filename) : mFile(filename, std::ios::app), mLogFileMutex() {
   if(!mFile) {
     throw::std::runtime_error("Error trying to open log file");
   }

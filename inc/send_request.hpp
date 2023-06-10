@@ -1,8 +1,11 @@
 /**************************************************************************************************
  * @file    send_request.hpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    09-June-2023
- * @brief   Implementation for sendRequest.
+ * @date    10-June-2023
+ * @brief   This file contains the implementation for the two global functions sendRequest and
+ *          sendRequestWithoutResponse and the helper function splitAndRemoveNewLine which manage
+ *          the request sending process to the server and handle the response.
+ *          In case of an error the program is terminated with a suitable exception.
  *************************************************************************************************/
 
 #pragma once

@@ -38,3 +38,11 @@ void Subscriber::listTopics(void) {
 void Subscriber::messageHandler(const std::string message) {
   
 }
+
+void Subscriber::signalHandler(int signum) {
+  if(instance) {
+    subscriberTcpClient->close();
+    std::cout << "TCP-Client closed" << std::endl;
+    exit(signum);
+  }
+}

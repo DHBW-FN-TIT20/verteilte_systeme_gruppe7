@@ -69,7 +69,7 @@ namespace network {
 
     if(responseSubStr.size() > 1 && actionStatus == ActionStatusType::STATUS_OK) {
       T result = messageParser.decodeObject<T>(responseSubStr.at(1));
-      logger.addLogEntry(clientEndpointStr + request.mAction.toString() + " successful; Response: >>" + result.toString() + "<<");
+      logger.addLogEntry(clientEndpointStr + " " + request.mAction.toString() + " successful; Response: >>" + result.toString() + "<<");
       return result;
     }
     std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;

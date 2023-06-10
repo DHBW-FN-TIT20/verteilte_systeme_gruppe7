@@ -15,6 +15,13 @@
  *************************************************************************************************/
 /* private/protected member functions */
 void Subscriber::unsubscribeTopic(const std::string &topicName) const {
+  RequestType request(ActionType::UNSUBSCRIBE_TOPIC, {{"topicName", topicName}});
+
+  //(void)sendRequestWithoutResponse(subscriberTcpClient, request);
+
+  /* successfully unsubscribed */
+  std::cout << "Successfully unsubscribed from topic >>" << topicName << "<<" << std::endl;
+  //log
 
 }
 

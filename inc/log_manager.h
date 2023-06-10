@@ -38,6 +38,7 @@ class LogManager {
      */
     void close(void);
 
+  public:
     /**
      * @brief Get the current timestamp and convert it into a readable string
      * 
@@ -45,7 +46,6 @@ class LogManager {
      */
     std::string getTimestampString(void) const;
 
-  public:
     /* public member functions */
     /**
      * @brief Default constructor for class LogManager

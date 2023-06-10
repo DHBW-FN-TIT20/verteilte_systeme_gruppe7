@@ -82,7 +82,7 @@ namespace network {
       return result;
     }
     std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
-    logger.addLogEntry(clientEndpointStr + " >>" + actionStatus.toString()) + "<<";
+    logger.addLogEntry(clientEndpointStr + " >>" + actionStatus.toString() + "<<");
     throw std::runtime_error("Action status: " + actionStatus.toString());
   }
 
@@ -109,10 +109,10 @@ namespace network {
     if(responseSubStr.size() == 1 && actionStatus == ActionStatusType::STATUS_OK) {
       std::cout << logger.getTimestampString() << request.mAction.toString() << " successful" << std::endl;
       logger.addLogEntry(clientEndpointStr + " " + request.mAction.toString() + " successful");
+      return;
     }
     std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
     logger.addLogEntry(clientEndpointStr + " " + ">>" + actionStatus.toString() + "<<");
     throw std::runtime_error("Action status: " + actionStatus.toString());
   }
-
 }

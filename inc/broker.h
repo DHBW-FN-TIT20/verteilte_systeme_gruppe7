@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <mutex>
 #include <csignal>
+#include <cstdlib>
 
 /* Own Libs / datatypes */
 #include "topic_type.h"

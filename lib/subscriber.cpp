@@ -31,9 +31,10 @@ void Subscriber::updateTopic(const std::string &topicName, const std::string &ms
 }
 
 /* public member functions */
-Subscriber::Subscriber(const std::string &address, const std::string &port) : mServerEndpoint(T_Endpoint{address, port}), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, messageHandler)), mOwnEndpoint(T_Endpoint{mTcpClient->socket().local_endpoint().address().to_string(), std::to_string(mTcpClient->socket().local_endpoint().port())}) {
+Subscriber::Subscriber(const std::string &address, const std::string &port) : mServerEndpoint(T_Endpoint{address, port}), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, [this](const std::string message) {this->messageHandler(message);})) {
   instance = this;
   signal(SIGINT, signalHandler);
+  mOwnEndpoint = T_Endpoint{mTcpClient->socket().local_endpoint().address().to_string(), std::to_string(mTcpClient->socket().local_endpoint().port())};
   mTcpClient->run();
 }
 
@@ -54,19 +55,18 @@ void Subscriber::subscribeTopic(const std::string &topicName) {
 void Subscriber::listTopics(void) {
   RequestType request(ActionType::LIST_TOPICS, {});
 
-  std::vector<std::string> topicList = network::sendRequest<std::vector<std::string>>(mTcpClient, request);
+  T_TopicNameList topicList = network::sendRequest<T_TopicNameList>(mTcpClient, request);
 
   /* topic list received */
-  if(topicList.size() > 0) {
+  if(topicList.TopicNameList.size() > 0) {
     std::cout << "Existing topics:" << std::endl;
-    for(auto& topic : topicList) {
+    for(auto& topic : topicList.TopicNameList) {
       std::cout << "- " << topic << std::endl;
     }
     std::cout << std::endl;
   } else {
     std::cout << "No topics exist. You can publish one and try again." << std::endl;
   }
-  
 }
 
 void Subscriber::messageHandler(const std::string message) {

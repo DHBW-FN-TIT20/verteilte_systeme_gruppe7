@@ -28,6 +28,7 @@
 #include "subscriber_list_type.h"
 #include "endpoint_type.h"
 #include "request_type.h"
+#include "defines.h"
 
 #include "log_manager.h"
 #include "parser/message_parser.hpp"

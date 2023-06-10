@@ -146,13 +146,13 @@ void Broker::updateTopic(RequestType &requestToSubscriber) {
 
 
 /* public member functions */
-Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint({address, port}), mLogger("log.txt"), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
+Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint({address, port}), mLogger(LOG_FILE_NAME), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
   instance = this;
   signal(SIGINT, signalHandler);
   brokerTcpServer.run();
 }
 
-Broker::Broker() : mOwnEndpoint({"localhost", "8080"}), mLogger("log.txt"), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
+Broker::Broker() : mOwnEndpoint({"localhost", "8080"}), mLogger(LOG_FILE_NAME), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
   instance = this;
 }
 

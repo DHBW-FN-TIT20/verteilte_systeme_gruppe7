@@ -45,9 +45,9 @@ Publisher::Publisher(void) : publisherTcpClient(std::make_shared<TcpClient>(T_En
 
 Publisher::Publisher(const std::string brokerAddress, const std::string brokerPort) : publisherTcpClient(std::make_shared<TcpClient>(T_Endpoint{brokerAddress, brokerPort})) {
   publisherTcpClient->connect();
+  publisherTcpClient->run();
 }
 
 Publisher::~Publisher(void) {
-  publisherTcpClient->run();
   publisherTcpClient->close();
 }

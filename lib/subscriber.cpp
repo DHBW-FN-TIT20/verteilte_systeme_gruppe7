@@ -30,7 +30,7 @@ void Subscriber::updateTopic(const std::string &topicName, const std::string &ms
 }
 
 /* public member functions */
-Subscriber::Subscriber(const std::string &address, const std::string &port) : mServerEndpoint(T_Endpoint{address, port}), mMessageParser(), mLogger(LOG_FILE_NAME), subscriberTcpClient(std::make_shared<TcpClient>(mServerEndpoint, messageHandler)) {}
+Subscriber::Subscriber(const std::string &address, const std::string &port) : mServerEndpoint(T_Endpoint{address, port}), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, messageHandler)) {}
 
 Subscriber::~Subscriber() {}
 
@@ -42,13 +42,13 @@ void Subscriber::listTopics(void) {
 
 }
 
-void Subscriber::messageHandler(const std::string message) {
+void Subscriber::messageHandler(const std::string message) const {
   
 }
 
 void Subscriber::signalHandler(int signum) {
   if(instance) {
-    subscriberTcpClient->close();
+    mTcpClient->close();
     std::cout << "TCP-Client closed" << std::endl;
     exit(signum);
   }

@@ -5,6 +5,8 @@
   * @brief   Prototype for class Subscriber
   ************************************************************************************************/
 
+#pragma once
+
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
@@ -29,7 +31,7 @@
 #include "tcp/tcp_client.hpp"
 #include "log_manager.h"
 #include "parser/message_parser.hpp"
-#include "send_request.hpp"
+#include "send_request.h"
 
 /**************************************************************************************************
  * Public - Class prototype
@@ -42,6 +44,7 @@ class Subscriber {
     MessageParser                   mMessageParser;
     LogManager                      mLogger;
     std::shared_ptr<TcpClient>      mTcpClient;
+    std::string                     mTopicName;
 
   protected:
 

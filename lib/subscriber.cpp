@@ -34,15 +34,22 @@ void Subscriber::updateTopic(const std::string &topicName, const std::string &ms
 Subscriber::Subscriber(const std::string &address, const std::string &port) : mServerEndpoint(T_Endpoint{address, port}), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, [this](const std::string message) {this->messageHandler(message);})) {
   instance = this;
   signal(SIGINT, signalHandler);
+  mTcpClient->connect();
   mOwnEndpoint = T_Endpoint{mTcpClient->socket().local_endpoint().address().to_string(), std::to_string(mTcpClient->socket().local_endpoint().port())};
   mTcpClient->run();
 }
 
 Subscriber::~Subscriber() {
+  if(mTopicName != "") {
+    unsubscribeTopic(mTopicName);
+  }
+  mTcpClient->close();
   instance = nullptr;
 }
 
 void Subscriber::subscribeTopic(const std::string &topicName) {
+  std::cout << "punkt erreicht" << std::endl;
+  mTopicName = topicName;
   RequestType request(ActionType::SUBSCRIBE_TOPIC, {{"topicName", topicName}});
 
   (void)network::sendRequestWithoutResponse(mTcpClient, request);
@@ -91,7 +98,7 @@ void Subscriber::messageHandler(const std::string message) {
 
 void Subscriber::signalHandler(int signum) {
   if(instance) {
-    instance->mTcpClient->close();
+    instance->~Subscriber();
     std::cout << "TCP-Client closed" << std::endl;
     exit(signum);
   }

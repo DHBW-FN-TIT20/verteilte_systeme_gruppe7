@@ -169,17 +169,11 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
       break;
   }
 
-  if(request.mAction != ActionType::SUBSCRIBE_TOPIC) {
-    response += "\n";
-  }
+  response += "\n";
   
   conn->sendResponse(response);
 
-  if(request.mAction != ActionType::SUBSCRIBE_TOPIC) {
-    std::cout << "Response sent: " << response << std::endl;
-  } else {
-    std::cout << "Response sent: " << response << std::endl << std::endl;
-  }
+  std::cout << "Response sent: " << response << std::endl << std::endl;
 }
 
 void Broker::signalHandler(int signum) {

@@ -56,6 +56,9 @@ namespace network {
 
   /**
    * @brief Send a request to the TCP server and return the response
+   * Invoke only with the following action types:
+   * > LIST_TOPICS
+   * > GET_TOPIC_STATUS
    * 
    * @param client Open connection to the server
    * @param request Request to be sent to the server
@@ -89,6 +92,10 @@ namespace network {
 
   /**
    * @brief Send a request to the TCP server. Only expect an action status as response and handle it.
+   * Invoke only with the following action types:
+   * > SUBSCRIBE_TOPIC
+   * > UNSUBSCRIBE_TOPIC
+   * > PUBLISH_TOPIC
    * 
    * @param client Open connection to the server
    * @param request Request to be sent to the server

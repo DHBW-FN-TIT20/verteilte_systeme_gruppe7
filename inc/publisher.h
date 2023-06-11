@@ -32,6 +32,8 @@ class Publisher {
     virtual std::string sendRequest(const RequestType &request) const;
 
   public:
+    static Publisher* instance;
+
     /**
      * @brief Publish new information on a topic
      * 
@@ -45,6 +47,12 @@ class Publisher {
      * @param topicName Topic name for which information is requested
      */
     T_TopicStatus getTopicStatus(const std::string topicName) const;
+    /**
+     * @brief Handles OS signales
+     *
+     * @param signalNumber signal number
+     */
+    static void signalHandler(int signalNumber);
     /**
      * @brief Default constructor for class Publisher
      *

@@ -42,10 +42,20 @@ T_TopicStatus Publisher::getTopicStatus(const std::string topicName) const {
   return network::sendRequest<T_TopicStatus>(publisherTcpClient, request);
 }
 
+void Publisher::signalHandler(int signalNumber) {
+  if(!instance) return;
+
+  instance->~Publisher();
+  std::cout << "TCP-Client closed" << std::endl;
+  exit(signalNumber);
+}
+
 Publisher::Publisher(void) : publisherTcpClient(std::make_shared<TcpClient>(T_Endpoint{"localhost", "8080"})) {}
 
 Publisher::Publisher(const std::string brokerAddress, const std::string brokerPort) : publisherTcpClient(std::make_shared<TcpClient>(T_Endpoint{brokerAddress, brokerPort})) {
+  instance = this;
   publisherTcpClient->connect();
+  signal(SIGINT, signalHandler);
   publisherTcpClient->run();
 }
 

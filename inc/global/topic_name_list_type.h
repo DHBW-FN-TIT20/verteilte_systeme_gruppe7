@@ -1,7 +1,7 @@
 /**************************************************************************************************
-  * @file    action_enum.h
+  * @file    topic_name_list_type.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    01-June-2023
+  * @date    10-June-2023
   * @brief   
   ************************************************************************************************/
 

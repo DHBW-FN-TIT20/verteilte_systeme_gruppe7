@@ -18,4 +18,4 @@
 /**************************************************************************************************
  * Public - typedefs / structs / enums
  *************************************************************************************************/
-typedef std::vector<T_Subscriber>  T_SubscriberList;   /*!< type definition for list of subscribers identified by their names */
+typedef std::vector<T_Subscriber>  T_SubscriberList;   /*!< type definition for list of subscribers identified by their endpoint and open tcp connection */

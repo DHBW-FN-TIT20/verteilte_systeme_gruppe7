@@ -1,96 +1,83 @@
-/**
-  *************************************************************************************************
+/**************************************************************************************************
   * @file    subscriber.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    16-May-2023
-  * @brief   
-  *************************************************************************************************
-  */
+  * @date    10-June-2023
+  * @brief   Prototype for class Subscriber
+  ************************************************************************************************/
+
+#pragma once
 
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
 /* C++ Libs */
-#include <string>
-#include <vector>
+#include <iostream>
+#include <iomanip>
+#include <csignal>
 
 /* Own Libs / datatypes */
-#include "topic_status_type.h"
+#include "action_type.h"
+#include "action_status_type.h"
+#include "defines.h"
+#include "endpoint_type.h"
+#include "request_type.h"
+#include "topic_name_list_type.h"
 
-using std::string;
-using std::vector;
-
-/**************************************************************************************************
- * Public - typedefs / structs / enums
- *************************************************************************************************/
+#include "tcp/tcp_client.hpp"
+#include "log_manager.h"
+#include "parser/message_parser.hpp"
+#include "send_request.h"
 
 /**************************************************************************************************
  * Public - Class prototype
  *************************************************************************************************/
 
-class SUBSCRIBER {
+class Subscriber {
   private:
-    /**
-     * @brief Register subscriber to the topic. If it doesn't exist, it will be created.
-     * 
-     * @param topicName Topic name
-     * @return true Subscriber registered successfully
-     * @return false Error: invalid parameters
-     */
-    bool subscribeTopic(string topicName) const;
+    T_Endpoint                      mServerEndpoint;
+    T_Endpoint                      mOwnEndpoint;
+    MessageParser                   mMessageParser;
+    LogManager                      mLogger;
+    std::shared_ptr<TcpClient>      mTcpClient;
+    std::string                     mTopicName;
 
+  protected:
     /**
      * @brief Unsubscribe subscriber from the topic.
      * If no more subscribers are registered on this topic, it will be deleted.
      * 
      * @param topicName Topic name
-     * @return true 
-     * @return false 
      */
-    bool unsubscribeTopic(string topicName) const;
-
-    /**
-     * @brief Publish new information on a topic
-     * 
-     * @param topicName Topic name
-     * @param msg Message to publish
-     * @return true Topic updated successfully
-     * @return false Error: Topic doesn't exist / invalid parameters
-     */
-    bool publishTopic(string topicName, string &msg) const;
-
-    /**
-     * @brief Request list of available topics.
-     * 
-     * @return vector<string>* Pointer to list of topics
-     */
-    vector<string>* listTopics(void) const;
-
-    /**
-     * @brief Get the topic status object
-     * 
-     * @param topicName Topic name
-     * @return TOPIC_STATUS Current status of the topic
-     */
-    T_TopicStatus getTopicStatus(string topicName) const;
-
-    /**
-     * @brief Send the content of a topic to all subscribers.
-     * 
-     * @param topicName Topic name
-     * @param msg Message
-     * @param timestamp timestamp of latest update
-     */
-    void updateTopic(string topicName, string &msg, int32_t timestamp) const;
+    void unsubscribeTopic(const std::string &topicName);
 
   public:
+    static Subscriber* instance;
     
-    SUBSCRIBER(string address, int port);
+    Subscriber(const T_Endpoint &endpoint, std::function<void(const std::string)> callback);
 
     /**
-     * @brief Default destructor for class SUBSCRIBER
+     * @brief Default destructor for class Subscriber
      * 
      */
-    ~SUBSCRIBER();
+    ~Subscriber();
 
+    /**
+     * @brief Register subscriber to the topic.
+     * 
+     * @param topicName Topic name
+     */
+    void subscribeTopic(const std::string &topicName);
+
+    /**
+     * @brief List all topics that currently exist in the broker
+     * 
+     */
+    T_TopicNameList listTopics(void);
+
+    /**
+     * @brief catch and handle OS signals
+     * 
+     * @param signum signal number
+     */
+    static void signalHandler(int signum);
 };

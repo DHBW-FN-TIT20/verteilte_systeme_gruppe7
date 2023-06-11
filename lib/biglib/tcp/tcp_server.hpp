@@ -1,4 +1,3 @@
-
 /**************************************************************************************************
  * @file    tcp_server.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
@@ -141,7 +140,6 @@ class TcpServer {
     void handleAccept(std::shared_ptr<TcpConnection> newConnection, const asio::error_code &ec) {
       if(!ec) {
         newConnection->start(mMessageHandler);       //accept the client -> start connection in instance of class TcpConnection
-        std::cout << "Accepted connection: " << newConnection->socket().remote_endpoint() << std::endl;   //display ip and port of client in the terminal
       } else {
         //TODO: Error
       }
@@ -164,32 +162,5 @@ class TcpServer {
       }
     }
 };
-
-
-/* example for using the server (don't execute this): */
-
-//#define RUN_TCP_SERVER
-#ifdef RUN_TCP_SERVER
-
-/**
- * @brief Callback function to be executed when new data from a client is received
- * 
- * @param message received data string
- */
-void messageHandler(std::shared_ptr<TcpConnection> conn, const std::string message) {
-  std::cout << "message handler: " << message << std::endl;
-}
-
-
-// This will start a simple tcp server that accepts clients on port 8080 and handle the received data with the callback function messageHandler
-int main() {
-  TcpServer acceptServer({"localhost", "8080"}, messageHandler);      // get instance of TcpServer; set port to listen to to 8080
-  acceptServer.run();                                 // start the server -> begin accepting clients
-
-  std::cout << "Server closed" << std::endl;
-  return 0;
-}
-
-#endif
 
 #endif /* TCP_SERVER_HPP_ */

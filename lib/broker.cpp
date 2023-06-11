@@ -107,13 +107,15 @@ void Broker::updateTopic(RequestType &requestToSubscriber) {
 
 
 /* public member functions */
-Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint({address, port}), mLogger("log.txt"), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
+Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint({address, port}), mLogger(LOG_FILE_NAME), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
   instance = this;
   signal(SIGINT, signalHandler);
+  std::cout << "Broker started with endpoint: " << mOwnEndpoint.toString() << ". Accepting clients..." << std::endl;
+  mLogger.addLogEntry("Broker started with endpoint: " + mOwnEndpoint.toString());
   brokerTcpServer.run();
 }
 
-Broker::Broker() : mOwnEndpoint({"localhost", "8080"}), mLogger("log.txt"), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
+Broker::Broker() : mOwnEndpoint({"localhost", "8080"}), mLogger(LOG_FILE_NAME), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
   instance = this;
 }
 
@@ -129,7 +131,8 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
   };
 
   /* display request on terminal */
-  std::cout << mLogger.getTimestampString() << clientEndpoint.toString() << " >>" << message << "<<" << std::endl;
+  std::cout << "\n" << mLogger.getTimestampString() << clientEndpoint.toString() << std::endl << "Client request: " << message << std::endl;
+  mLogger.addLogEntry("Broker on " + mOwnEndpoint.toString() + ": received request >>" + message + "<< from " + clientEndpoint.toString());
 
   /* parse message */
   RequestType request = mMessageParser.decodeObject<RequestType>(message);
@@ -169,17 +172,10 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
       break;
   }
 
-  if(request.mAction != ActionType::SUBSCRIBE_TOPIC) {
-    response += "\n";
-  }
-  
-  conn->sendResponse(response);
+  conn->sendResponse(response + "\n");
 
-  if(request.mAction != ActionType::SUBSCRIBE_TOPIC) {
-    std::cout << "Response sent: " << response << std::endl;
-  } else {
-    std::cout << "Response sent: " << response << std::endl << std::endl;
-  }
+  std::cout << "Response sent: " << response << std::endl << std::endl;
+  mLogger.addLogEntry("Broker on " + mOwnEndpoint.toString() + ": response >>" + response + "<< sent to " + clientEndpoint.toString());
 }
 
 void Broker::signalHandler(int signum) {

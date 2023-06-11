@@ -31,7 +31,7 @@ include_paths=(
 )
 
 # compiler flags
-cpp_standard="-std=c++14"
+cpp_standard="-std=c++17"
 cpp_flags=(
   "$cpp_standard"
   "-Wall"
@@ -61,21 +61,16 @@ while IFS= read -r -d '' file; do
   lib_files+=("${file#$lib_dir}")
 done < <(find "$lib_dir" -type f -name "*.cpp" -print0)
 
-while getopts ":pbsr" opt; do
+while getopts ":bc" opt; do
   case $opt in
-    p)
-      files=(
-        "publisher.cpp"
-      )
-      ;;
     b)
       files=(
-        "broker.cpp"
+        "broker_main.cpp"
       )
       ;;
-    s)
+    c)
       files=(
-        "subscriber.cpp"
+        "client_main.cpp"
       )
       ;;
     \?)

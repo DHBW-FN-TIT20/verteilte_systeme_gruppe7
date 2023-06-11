@@ -20,24 +20,29 @@ Broker* Broker::instance = nullptr;
 /**************************************************************************************************
  * Function prototypes
  *************************************************************************************************/
-void signalHandler(int signum);
 
 /**************************************************************************************************
  * Program entry point
  *************************************************************************************************/
-int main() {
-  signal(SIGINT, signalHandler);
+int main(int argc, char* argv[]) {
+  std::vector<std::string> args(argv, argv + argc);
+  T_Endpoint serverEndpoint;
 
-  Broker broker("localhost", "8080");
+  /* get server endpoint */
+  auto it = std::find(args.begin(), args.end(), "--server-address");
+  if(it != args.end() && ++it != args.end()) {
+    serverEndpoint.address = *it;
+    it = std::find(args.begin(), args.end(), "--server-port");
+    if(it != args.end() && ++it != args.end()) {
+      serverEndpoint.port = *it;
+    } else {
+      throw std::invalid_argument("No server-port found");
+    }
+  } else {
+    throw std::invalid_argument("No server-address found");
+  }
+
+  Broker broker(serverEndpoint.address, serverEndpoint.port);
 
   return 0;
-}
-
-
-/**************************************************************************************************
- * Function implementation
- *************************************************************************************************/
-void signalHandler(int signum) {
-  std::cout << "Terminated" << std::endl;
-  exit(signum);
 }

@@ -25,13 +25,48 @@ compile all:
 ```
 add parameters to compile individual files:
 ```
--p publisher.cpp
--b broker.cpp
--s subscriber.cpp
--r request_parser.cpp
+-b broker_main.cpp
+-c client_main.cpp
 ```
 
+run the broker by changing into the /build directory:
+
+```
+cd ../build
+```
+
+start the broker using:
+
+```
+./broker_main_exe --server-address insert_address --server-port insert_port
+```
+
+then you can start a client using:
+
+```
+./client_main_exe --server-address insert_broker_address --server-port insert_broker_port --action insert_action
+```
+
+for `--action` there are the following options:
+
+```
+SUBSCRIBE_TOPIC
+UNSUBSCRIBE_TOPIC
+PUBLISH_TOPIC
+LIST_TOPIC
+GET_TOPIC_STATUS
+```
+
+please note that you can only use `PUBLISH_TOPIC` if you also provide a message using:
+
+```
+--message "your message"
+```
+
+the client will terminate automatically after receiving the response from the broker, except if you used `SUBSCRIBE_TOPIC` in which case the connection remains open to receive topics. You can use the key combination Ctrl+C to properly close the client and the broker.
+
 ### :test_tube: unit tests
+
 navigate to /scripts directory:
 
 ```

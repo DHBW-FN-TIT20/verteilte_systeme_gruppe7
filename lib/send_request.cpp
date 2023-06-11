@@ -39,7 +39,7 @@ std::vector<std::string> network::splitAndRemoveNewline(std::string str) {
 
 void network::sendRequestWithoutResponse(std::shared_ptr<TcpClient> client, RequestType &request) {
   MessageParser messageParser;
-  LogManager logger("log.txt");
+  LogManager logger(LOG_FILE_NAME);
 
   std::string requestStr = messageParser.encodeObject(request);
   std::string clientEndpointStr = client->socket().local_endpoint().address().to_string() + ":" + std::to_string(client->socket().local_endpoint().port());
@@ -52,11 +52,11 @@ void network::sendRequestWithoutResponse(std::shared_ptr<TcpClient> client, Requ
 
   if(responseSubStr.size() == 1 && actionStatus == ActionStatusType::STATUS_OK) {
     std::cout << logger.getTimestampString() << request.mAction.toString() << " successful" << std::endl;
-    logger.addLogEntry(clientEndpointStr + " " + request.mAction.toString() + " successful");
+    logger.addLogEntry("Client on " + clientEndpointStr + " " + request.mAction.toString() + " successful");
     return;
   }
   std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
-  logger.addLogEntry(clientEndpointStr + " " + ">>" + actionStatus.toString() + "<<");
+  logger.addLogEntry("Client on " + clientEndpointStr + ": received action status >>" + actionStatus.toString() + "<<");
   throw std::runtime_error("Action status: " + actionStatus.toString());
 }
 

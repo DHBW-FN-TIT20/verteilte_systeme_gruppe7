@@ -16,6 +16,8 @@
  *************************************************************************************************/
 Subscriber* Subscriber::instance = nullptr;
 
+void messageHandler(const std::string message);
+
 /**************************************************************************************************
  * Program entry point
  *************************************************************************************************/
@@ -44,14 +46,23 @@ int main(int argc, char* argv[]) {
     if(action == "SUBSCRIBE_TOPIC") {
       it = std::find(args.begin(), args.end(), "--topicName");
       if(it != args.end() && ++it != args.end()) {
-        Subscriber subscriber(serverEndpoint);
+        Subscriber subscriber(serverEndpoint, messageHandler);
         subscriber.subscribeTopic(*it);
+        std::cout << "Successfully subscribed to topic >>" << *it << "<<" << std::endl;
       } else {
         throw std::invalid_argument("No topic name found");
       }
     } else if(action == "LIST_TOPICS") {
-      Subscriber subscriber(serverEndpoint);
-      subscriber.listTopics();
+      Subscriber subscriber(serverEndpoint, messageHandler);
+      if(T_TopicNameList topicList = subscriber.listTopics(); topicList.TopicNameList.size() > 0) {
+        std::cout << "Existing topics:" << std::endl;
+        for(auto& topic : topicList.TopicNameList) {
+          std::cout << "- " << topic << std::endl;
+        }
+        std::cout << std::endl;
+      } else {
+        std::cout << "No topics exist. You can publish one and try again." << std::endl;
+      }
     } else if(action == "PUBLISH_TOPIC") {
       it = std::find(args.begin(), args.end(), "--topicName");
       if(it != args.end() && ++it != args.end()) {
@@ -81,5 +92,36 @@ int main(int argc, char* argv[]) {
     throw std::invalid_argument("No action found");
   }
 
+
   return 0;
 }
+
+/**************************************************************************************************
+ * Public - function implementation
+ *************************************************************************************************/
+void messageHandler(const std::string message) {
+  MessageParser parser;
+  LogManager logger(LOG_FILE_NAME);
+
+  /* parse message */
+  RequestType request = parser.decodeObject<RequestType>(message);
+
+  /* extract relevant information from response */
+  const std::string topicName = request.mParameterList.at("topicName");
+  const std::string topicMessage = request.mParameterList.at("message");
+  std::time_t topicTimestamp;
+  try {
+    topicTimestamp = static_cast<std::time_t>(std::stol(request.mParameterList.at("timestamp")));
+  } catch(const std::invalid_argument &ia) {
+    std::cerr << "Invalid timestamp: " << ia.what() << std::endl;
+  } catch(const std::out_of_range &oor) {
+    std::cerr << "Timestamp out of range: " << oor.what() << std::endl;
+  }
+
+
+  std::cout << logger.getTimestampString() << "received topic >>" << topicName << "<<" << std::endl;
+  std::cout << "> Topic message: " << topicMessage << std::endl;
+  std::cout << "> Timestamp: " << topicTimestamp << std::endl << std::endl;
+}
+
+

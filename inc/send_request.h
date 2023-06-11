@@ -25,6 +25,7 @@
 #include "action_status_type.h"
 #include "topic_status_type.h"
 #include "topic_name_list_type.h"
+#include "defines.h"
 
 #include "parser/message_parser.hpp"
 #include "log_manager.h"
@@ -69,11 +70,11 @@ namespace network {
 
     if(responseSubStr.size() > 1 && actionStatus == ActionStatusType::STATUS_OK) {
       T result = messageParser.decodeObject<T>(responseSubStr.at(1));
-      logger.addLogEntry(clientEndpointStr + " " + request.mAction.toString() + " successful; Response: >>" + result.toString() + "<<");
+      logger.addLogEntry("Client on " + clientEndpointStr + " " + request.mAction.toString() + " successful; Response: >>" + result.toString() + "<<");
       return result;
     }
     std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
-    logger.addLogEntry(clientEndpointStr + " >>" + actionStatus.toString() + "<<");
+    logger.addLogEntry("Client on " + clientEndpointStr + ": received action status >>" + actionStatus.toString() + "<<");
     throw std::runtime_error("Action status: " + actionStatus.toString());
   }
 

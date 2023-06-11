@@ -24,8 +24,25 @@ Broker* Broker::instance = nullptr;
 /**************************************************************************************************
  * Program entry point
  *************************************************************************************************/
-int main() {
-  Broker broker("localhost", "8080");
+int main(int argc, char* argv[]) {
+  std::vector<std::string> args(argv, argv + argc);
+  T_Endpoint serverEndpoint;
+
+  /* get server endpoint */
+  auto it = std::find(args.begin(), args.end(), "--server-address");
+  if(it != args.end() && ++it != args.end()) {
+    serverEndpoint.address = *it;
+    it = std::find(args.begin(), args.end(), "--server-port");
+    if(it != args.end() && ++it != args.end()) {
+      serverEndpoint.port = *it;
+    } else {
+      throw std::invalid_argument("No server-port found");
+    }
+  } else {
+    throw std::invalid_argument("No server-address found");
+  }
+
+  Broker broker(serverEndpoint.address, serverEndpoint.port);
 
   return 0;
 }

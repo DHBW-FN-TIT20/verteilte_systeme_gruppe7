@@ -12,11 +12,6 @@
  *************************************************************************************************/
 /* C++ Libs */
 #include <iostream>
-#include <string>
-#include <vector>
-#include <cstdint>
-#include <chrono>
-#include <ctime>
 #include <iomanip>
 #include <csignal>
 
@@ -47,7 +42,6 @@ class Subscriber {
     std::string                     mTopicName;
 
   protected:
-
     /**
      * @brief Unsubscribe subscriber from the topic.
      * If no more subscribers are registered on this topic, it will be deleted.
@@ -56,19 +50,10 @@ class Subscriber {
      */
     void unsubscribeTopic(const std::string &topicName);
 
-    /**
-     * @brief Send the content of a topic to all subscribers.
-     * 
-     * @param topicName Topic name
-     * @param msg Message
-     * @param timestamp timestamp of latest update
-     */
-    void updateTopic(const std::string &topicName, const std::string &msg, const std::time_t &timestamp);
-
   public:
     static Subscriber* instance;
     
-    Subscriber(const T_Endpoint &endpoint);
+    Subscriber(const T_Endpoint &endpoint, std::function<void(const std::string)> callback);
 
     /**
      * @brief Default destructor for class Subscriber
@@ -87,14 +72,7 @@ class Subscriber {
      * @brief List all topics that currently exist in the broker
      * 
      */
-    void listTopics(void);
-
-    /**
-     * @brief handle incoming messages during continuous receive
-     * 
-     * @param message response from server
-     */
-    void messageHandler(const std::string message);
+    T_TopicNameList listTopics(void);
 
     /**
      * @brief catch and handle OS signals
@@ -102,5 +80,4 @@ class Subscriber {
      * @param signum signal number
      */
     static void signalHandler(int signum);
-
 };

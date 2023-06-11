@@ -24,14 +24,8 @@ void Subscriber::unsubscribeTopic(const std::string &topicName) {
   mLogger.addLogEntry(mOwnEndpoint.toString() + ": unsubscribed from topic >>" + topicName + "<<");
 }
 
-void Subscriber::updateTopic(const std::string &topicName, const std::string &msg, const std::time_t &timestamp) {
-  std::cout << mLogger.getTimestampString() << "received topic >>" << topicName << "<<" << std::endl;
-  std::cout << "> Topic message: " << msg << std::endl;
-  std::cout << "> Timestamp: " << timestamp << std::endl << std::endl;
-}
-
 /* public member functions */
-Subscriber::Subscriber(const T_Endpoint &endpoint) : mServerEndpoint(endpoint), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, [this](const std::string message) {this->messageHandler(message);})) {
+Subscriber::Subscriber(const T_Endpoint &endpoint, std::function<void(const std::string)> callback) : mServerEndpoint(endpoint), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, [callback](const std::string message) {callback(message);})) {
   instance = this;
   signal(SIGINT, signalHandler);
   mTcpClient->connect();
@@ -48,52 +42,23 @@ Subscriber::~Subscriber() {
 }
 
 void Subscriber::subscribeTopic(const std::string &topicName) {
-  std::cout << "punkt erreicht" << std::endl;
   mTopicName = topicName;
   RequestType request(ActionType::SUBSCRIBE_TOPIC, {{"topicName", topicName}});
 
   (void)network::sendRequestWithoutResponse(mTcpClient, request);
 
   /* successfully subscribed */
-  std::cout << "Successfully subscribed to topic >>" << topicName << "<<" << std::endl;
   mLogger.addLogEntry(mOwnEndpoint.toString() + ": subscribed to topic >>" + topicName + "<<");
 }
 
-void Subscriber::listTopics(void) {
+T_TopicNameList Subscriber::listTopics(void) {
   RequestType request(ActionType::LIST_TOPICS, {});
 
   T_TopicNameList topicList = network::sendRequest<T_TopicNameList>(mTcpClient, request);
 
   /* topic list received */
-  if(topicList.TopicNameList.size() > 0) {
-    std::cout << "Existing topics:" << std::endl;
-    for(auto& topic : topicList.TopicNameList) {
-      std::cout << "- " << topic << std::endl;
-    }
-    std::cout << std::endl;
-  } else {
-    std::cout << "No topics exist. You can publish one and try again." << std::endl;
-  }
-}
-
-void Subscriber::messageHandler(const std::string message) {
-  /* parse message */
-  RequestType request = mMessageParser.decodeObject<RequestType>(message);
-
-  /* extract relevant information from response */
-  const std::string topicName = request.mParameterList.at("topicName");
-  const std::string topicMessage = request.mParameterList.at("message");
-  std::time_t topicTimestamp;
-  try {
-    topicTimestamp = static_cast<std::time_t>(std::stol(request.mParameterList.at("timestamp")));
-  } catch(const std::invalid_argument &ia) {
-    std::cerr << "Invalid timestamp: " << ia.what() << std::endl;
-  } catch(const std::out_of_range &oor) {
-    std::cerr << "Timestamp out of range: " << oor.what() << std::endl;
-  }
-
-  /* update topic member function call */
-  updateTopic(topicName, topicMessage, topicTimestamp);  
+  mLogger.addLogEntry(mOwnEndpoint.toString() + ": received topic list >>" + topicList.toString() + "<<");
+  return topicList;
 }
 
 void Subscriber::signalHandler(int signum) {

@@ -2,7 +2,8 @@
  * @file    client_main.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
  * @date    12-June-2023
- * @brief   
+ * @brief   This file contains the program entry point and instantiation of a subscriber / publisher object
+ *          -> Main file for clients (subscriber / publisher)
  *************************************************************************************************/
 
 /**************************************************************************************************

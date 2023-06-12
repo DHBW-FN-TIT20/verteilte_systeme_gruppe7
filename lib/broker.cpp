@@ -47,6 +47,9 @@ ActionStatusType Broker::unsubscribeTopic(const std::string &topicName, const T_
       T_SubscriberList &subscriberList = mTopicList.at(topicName).SubscriberList;
       subscriberList.erase(std::remove(subscriberList.begin(), subscriberList.end(), subscriber), subscriberList.end());
       if(subscriberList.empty()) {
+        mTopicList.at(topicName).StopHeartbeat = true;
+        mTopicList.at(topicName).HeartbeatCondition.notify_one();
+        mTopicList.at(topicName).HeartbeatThread.join();
         mTopicList.erase(topicName);
       }
       return ActionStatusType::STATUS_OK;     //Subscriber successfully unsubscribed; topic removed if applicable
@@ -67,8 +70,20 @@ ActionStatusType Broker::publishTopic(RequestType &requestFromPublisher) {
     mTopicList.at(topicName).Request = requestFromPublisher;  //update request of topic in topic list
     requestFromPublisher.mAction = ActionType::UPDATE_TOPIC;  //change action to udpate topic
     updateTopic(requestFromPublisher);  //publish updated topic
+    mTopicList.at(topicName).HeartbeatCondition.notify_one();
   } else {
-    mTopicList.insert(std::pair<std::string, T_Topic>(topicName, {topicName, requestFromPublisher, {}}));   //add new topic to list
+    T_Topic &newTopic = mTopicList[topicName];
+    newTopic.TopicName = topicName;
+    newTopic.Request = requestFromPublisher;
+    newTopic.HeartbeatThread = std::thread([this, &newTopic]() {
+      std::unique_lock<std::mutex> lock(newTopic.HeartbeatMutex);
+      while(!newTopic.StopHeartbeat) {
+        if(newTopic.HeartbeatCondition.wait_for(lock, std::chrono::seconds(HEARTBEAT_DURATION_SEC)) == std::cv_status::timeout) {
+          this->updateTopic(newTopic.Request);
+        }
+      }
+    });
+    //mTopicList.insert(std::pair<std::string, T_Topic>(topicName, std::move(newTopic)));   //add new topic to list
   }
   return ActionStatusType::STATUS_OK;
 }
@@ -103,6 +118,8 @@ void Broker::updateTopic(RequestType &requestToSubscriber) {
   for(T_Subscriber subscriber : mTopicList.at(requestToSubscriber.mParameterList.at("topicName")).SubscriberList) {
     subscriber.connection->sendResponse(response);
   }
+
+  std::cout << "Updated" << std::endl;
 }
 
 

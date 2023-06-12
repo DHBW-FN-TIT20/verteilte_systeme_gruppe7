@@ -25,12 +25,11 @@ void Subscriber::unsubscribeTopic(const std::string &topicName) {
 }
 
 /* public member functions */
-Subscriber::Subscriber(const T_Endpoint &endpoint, std::function<void(const std::string)> callback) : mServerEndpoint(endpoint), mMessageParser(), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, [callback](const std::string message) {callback(message);})) {
+Subscriber::Subscriber(const T_Endpoint &endpoint, std::function<void(const std::string)> callback) : mServerEndpoint(endpoint), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(mServerEndpoint, [callback](const std::string message) {callback(message);})) {
   instance = this;
   signal(SIGINT, signalHandler);
   mTcpClient->connect();
   mOwnEndpoint = T_Endpoint{mTcpClient->socket().local_endpoint().address().to_string(), std::to_string(mTcpClient->socket().local_endpoint().port())};
-  mTcpClient->run();
 }
 
 Subscriber::~Subscriber() {
@@ -38,7 +37,6 @@ Subscriber::~Subscriber() {
     unsubscribeTopic(mTopicName);
   }
   mTcpClient->close();
-  instance = nullptr;
 }
 
 void Subscriber::subscribeTopic(const std::string &topicName) {
@@ -49,6 +47,10 @@ void Subscriber::subscribeTopic(const std::string &topicName) {
 
   /* successfully subscribed */
   mLogger.addLogEntry(mOwnEndpoint.toString() + ": subscribed to topic >>" + topicName + "<<");
+  std::cout << "Successfully subscribed to topic >>" << topicName << "<<" << std::endl;
+
+  mTcpClient->continuousReceive();
+  mTcpClient->run();
 }
 
 T_TopicNameList Subscriber::listTopics(void) {
@@ -62,9 +64,9 @@ T_TopicNameList Subscriber::listTopics(void) {
 }
 
 void Subscriber::signalHandler(int signum) {
-  if(instance) {
-    instance->~Subscriber();
-    std::cout << "TCP-Client closed" << std::endl;
-    exit(signum);
-  }
+  if(!instance) return;
+  instance->~Subscriber();
+  std::cout << "TCP-Client closed" << std::endl;
+  instance = nullptr;
+  exit(signum);
 }

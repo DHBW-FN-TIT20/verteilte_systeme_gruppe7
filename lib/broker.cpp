@@ -93,11 +93,11 @@ T_TopicStatus Broker::getTopicStatus(const std::string &topicName) const {
     topicStatus.SubscriberList = mTopicList.at(topicName).SubscriberList;
     return topicStatus;
   }
-  return {};
+  return {0, {}};
 }
 
 void Broker::updateTopic(RequestType &requestToSubscriber) {
-  //send the request to every subscriber in the subscriber list of the topic using the open tcp connection
+  /* send the request to every subscriber in the subscriber list of the topic using the open tcp connection */
   std::string response = mMessageParser.encodeObject(requestToSubscriber);
 
   for(T_Subscriber subscriber : mTopicList.at(requestToSubscriber.mParameterList.at("topicName")).SubscriberList) {
@@ -119,7 +119,7 @@ Broker::Broker() : mOwnEndpoint({"localhost", "8080"}), mLogger(LOG_FILE_NAME), 
   instance = this;
 }
 
-Broker::~Broker(void) {
+Broker::~Broker() {
   instance = nullptr;
 }
 
@@ -162,8 +162,11 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
       response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicList);
       break;
     case ActionType::GET_TOPIC_STATUS:
-      topicStatus = getTopicStatus(request.mParameterList.at("topicName"));
-      actionStatus = ActionStatusType::STATUS_OK;
+      if(topicStatus = getTopicStatus(request.mParameterList.at("topicName")); topicStatus.Timestamp != 0){
+        actionStatus = ActionStatusType::STATUS_OK;
+      } else {
+        actionStatus = ActionStatusType::TOPIC_NON_EXISTENT;
+      }
       response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicStatus);
       break;
     default:

@@ -20,6 +20,7 @@
 #include <cstring>
 #include <array>
 #include <functional>
+#include <exception>
 
 /* Own Libs / datatypes */
 #include "endpoint_type.h"
@@ -31,11 +32,9 @@ using namespace asio;
 using namespace asio::ip;
 using asio::ip::tcp;
 
-
 /**************************************************************************************************
  * Class implementation
  *************************************************************************************************/
-
 class TcpClient : public std::enable_shared_from_this<TcpClient> {
   private:
     io_service mIoContext;
@@ -79,7 +78,7 @@ class TcpClient : public std::enable_shared_from_this<TcpClient> {
           this->responseHandler(std::string(mBuffer.data(), length));
           continuousReceive();
         } else {
-          //TODO: Error
+          throw std::runtime_error("Connection closed by server");
         }
       });
     }
@@ -91,5 +90,4 @@ class TcpClient : public std::enable_shared_from_this<TcpClient> {
     void close(void) {
       mSocket.close();
     }
-
 };

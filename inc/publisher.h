@@ -12,27 +12,42 @@
 #include <string>
 
 /* Own Libs / datatypes */
-#include "tcp/tcp_client.hpp"
 #include "topic_status_type.h"
 #include "request_type.h"
+#include "defines.h"
+
+#include "tcp/tcp_client.hpp"
+#include "log_manager.h"
 
 /*************************************************************************************************
  * Public - Class prototype
  *************************************************************************************************/
-
 class Publisher {
   private:
-    std::shared_ptr<TcpClient> publisherTcpClient;
-  protected:
-    /**
-     * @brief Send specified request to the broker
-     *
-     * @param request The request which should be send to the broker
-     */
-    virtual std::string sendRequest(const RequestType &request) const;
+    T_Endpoint                  mOwnEndpoint;
+    LogManager                  mLogger;
+    std::shared_ptr<TcpClient>  mTcpClient;
 
   public:
     static Publisher* instance;
+
+    /**
+     * @brief Default constructor for class Publisher
+     *
+     */
+    Publisher(const T_Endpoint &endpoint);
+
+    /**
+     * @brief No default constructor for class Publisher
+     *
+     */
+    Publisher(void);
+
+    /**
+     * @brief Default destructor for class Publisher
+     *  
+     */
+    ~Publisher(void);
 
     /**
      * @brief Publish new information on a topic
@@ -40,32 +55,19 @@ class Publisher {
      * @param topicName Topic name where the message should be published to
      * @param msg The message which should be published
      */
-    void publishTopic(const std::string topicName, const std::string &message) const;
+    void publishTopic(const std::string topicName, const std::string &message);
+
     /**
      * @brief Get info about the specified topic
      *
      * @param topicName Topic name for which information is requested
      */
-    T_TopicStatus getTopicStatus(const std::string topicName) const;
+    T_TopicStatus getTopicStatus(const std::string topicName);
+
     /**
      * @brief Handles OS signales
      *
      * @param signalNumber signal number
      */
     static void signalHandler(int signalNumber);
-    /**
-     * @brief Default constructor for class Publisher
-     *
-     */
-    Publisher(const std::string address, const std::string port);
-    /**
-     * @brief No default constructor for class Publisher
-     *
-     */
-    Publisher(void);
-    /**
-     * @brief Default destructor for class Publisher
-     *  
-     */
-    ~Publisher(void);
 };

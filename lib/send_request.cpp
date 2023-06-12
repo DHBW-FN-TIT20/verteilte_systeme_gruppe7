@@ -8,8 +8,6 @@
  *          In case of an error the program is terminated with a suitable exception.
  *************************************************************************************************/
 
-#pragma once
-
 /**************************************************************************************************
  * Include Header Files
  *************************************************************************************************/
@@ -51,11 +49,11 @@ void network::sendRequestWithoutResponse(std::shared_ptr<TcpClient> client, Requ
   ActionStatusType actionStatus = messageParser.decodeObject<ActionStatusType>(responseSubStr.at(0));
 
   if(responseSubStr.size() == 1 && actionStatus == ActionStatusType::STATUS_OK) {
-    std::cout << logger.getTimestampString() << request.mAction.toString() << " successful" << std::endl;
+    //std::cout << logger.getTimestampString() << request.mAction.toString() << " successful" << std::endl;
     logger.addLogEntry("Client on " + clientEndpointStr + " " + request.mAction.toString() + " successful");
     return;
   }
-  std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
+  //std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
   logger.addLogEntry("Client on " + clientEndpointStr + ": received action status >>" + actionStatus.toString() + "<<");
   throw std::runtime_error("Action status: " + actionStatus.toString());
 }

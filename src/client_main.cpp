@@ -1,7 +1,7 @@
 /**************************************************************************************************
- * @file    subscriber_main.cpp
+ * @file    client_main.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    07-June-2023
+ * @date    12-June-2023
  * @brief   
  *************************************************************************************************/
 
@@ -10,11 +10,13 @@
  *************************************************************************************************/
 #include <algorithm>
 #include "subscriber.h"
+#include "publisher.h"
 
 /**************************************************************************************************
  * Public - Global variables
  *************************************************************************************************/
 Subscriber* Subscriber::instance = nullptr;
+Publisher* Publisher::instance = nullptr;
 
 void messageHandler(const std::string message);
 
@@ -39,7 +41,7 @@ int main(int argc, char* argv[]) {
     throw std::invalid_argument("No server-address found");
   }
 
-  /* get action */
+  /* get action and execute it */
   it = std::find(args.begin(), args.end(), "--action");
   if(it != args.end() && ++it != args.end()) {
     std::string action = *it;
@@ -48,7 +50,6 @@ int main(int argc, char* argv[]) {
       if(it != args.end() && ++it != args.end()) {
         Subscriber subscriber(serverEndpoint, messageHandler);
         subscriber.subscribeTopic(*it);
-        std::cout << "Successfully subscribed to topic >>" << *it << "<<" << std::endl;
       } else {
         throw std::invalid_argument("No topic name found");
       }
@@ -69,8 +70,9 @@ int main(int argc, char* argv[]) {
         std::string topicName = *it;
         it = std::find(args.begin(), args.end(), "--message");
         if(it != args.end() && ++it != args.end()) {
-          //Publisher publisher(serverEndpoint);
-          //publisher.publishTopic(topicName, *it);
+          Publisher publisher(serverEndpoint);
+          publisher.publishTopic(topicName, *it);
+          std::cout << "Successfully published message on topic >>" << topicName << "<<" << std::endl;
         } else {
           throw std::invalid_argument("No message found");
         }
@@ -80,8 +82,9 @@ int main(int argc, char* argv[]) {
     } else if(action == "GET_TOPIC_STATUS") {
       it = std::find(args.begin(), args.end(), "--topicName");
       if(it != args.end() && ++it != args.end()) {
-        //Publisher publisher(serverEndpoint);
-        //publisher.getTopicStatus(*it);
+        Publisher publisher(serverEndpoint);
+        T_TopicStatus topicStatus = publisher.getTopicStatus(*it);
+        std::cout << "Status of " << *it << ": " << topicStatus.toString() << std::endl;
       } else {
         throw std::invalid_argument("No topic name found");
       }
@@ -109,19 +112,9 @@ void messageHandler(const std::string message) {
   /* extract relevant information from response */
   const std::string topicName = request.mParameterList.at("topicName");
   const std::string topicMessage = request.mParameterList.at("message");
-  std::time_t topicTimestamp;
-  try {
-    topicTimestamp = static_cast<std::time_t>(std::stol(request.mParameterList.at("timestamp")));
-  } catch(const std::invalid_argument &ia) {
-    std::cerr << "Invalid timestamp: " << ia.what() << std::endl;
-  } catch(const std::out_of_range &oor) {
-    std::cerr << "Timestamp out of range: " << oor.what() << std::endl;
-  }
+  std::time_t topicTimestamp = request.mTimestamp;
 
-
-  std::cout << logger.getTimestampString() << "received topic >>" << topicName << "<<" << std::endl;
+  std::cout << std::endl << logger.getTimestampString() << "received topic >>" << topicName << "<<" << std::endl;
   std::cout << "> Topic message: " << topicMessage << std::endl;
   std::cout << "> Timestamp: " << topicTimestamp << std::endl << std::endl;
 }
-
-

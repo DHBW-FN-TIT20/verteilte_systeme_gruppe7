@@ -12,7 +12,6 @@
  *************************************************************************************************/
 /* C++ Libs */
 #include <iostream>
-#include <iomanip>
 #include <csignal>
 
 /* Own Libs / datatypes */
@@ -25,7 +24,6 @@
 
 #include "tcp/tcp_client.hpp"
 #include "log_manager.h"
-#include "parser/message_parser.hpp"
 #include "send_request.h"
 
 /**************************************************************************************************
@@ -36,7 +34,6 @@ class Subscriber {
   private:
     T_Endpoint                      mServerEndpoint;
     T_Endpoint                      mOwnEndpoint;
-    MessageParser                   mMessageParser;
     LogManager                      mLogger;
     std::shared_ptr<TcpClient>      mTcpClient;
     std::string                     mTopicName;

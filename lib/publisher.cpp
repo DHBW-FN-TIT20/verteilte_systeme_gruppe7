@@ -14,11 +14,22 @@
 /**************************************************************************************************
  * Public - Class implementation
  *************************************************************************************************/
-std::string Publisher::sendRequest(const RequestType &request) const {
-  return "";
+Publisher::Publisher(void) : mOwnEndpoint(T_Endpoint{"localhost", "8080"}), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(T_Endpoint{"localhost", "8080"})) {}
+
+Publisher::Publisher(const T_Endpoint &endpoint) : mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(endpoint)) {
+  instance = this;
+  signal(SIGINT, signalHandler);
+  mTcpClient->connect();
+  mOwnEndpoint = T_Endpoint{mTcpClient->socket().local_endpoint().address().to_string(), std::to_string(mTcpClient->socket().local_endpoint().port())};
+  mTcpClient->run();
 }
 
-void Publisher::publishTopic(const std::string topicName, const std::string &message) const {
+Publisher::~Publisher(void) {
+  mTcpClient->close();
+  instance = nullptr;
+}
+
+void Publisher::publishTopic(const std::string topicName, const std::string &message) {
   // create message object
   std::map<std::string, std::string> requestParameters = {
     {"topicName", topicName},
@@ -28,10 +39,13 @@ void Publisher::publishTopic(const std::string topicName, const std::string &mes
   RequestType request = RequestType(ActionType::PUBLISH_TOPIC, requestParameters);
 
   // send request
-  network::sendRequestWithoutResponse(publisherTcpClient, request);
+  network::sendRequestWithoutResponse(mTcpClient, request);
+
+  /* topic successfully published */
+  mLogger.addLogEntry(mOwnEndpoint.toString() + ": published on topic >>" + topicName + "<< with message >>" + message + "<<");
 }
 
-T_TopicStatus Publisher::getTopicStatus(const std::string topicName) const {
+T_TopicStatus Publisher::getTopicStatus(const std::string topicName) {
   std::map<std::string, std::string> requestParameters = {
     {"topicName", topicName}
   };
@@ -39,26 +53,17 @@ T_TopicStatus Publisher::getTopicStatus(const std::string topicName) const {
   RequestType request = RequestType(ActionType::GET_TOPIC_STATUS, requestParameters);
 
   // send request
-  return network::sendRequest<T_TopicStatus>(publisherTcpClient, request);
+  T_TopicStatus topicStatus = network::sendRequest<T_TopicStatus>(mTcpClient, request);
+
+  /* topic status received */
+  mLogger.addLogEntry(mOwnEndpoint.toString() + ": received topic status >>" + topicStatus.toString() + "<<");
+
+  return topicStatus;
 }
 
 void Publisher::signalHandler(int signalNumber) {
   if(!instance) return;
-
   instance->~Publisher();
   std::cout << "TCP-Client closed" << std::endl;
   exit(signalNumber);
-}
-
-Publisher::Publisher(void) : publisherTcpClient(std::make_shared<TcpClient>(T_Endpoint{"localhost", "8080"})) {}
-
-Publisher::Publisher(const std::string brokerAddress, const std::string brokerPort) : publisherTcpClient(std::make_shared<TcpClient>(T_Endpoint{brokerAddress, brokerPort})) {
-  instance = this;
-  publisherTcpClient->connect();
-  signal(SIGINT, signalHandler);
-  publisherTcpClient->run();
-}
-
-Publisher::~Publisher(void) {
-  publisherTcpClient->close();
 }

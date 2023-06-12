@@ -73,7 +73,7 @@ namespace network {
       logger.addLogEntry("Client on " + clientEndpointStr + " " + request.mAction.toString() + " successful; Response: >>" + result.toString() + "<<");
       return result;
     }
-    std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
+    //std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
     logger.addLogEntry("Client on " + clientEndpointStr + ": received action status >>" + actionStatus.toString() + "<<");
     throw std::runtime_error("Action status: " + actionStatus.toString());
   }

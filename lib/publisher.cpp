@@ -62,8 +62,9 @@ T_TopicStatus Publisher::getTopicStatus(const std::string topicName) {
 }
 
 void Publisher::signalHandler(int signalNumber) {
-  if(!instance) return;
-  instance->~Publisher();
-  std::cout << "TCP-Client closed" << std::endl;
+  if(instance) {
+    instance->~Publisher();
+    std::cout << "TCP-Client closed" << std::endl;
+  }
   exit(signalNumber);
 }

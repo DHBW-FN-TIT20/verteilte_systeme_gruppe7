@@ -37,6 +37,7 @@ Subscriber::~Subscriber() {
     unsubscribeTopic(mTopicName);
   }
   mTcpClient->close();
+  instance = nullptr;
 }
 
 void Subscriber::subscribeTopic(const std::string &topicName) {
@@ -64,9 +65,9 @@ T_TopicNameList Subscriber::listTopics(void) {
 }
 
 void Subscriber::signalHandler(int signum) {
-  if(!instance) return;
-  instance->~Subscriber();
-  std::cout << "TCP-Client closed" << std::endl;
-  instance = nullptr;
+  if(instance) {
+    instance->~Subscriber();
+    std::cout << "TCP-Client closed" << std::endl;
+  }
   exit(signum);
 }

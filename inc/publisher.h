@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    publisher.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    05-June-2023
+ * @date    12-June-2023
  * @brief   Prototype for class Publisher
  **************************************************************************************************/
 

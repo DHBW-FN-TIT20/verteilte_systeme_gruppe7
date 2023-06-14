@@ -52,7 +52,6 @@ void network::sendRequestWithoutResponse(std::shared_ptr<TcpClient> client, Requ
     logger.addLogEntry("Client on " + clientEndpointStr + " " + request.mAction.toString() + " successful");
     return;
   }
-  //std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
   logger.addLogEntry("Client on " + clientEndpointStr + ": received action status >>" + actionStatus.toString() + "<<");
   throw std::runtime_error("Action status: " + actionStatus.toString());
 }

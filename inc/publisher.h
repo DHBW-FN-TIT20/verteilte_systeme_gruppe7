@@ -53,7 +53,7 @@ class Publisher {
      * @brief Publish new information on a topic
      * 
      * @param topicName Topic name where the message should be published to
-     * @param msg The message which should be published
+     * @param message The message which should be published
      */
     void publishTopic(const std::string topicName, const std::string &message);
 

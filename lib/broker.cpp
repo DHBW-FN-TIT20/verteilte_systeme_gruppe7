@@ -114,12 +114,31 @@ T_TopicStatus Broker::getTopicStatus(const std::string &topicName) const {
 void Broker::updateTopic(RequestType &requestToSubscriber) {
   /* send the request to every subscriber in the subscriber list of the topic using the open tcp connection */
   std::string response = mMessageParser.encodeObject(requestToSubscriber);
+  T_SubscriberList currentSubscriberList = mTopicList.at(requestToSubscriber.mParameterList.at("topicName")).SubscriberList;
+  bool isHeartbeat = false;
 
-  for(T_Subscriber subscriber : mTopicList.at(requestToSubscriber.mParameterList.at("topicName")).SubscriberList) {
-    subscriber.connection->sendResponse(response);
+  if(mTopicList.at(requestToSubscriber.mParameterList.at("topicName")).Request == requestToSubscriber) {  //Heartbeat
+    if(currentSubscriberList.empty()) {
+      std::cout << "Heartbeat: no subscribers found for topic >>" << requestToSubscriber.mParameterList.at("topicName") << "<<" << std::endl;
+      return;
+    } else {
+      std::cout << "Heartbeat for topic >>" << requestToSubscriber.mParameterList.at("topicName") << "<< sent to:" << std::endl;
+      isHeartbeat = true;
+    }
+  } else { //new message
+    if(currentSubscriberList.empty()) {
+      std::cout << "No subscribers have subscribed to this topit yet" << std::endl;
+      return;
+    } else {
+      std::cout << "Message sent to:" << std::endl;
+    }
   }
-
-  std::cout << "Updated" << std::endl;
+  
+  for(T_Subscriber subscriber : currentSubscriberList) {
+    subscriber.connection->sendResponse(response);
+    std::cout << "- " << subscriber.endpoint.toString() << std::endl;
+  }
+  if(isHeartbeat) std::cout << std::endl;
 }
 
 

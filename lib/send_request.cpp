@@ -49,7 +49,6 @@ void network::sendRequestWithoutResponse(std::shared_ptr<TcpClient> client, Requ
   ActionStatusType actionStatus = messageParser.decodeObject<ActionStatusType>(responseSubStr.at(0));
 
   if(responseSubStr.size() == 1 && actionStatus == ActionStatusType::STATUS_OK) {
-    //std::cout << logger.getTimestampString() << request.mAction.toString() << " successful" << std::endl;
     logger.addLogEntry("Client on " + clientEndpointStr + " " + request.mAction.toString() + " successful");
     return;
   }

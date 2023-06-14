@@ -41,7 +41,7 @@ class Publisher {
      * @brief No default constructor for class Publisher
      *
      */
-    Publisher(void);
+    Publisher(void) = delete;
 
     /**
      * @brief Default destructor for class Publisher

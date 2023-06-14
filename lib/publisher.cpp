@@ -14,8 +14,6 @@
 /**************************************************************************************************
  * Public - Class implementation
  *************************************************************************************************/
-Publisher::Publisher(void) : mOwnEndpoint(T_Endpoint{"localhost", "8080"}), mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(T_Endpoint{"localhost", "8080"})) {}
-
 Publisher::Publisher(const T_Endpoint &endpoint) : mLogger(LOG_FILE_NAME), mTcpClient(std::make_shared<TcpClient>(endpoint)) {
   instance = this;
   signal(SIGINT, signalHandler);

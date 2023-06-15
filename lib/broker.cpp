@@ -146,7 +146,7 @@ void Broker::updateTopic(RequestType &requestToSubscriber) {
 Broker::Broker(const std::string address, const std::string port) : mOwnEndpoint({address, port}), mLogger(LOG_FILE_NAME), mMessageParser(), brokerTcpServer(mOwnEndpoint, [this](std::shared_ptr<TcpConnection> conn, const std::string message) {this->messageHandler(conn, message);}) {
   instance = this;
   signal(SIGINT, signalHandler);
-  std::cout << "Broker started with endpoint: " << mOwnEndpoint.toString() << ". Accepting clients..." << std::endl << std::endl;
+  std::cout << "Broker started with endpoint: " << mOwnEndpoint.toString() << ". Accepting clients..." << std::endl;
   mLogger.addLogEntry("Broker started with endpoint: " + mOwnEndpoint.toString());
   brokerTcpServer.run();
 }

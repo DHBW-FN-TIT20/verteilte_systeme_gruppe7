@@ -7,7 +7,7 @@ Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
 ## :running: Get up and running
 Switch to the `build` directory (you may need to [compile](#gear-compile-via-script) the application first):
 ```
-cd ../build
+cd build/
 ```
 
 Start the broker using:

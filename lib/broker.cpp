@@ -200,10 +200,11 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
     case ActionType::GET_TOPIC_STATUS:
       if(topicStatus = getTopicStatus(request.mParameterList.at("topicName")); topicStatus.Timestamp != 0){
         actionStatus = ActionStatusType::STATUS_OK;
+        response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicStatus);
       } else {
         actionStatus = ActionStatusType::TOPIC_NON_EXISTENT;
+        response = mMessageParser.encodeObject(actionStatus);
       }
-      response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicStatus);
       break;
     default:
       actionStatus = ActionStatusType::INTERNAL_ERROR;

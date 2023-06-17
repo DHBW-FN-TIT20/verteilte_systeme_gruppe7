@@ -21,6 +21,7 @@
 #include <array>
 #include <functional>
 #include <thread>
+#include <exception>
 
 /* Own Libs / datatypes */
 #include "endpoint_type.h"
@@ -77,7 +78,6 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
      */
     void start(std::function<void(std::shared_ptr<TcpConnection>, const std::string)> callback) {
       messageHandler = callback;
-      // read and write data
       startRead();
     }
 
@@ -90,9 +90,9 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
           }).detach();
           startRead();
         } else if (ec == asio::error::eof) {
-          //connection closed by client
+          //Connection closed by client - no action required here
         } else {
-          //TODO: Error
+          throw std::runtime_error("Error receiving data");
         }
       });
     }
@@ -100,7 +100,7 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
     void sendResponse(const std::string& response) {
       asio::async_write(mSocket, asio::buffer(response), [self = shared_from_this()](const asio::error_code &ec, std::size_t) {
         if(ec) {
-          //TODO: Error
+          throw std::runtime_error("Error sending message");
         }
       });
     }
@@ -141,7 +141,7 @@ class TcpServer {
       if(!ec) {
         newConnection->start(mMessageHandler);       //accept the client -> start connection in instance of class TcpConnection
       } else {
-        //TODO: Error
+        throw std::runtime_error("Error trying to open new connection");
       }
     }
 

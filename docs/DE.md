@@ -74,6 +74,36 @@ Das ermöglicht den Austausch von JSON in jede andere belibige string Struktur, 
   <img src="assets/message-parser.svg" width="300px">
 </p>
 
+**Send Request**<br>
+Alle Clients verwenden die globalen Funktionen `sendRequest(request)` und `sendRequestWithoutResponse(request)`.
+
+`sendRequest(request)` - für Anfragen mit Response Informationen, neben dem ActionStatus<br>
+`sendRequestWithoutResponse(request)` - für Anfragen ohne weitere Response Informationen neben dem ActionStatus
+
+Der ActionStatus wird in diese Funktionen bereits abgehandelt.
+Die darüberliegenden Funktionen, die die sendRequest Funktionen verwenden kennen den ActionStatus nicht.
+Sobald die sendRequest Funktion eine Rückgabe zurückgibt kann von einer erfolgreichen Abarbeitung des Requests ausgegangen werden.
+Bei einer nicht erfolgreichen Abarbeitung wird innerhalb der sendRequest Methode eine Exception mit den Details geworfen.
+Bei einer Implementierung, bei der sich das Programm nicht wie in diesem Falle bei einem Fehlerfall beenden soll, können diese Exceptions von außen abgefangen werden.
+
+### Publisher
+
+### Subscriber
+
+### Broker
+Der Broker dient als zentrale Server-Instanz.
+Alle Clients verbinden sich mit diesem um Requests zu stellen.
+Für jeden möglichen Request existiert eine dedizierte Funktion im Broker die diese Anfrage abarbeitet.
+Den Aufruf der korrekten Funktion wird in der `messageHandler` Methode entschieden.
+Für die korrekte Weiterleitung einer gepubslihten Nachricht an alle Subscriber wird eine Liste kategorisiert nach den Topics geführt.
+Zu jedem Topic wird eine Liste der Subscriberaddressen gespeichert.
+Für jedes Topic wird ein eigener Thread gestartet der im 10 Sekundentakt die letzte gepublishte Nachricht an die Subscriber versendet.
+Dazu wird die letzte gepublishte Nachricht im fertigen aussendbaren Request Objekt gespeichert.
+
+<p align="center">
+  <img src="assets/broker-without-tcp.svg" width="800px">
+</p>
+
 ---
 <p align="center">
   <img src="assets/class-diagramm.svg" width="90%">
@@ -113,4 +143,4 @@ Das ermöglicht den Austausch von JSON in jede andere belibige string Struktur, 
 Verwendung von [gitmoji.dev](https://gitmoji.dev/).
 
 Die Commitmessage wird in english verfasst.
-Als Zeitsprache wird "simple present" verwendet (Jeder Commit soll beschreiben was dieser aktiv verändert!)
+Als Zeit wird "simple present" verwendet (Jeder Commit soll beschreiben was dieser aktiv verändert!)

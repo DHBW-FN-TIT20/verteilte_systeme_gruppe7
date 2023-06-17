@@ -1,0 +1,116 @@
+# Dokumentation
+
+Diese Seite beinhaltet eine kurze Dokumentation des Konzeptes hinter der Implementierung.
+
+## Übersicht
+
+| | |
+|---|---|
+| Version | v1.0.0 |
+| Programmiersprache | C++ 17 |
+
+## Third Party Librarys
+
+- **nlohmann/json**<br>
+  Verwendet als JSON Parser<br>
+  [github](https://github.com/nlohmann/json) | [website](https://json.nlohmann.me/)
+- **asio**<br>
+  I/O Programming - Verwendet für die Systemunabhängige Socketverwaltung<br>
+  [github](https://github.com/chriskohlhoff/asio/) | [website](https://think-async.com/Asio)
+
+## Konzept
+
+Das Model besteht aus drei zentralen Elementen.
+Dem Publisher, dem Broker und dem Subscriber.
+
+<p align="center">
+  <img src="assets/pub-broker-sub.svg" width="500px">
+</p>
+
+Der Broker dient als zentrale Server-Instanz.
+Die Publisher und Subsriber können als Clients betrachtet werden.
+Der Publisher publiziert die Nachrichten über den Broker an alle die Subscriber, die sich für ein bestimmtes Thema interessieren.
+Die Subscriber melden sich dazu zuvor mit der Wahl eines Topics am Broker an.
+Der Broker leitet die gepublishted Nachrichten der Pubsliher gezielt an die einzelnen Subscriber weiter.
+Die Anzahl der Publisher und Subscriber kann variieren.
+
+Nachfolgend werden die relevantesten Klassen beschreiben.
+
+### Globale Helper Klassen
+
+**Request type**<br>
+Alle Anfragen an den Broker werden über Request Objekte formuliert.
+Je nach geforderte "mAction" werden unterschiedliche Paramter benötigt.
+Diese werden in der "mParameterList" definiert.
+Ein Parameterelement sieht folgendermaßen aus: `<"Parameterbezeichung", "Parameterwert">`
+
+<p align="center">
+  <img src="assets/request-type.svg" width="500px">
+</p>
+
+**Action Status**<br>
+Der Broker antwortet auf alle Requests mit einem Action Status.
+Dieser beschreibt, ob der Request erfolgreich abgearbeitet wurde, oder ob ein Fehler aufgetreten ist.
+
+<p align="center">
+  <img src="assets/action-status-type.svg" width="300px">
+</p>
+
+Zusätzlich kann eine Request weitere Response Informationen beinhalten.
+Diese werden je nach Request in einer eigenen Klasse beschrieben.
+Die Response-Nachricht reiht die Objekte aneinander.
+Als Beispiel: <nobr>`"{ActionStatus};{T_TopicStatus}"`</nobr>
+
+<p align="center">
+  <img src="assets/topic-status-topic-name-list.svg" width="600px">
+</p>
+
+**Message Parser**<br>
+Der Nachrichtenaustausch findet mittles JSON String statt.
+Für die Konvertierung existiert eine eigene Klasse "MessageParser".
+Das ermöglicht den Austausch von JSON in jede andere belibige string Struktur, solange diese die relevanten Objektklassen für den Nachrichtenaustausch encoden und decoden kann.
+
+<p align="center">
+  <img src="assets/message-parser.svg" width="300px">
+</p>
+
+---
+<p align="center">
+  <img src="assets/class-diagramm.svg" width="90%">
+</p>
+
+## Contributing
+
+### Naming conventions
+
+| object | naming convention | example |
+| --- | --- | --- |
+| files | snake case | file_name |
+| classes | pascal case | ClassName |
+| datatype classes | pascal case; suffix “Type” | DatatypeClassType |
+| member functions | camel case | memberFunctionName |
+| functions | camel case | functionName |
+| test functions | pascal case; prefix ‘Test’ | TestFunctionName |
+| global variables | pascal case | GlobalVariableName |
+| local variables | camel case | localVariableName |
+| member variables | pascal case; prefix ‘m’ | mMemberVariableName |
+| constants | screaming snake case | CONSTANT_NAME |
+| typedefs | pascal case; prefix ‘T_’ | T_TypedefName |
+
+### Git rules
+
+#### Naming conventions
+
+| object | naming convention | example |
+| --- | --- | --- |
+| branches | kebab case; prefix (3 letters) + “/” | dev/branch-name |
+
+### Commit message
+
+```
+:gitmoji: text
+```
+Verwendung von [gitmoji.dev](https://gitmoji.dev/).
+
+Die Commitmessage wird in english verfasst.
+Als Zeitsprache wird "simple present" verwendet (Jeder Commit soll beschreiben was dieser aktiv verändert!)

@@ -1,9 +1,9 @@
 /**************************************************************************************************
-  * @file    T_Request.h
-  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    03-June-2023
-  * @brief   Type definition for request for communication between publisher/subscriber and broker 
-  ************************************************************************************************/
+ * @file    request_type.h
+ * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
+ * @date    08-June-2023
+ * @brief   Type definition for request for communication between publisher/subscriber and broker 
+ *************************************************************************************************/
 
 #pragma once
 

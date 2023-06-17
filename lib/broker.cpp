@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    broker.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    08-June-2023
+ * @date    15-June-2023
  * @brief   Implementation for class Broker
  *************************************************************************************************/
 

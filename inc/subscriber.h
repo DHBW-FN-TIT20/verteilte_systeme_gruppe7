@@ -1,9 +1,9 @@
 /**************************************************************************************************
-  * @file    subscriber.h
-  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    10-June-2023
-  * @brief   Prototype for class Subscriber
-  ************************************************************************************************/
+ * @file    subscriber.h
+ * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
+ * @date    12-June-2023
+ * @brief   Prototype for class Subscriber
+ *************************************************************************************************/
 
 #pragma once
 

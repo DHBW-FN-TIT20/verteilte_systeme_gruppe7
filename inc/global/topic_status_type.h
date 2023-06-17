@@ -1,9 +1,9 @@
 /**************************************************************************************************
-  * @file    topic_status_type.h
-  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    05-June-2023
-  * @brief   
-  ************************************************************************************************/
+ * @file    topic_status_type.h
+ * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
+ * @date    08-June-2023
+ * @brief   Datatype for topic status
+ *************************************************************************************************/
 
 #pragma once
 

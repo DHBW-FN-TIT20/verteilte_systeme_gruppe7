@@ -1,7 +1,7 @@
 /**************************************************************************************************
   * @file    subscriber.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    10-June-2023
+  * @date    12-June-2023
   * @brief   Implementation for class Subscriber
   ************************************************************************************************/
 

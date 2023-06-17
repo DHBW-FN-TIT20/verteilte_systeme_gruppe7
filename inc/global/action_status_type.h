@@ -1,11 +1,9 @@
-/**
-  *************************************************************************************************
-  * @file    action_status_type.h
-  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    01-June-2023
-  * @brief   
-  *************************************************************************************************
-  */
+/***************************************************************************************************
+ * @file    action_status_type.h
+ * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
+ * @date    01-June-2023
+ * @brief   Datatype for ActionStatus
+ **************************************************************************************************/
 
 #pragma once
 

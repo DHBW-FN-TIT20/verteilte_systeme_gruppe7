@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    send_request.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    10-June-2023
+ * @date    14-June-2023
  * @brief   This file contains the implementation for the two global functions sendRequest and
  *          sendRequestWithoutResponse and the helper function splitAndRemoveNewLine which manage
  *          the request sending process to the server and handle the response.

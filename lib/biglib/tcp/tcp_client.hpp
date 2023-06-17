@@ -1,8 +1,7 @@
-
 /**************************************************************************************************
- * @file    tcp_client.h
+ * @file    tcp_client.hpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    06-June-2023
+ * @date    12-June-2023
  * @brief   This file contains the implementation for the tcp client.
  *************************************************************************************************/
 

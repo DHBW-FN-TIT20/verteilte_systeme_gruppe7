@@ -1,11 +1,9 @@
-/**
-  *************************************************************************************************
-  * @file    subscriber_list_type.h
-  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    05-June-2023
-  * @brief   
-  *************************************************************************************************
-  */
+/***************************************************************************************************
+ * @file    subscriber_list_type.h
+ * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
+ * @date    10-June-2023
+ * @brief   Datatype for subscriber list
+ **************************************************************************************************/
 
 #pragma once
 

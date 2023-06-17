@@ -1,9 +1,9 @@
 /**************************************************************************************************
-  * @file    defines.h
-  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    31-May-2023
-  * @brief   Global defines and macros
-  ************************************************************************************************/
+ * @file    defines.h
+ * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
+ * @date    12-June-2023
+ * @brief   Global defines and macros
+ *************************************************************************************************/
 
 /**************************************************************************************************
  * Macros

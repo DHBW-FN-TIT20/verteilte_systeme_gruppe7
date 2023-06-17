@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    test_log_manager.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    31-May-2023
+ * @date    07-June-2023
  * @brief   Unit tests for class LogManger
  *************************************************************************************************/
 

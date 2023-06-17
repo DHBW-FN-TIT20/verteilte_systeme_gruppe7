@@ -1,9 +1,9 @@
 /**************************************************************************************************
-  * @file    topic_name_list_type.h
-  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    10-June-2023
-  * @brief   
-  ************************************************************************************************/
+ * @file    topic_name_list_type.h
+ * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
+ * @date    10-June-2023
+ * @brief   Datatype for topic list name
+ *************************************************************************************************/
 
 #pragma once
 

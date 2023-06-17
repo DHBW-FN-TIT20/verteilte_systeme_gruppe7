@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    publisher.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    05-June-2023
+ * @date    14-June-2023
  * @brief   Implementation for class Publisher
  *************************************************************************************************/
 

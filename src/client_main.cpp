@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    client_main.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    12-June-2023
+ * @date    17-June-2023
  * @brief   This file contains the program entry point and instantiation of a subscriber / publisher object
  *          -> Main file for clients (subscriber / publisher)
  *************************************************************************************************/
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
   if(it != args.end() && ++it != args.end()) {
     std::string action = *it;
     if(action == "SUBSCRIBE_TOPIC") {
-      it = std::find(args.begin(), args.end(), "--topicName");
+      it = std::find(args.begin(), args.end(), "--topic-name");
       if(it != args.end() && ++it != args.end()) {
         Subscriber subscriber(serverEndpoint, messageHandler);
         subscriber.subscribeTopic(*it);
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
         std::cout << "No topics exist. You can publish one and try again." << std::endl;
       }
     } else if(action == "PUBLISH_TOPIC") {
-      it = std::find(args.begin(), args.end(), "--topicName");
+      it = std::find(args.begin(), args.end(), "--topic-name");
       if(it != args.end() && ++it != args.end()) {
         std::string topicName = *it;
         it = std::find(args.begin(), args.end(), "--message");
@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
         throw std::invalid_argument("No topic name found");
       }
     } else if(action == "GET_TOPIC_STATUS") {
-      it = std::find(args.begin(), args.end(), "--topicName");
+      it = std::find(args.begin(), args.end(), "--topic-name");
       if(it != args.end() && ++it != args.end()) {
         Publisher publisher(serverEndpoint);
         T_TopicStatus topicStatus = publisher.getTopicStatus(*it);

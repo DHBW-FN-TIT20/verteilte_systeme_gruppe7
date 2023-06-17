@@ -22,10 +22,10 @@ Start a client using:
 
 For `--action` there are the following options:
 ```
-SUBSCRIBE_TOPIC --topicName insert_topic_name
-PUBLISH_TOPIC --topicName insert_topic_name --message "insert your message here"
+SUBSCRIBE_TOPIC --topic-name insert_topic_name
+PUBLISH_TOPIC --topic-name insert_topic_name --message "insert your message here"
 LIST_TOPIC
-GET_TOPIC_STATUS --topicName insert_topic_name
+GET_TOPIC_STATUS --topic-name insert_topic_name
 ```
 
 The client will terminate automatically after receiving the response from the broker, except if you used `SUBSCRIBE_TOPIC` in which case the connection remains open to receive topics. You can use the key combination `Ctrl+C` to properly close the client and the broker.

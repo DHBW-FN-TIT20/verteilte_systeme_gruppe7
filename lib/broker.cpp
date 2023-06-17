@@ -83,7 +83,6 @@ ActionStatusType Broker::publishTopic(RequestType &requestFromPublisher) {
         }
       }
     });
-    //mTopicList.insert(std::pair<std::string, T_Topic>(topicName, std::move(newTopic)));   //add new topic to list
   }
   return ActionStatusType::STATUS_OK;
 }

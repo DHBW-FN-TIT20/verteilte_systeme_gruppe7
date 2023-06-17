@@ -1,9 +1,9 @@
 /**************************************************************************************************
-  * @file    test_topic_status_type.cpp
-  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    07-June-2023
-  * @brief   Unit tests for T_TopicStatus
-  ************************************************************************************************/
+ * @file    test_topic_status_type.cpp
+ * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
+ * @date    08-June-2023
+ * @brief   Unit tests for T_TopicStatus
+ *************************************************************************************************/
 
 /**************************************************************************************************
  * Include Header Files

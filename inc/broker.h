@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    broker.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    07-June-2023
+ * @date    12-June-2023
  * @brief   Prototype for class Broker
  *************************************************************************************************/
 
@@ -71,7 +71,8 @@ class Broker{
     /**
      * @brief Add subscriber to subscriber list of the given topic
      * 
-     * @param topicName 
+     * @param topicName Name of the topic the subscriber wants to subscribe to
+     * @param subscriber Subscriber who sent the request
      * @return ActionStatusType 
      */
     ActionStatusType subscribeTopic(const std::string &topicName, const T_Subscriber &subscriber);
@@ -81,6 +82,7 @@ class Broker{
      * If subscriber list is empty after that, delete the topic.
      * 
      * @param topicName Topic to unsubscribe from
+     * @param subscriber Subscriber who sent the request
      * @return ActionStatusType Action status
      */
     ActionStatusType unsubscribeTopic(const std::string &topicName, const T_Subscriber &subscriber);
@@ -139,7 +141,7 @@ class Broker{
      * @brief Default destructor for class Broker
      * 
      */
-    ~Broker(void);
+    ~Broker();
 
     /**
      * @brief Handle incoming messages from clients
@@ -150,9 +152,9 @@ class Broker{
     void messageHandler(std::shared_ptr<TcpConnection> conn, const std::string message);
 
     /**
-     * @brief 
+     * @brief Handler for OS signals
      * 
-     * @param signum 
+     * @param signum Signal identifier
      */
     static void signalHandler(int signum);
 };

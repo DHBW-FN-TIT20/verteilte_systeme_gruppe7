@@ -1,8 +1,10 @@
 /**************************************************************************************************
- * @file    message_parser.h
+ * @file    message_parser.hpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    06-June-2023
- * @brief   Prototype for class MessageParser.
+ * @date    10-June-2023
+ * @brief   Implementation for class MessageParser. Dumps given types to json-string,
+ *          parses json-string to specified type. Defines overloading functions for custom
+ *          datatypes.
  *************************************************************************************************/
 
 #pragma once

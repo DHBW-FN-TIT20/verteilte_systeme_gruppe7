@@ -1,8 +1,8 @@
 /**************************************************************************************************
-  * @file    test_request.h
+  * @file    test_request_type.h
   * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    01-June-2023
-  * @brief   Unit tests for class Request 
+  * @date    07-June-2023
+  * @brief   Unit tests for class RequestType 
   ************************************************************************************************/
 
 /**************************************************************************************************

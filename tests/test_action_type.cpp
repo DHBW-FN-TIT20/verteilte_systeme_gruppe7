@@ -1,9 +1,9 @@
 /**************************************************************************************************
-  * @file    test_action_type.cpp
-  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
-  * @date    07-June-2023
-  * @brief   Unit tests for class ActionType
-  ************************************************************************************************/
+ * @file    test_action_type.cpp
+ * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
+ * @date    07-June-2023
+ * @brief   Unit tests for class ActionType
+ *************************************************************************************************/
 
 /**************************************************************************************************
  * Include Header Files

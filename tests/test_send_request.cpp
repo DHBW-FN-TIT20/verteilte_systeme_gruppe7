@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    test_send_request.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    05-June-2023
+ * @date    10-June-2023
  * @brief   Unit tests for sendRequest functions.
  *************************************************************************************************/
 

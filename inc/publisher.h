@@ -1,11 +1,9 @@
-/**
- *************************************************************************************************
+/**************************************************************************************************
  * @file    publisher.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    05-June-2023
- * @brief   
- *************************************************************************************************
- */
+ * @date    14-June-2023
+ * @brief   Prototype for class Publisher
+ **************************************************************************************************/
 
 /**************************************************************************************************
  * Include Header Files
@@ -15,34 +13,61 @@
 
 /* Own Libs / datatypes */
 #include "topic_status_type.h"
+#include "request_type.h"
+#include "defines.h"
 
-using std::string;
+#include "tcp/tcp_client.hpp"
+#include "log_manager.h"
 
- /*************************************************************************************************
+/*************************************************************************************************
  * Public - Class prototype
  *************************************************************************************************/
-
-class PUBLISHER {
+class Publisher {
   private:
-  
+    T_Endpoint                  mOwnEndpoint;
+    LogManager                  mLogger;
+    std::shared_ptr<TcpClient>  mTcpClient;
 
   public:
+    static Publisher* instance;
+
+    /**
+     * @brief Default constructor for class Publisher
+     *
+     */
+    Publisher(const T_Endpoint &endpoint);
+
+    /**
+     * @brief No default constructor for class Publisher
+     *
+     */
+    Publisher(void) = delete;
+
+    /**
+     * @brief Default destructor for class Publisher
+     *  
+     */
+    ~Publisher(void);
+
     /**
      * @brief Publish new information on a topic
      * 
-     * @param topic Topic name
-     * @param msg Message to publish
-     * @return true Topic updated successfully
-     * @return false Error: Topic doesn't exist / invalid parameters
+     * @param topicName Topic name where the message should be published to
+     * @param message The message which should be published
      */
-    bool publishTopic(const string topicName, const string &msg) const;
+    void publishTopic(const std::string topicName, const std::string &message);
 
     /**
-     * @brief Get the topic status object
-     * 
-     * @param topic Topic name
-     * @return TOPIC_STATUS Current status of the topic
+     * @brief Get info about the specified topic
+     *
+     * @param topicName Topic name for which information is requested
      */
-    T_TopicStatus getTopicStatus(const string topicName) const;
+    T_TopicStatus getTopicStatus(const std::string topicName);
 
+    /**
+     * @brief Handles OS signales
+     *
+     * @param signalNumber signal number
+     */
+    static void signalHandler(int signalNumber);
 };

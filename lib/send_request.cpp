@@ -1,14 +1,12 @@
 /**************************************************************************************************
  * @file    send_request.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    10-June-2023
+ * @date    14-June-2023
  * @brief   This file contains the implementation for the two global functions sendRequest and
  *          sendRequestWithoutResponse and the helper function splitAndRemoveNewLine which manage
  *          the request sending process to the server and handle the response.
  *          In case of an error the program is terminated with a suitable exception.
  *************************************************************************************************/
-
-#pragma once
 
 /**************************************************************************************************
  * Include Header Files
@@ -51,11 +49,9 @@ void network::sendRequestWithoutResponse(std::shared_ptr<TcpClient> client, Requ
   ActionStatusType actionStatus = messageParser.decodeObject<ActionStatusType>(responseSubStr.at(0));
 
   if(responseSubStr.size() == 1 && actionStatus == ActionStatusType::STATUS_OK) {
-    std::cout << logger.getTimestampString() << request.mAction.toString() << " successful" << std::endl;
     logger.addLogEntry("Client on " + clientEndpointStr + " " + request.mAction.toString() + " successful");
     return;
   }
-  std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
   logger.addLogEntry("Client on " + clientEndpointStr + ": received action status >>" + actionStatus.toString() + "<<");
   throw std::runtime_error("Action status: " + actionStatus.toString());
 }

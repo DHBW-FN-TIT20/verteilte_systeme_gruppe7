@@ -1,8 +1,9 @@
 /**************************************************************************************************
  * @file    broker_main.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    07-June-2023
- * @brief   
+ * @date    12-June-2023
+ * @brief   This file contains the program entry and instantiation for a broker object.
+ *          -> Main file for class Broker
  *************************************************************************************************/
 
 /**************************************************************************************************

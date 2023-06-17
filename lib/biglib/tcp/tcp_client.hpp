@@ -1,8 +1,7 @@
-
 /**************************************************************************************************
- * @file    tcp_client.h
+ * @file    tcp_client.hpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    06-June-2023
+ * @date    12-June-2023
  * @brief   This file contains the implementation for the tcp client.
  *************************************************************************************************/
 
@@ -20,6 +19,7 @@
 #include <cstring>
 #include <array>
 #include <functional>
+#include <exception>
 
 /* Own Libs / datatypes */
 #include "endpoint_type.h"
@@ -31,11 +31,9 @@ using namespace asio;
 using namespace asio::ip;
 using asio::ip::tcp;
 
-
 /**************************************************************************************************
  * Class implementation
  *************************************************************************************************/
-
 class TcpClient : public std::enable_shared_from_this<TcpClient> {
   private:
     io_service mIoContext;
@@ -46,7 +44,8 @@ class TcpClient : public std::enable_shared_from_this<TcpClient> {
 
   public:
     TcpClient(T_Endpoint endpoint, std::function<void(const std::string)> callback) : mSocket(mIoContext), mRemoteEndpoint(endpoint), responseHandler(callback) {}
-
+    TcpClient(T_Endpoint endpoint) : mSocket(mIoContext), mRemoteEndpoint(endpoint) {}
+    
     void connect(void) {
       tcp::resolver resolver(mIoContext);
       auto endpoint_iterator = resolver.resolve(mRemoteEndpoint.address, mRemoteEndpoint.port);
@@ -78,7 +77,7 @@ class TcpClient : public std::enable_shared_from_this<TcpClient> {
           this->responseHandler(std::string(mBuffer.data(), length));
           continuousReceive();
         } else {
-          //TODO: Error
+          throw std::runtime_error("Connection closed by server");
         }
       });
     }
@@ -90,5 +89,4 @@ class TcpClient : public std::enable_shared_from_this<TcpClient> {
     void close(void) {
       mSocket.close();
     }
-
 };

@@ -2,7 +2,7 @@
  * @file    subscriber_type.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
  * @date    08-June-2023
- * @brief   
+ * @brief   Datatype for subscriber
  *************************************************************************************************/
 
 #pragma once

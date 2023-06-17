@@ -1,7 +1,7 @@
 /**************************************************************************************************
- * @file    send_request.hpp
+ * @file    send_request.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    10-June-2023
+ * @date    14-June-2023
  * @brief   This file contains the declaration for the two global functions sendRequest and
  *          sendRequestWithoutResponse and the helper function splitAndRemoveNewLine which manage
  *          the request sending process to the server and handle the response.
@@ -73,7 +73,6 @@ namespace network {
       logger.addLogEntry("Client on " + clientEndpointStr + " " + request.mAction.toString() + " successful; Response: >>" + result.toString() + "<<");
       return result;
     }
-    std::cout << logger.getTimestampString() << actionStatus.toString() << std::endl;
     logger.addLogEntry("Client on " + clientEndpointStr + ": received action status >>" + actionStatus.toString() + "<<");
     throw std::runtime_error("Action status: " + actionStatus.toString());
   }

@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    log_manager.h
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    31-May-2023
+ * @date    10-June-2023
  * @brief   Prototype for class LogManger
  *************************************************************************************************/
 

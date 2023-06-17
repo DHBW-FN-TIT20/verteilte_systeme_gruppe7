@@ -1,7 +1,7 @@
 /**************************************************************************************************
  * @file    broker.cpp
  * @author  Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
- * @date    08-June-2023
+ * @date    15-June-2023
  * @brief   Implementation for class Broker
  *************************************************************************************************/
 
@@ -47,6 +47,9 @@ ActionStatusType Broker::unsubscribeTopic(const std::string &topicName, const T_
       T_SubscriberList &subscriberList = mTopicList.at(topicName).SubscriberList;
       subscriberList.erase(std::remove(subscriberList.begin(), subscriberList.end(), subscriber), subscriberList.end());
       if(subscriberList.empty()) {
+        mTopicList.at(topicName).StopHeartbeat = true;
+        mTopicList.at(topicName).HeartbeatCondition.notify_one();
+        mTopicList.at(topicName).HeartbeatThread.join();
         mTopicList.erase(topicName);
       }
       return ActionStatusType::STATUS_OK;     //Subscriber successfully unsubscribed; topic removed if applicable
@@ -67,8 +70,19 @@ ActionStatusType Broker::publishTopic(RequestType &requestFromPublisher) {
     mTopicList.at(topicName).Request = requestFromPublisher;  //update request of topic in topic list
     requestFromPublisher.mAction = ActionType::UPDATE_TOPIC;  //change action to udpate topic
     updateTopic(requestFromPublisher);  //publish updated topic
+    mTopicList.at(topicName).HeartbeatCondition.notify_one();
   } else {
-    mTopicList.insert(std::pair<std::string, T_Topic>(topicName, {topicName, requestFromPublisher, {}}));   //add new topic to list
+    T_Topic &newTopic = mTopicList[topicName];
+    newTopic.TopicName = topicName;
+    newTopic.Request = requestFromPublisher;
+    newTopic.HeartbeatThread = std::thread([this, &newTopic]() {
+      std::unique_lock<std::mutex> lock(newTopic.HeartbeatMutex);
+      while(!newTopic.StopHeartbeat) {
+        if(newTopic.HeartbeatCondition.wait_for(lock, std::chrono::seconds(HEARTBEAT_DURATION_SEC)) == std::cv_status::timeout) {
+          this->updateTopic(newTopic.Request);
+        }
+      }
+    });
   }
   return ActionStatusType::STATUS_OK;
 }
@@ -93,16 +107,37 @@ T_TopicStatus Broker::getTopicStatus(const std::string &topicName) const {
     topicStatus.SubscriberList = mTopicList.at(topicName).SubscriberList;
     return topicStatus;
   }
-  return {};
+  return {0, {}};
 }
 
 void Broker::updateTopic(RequestType &requestToSubscriber) {
-  //send the request to every subscriber in the subscriber list of the topic using the open tcp connection
+  /* send the request to every subscriber in the subscriber list of the topic using the open tcp connection */
   std::string response = mMessageParser.encodeObject(requestToSubscriber);
+  T_SubscriberList currentSubscriberList = mTopicList.at(requestToSubscriber.mParameterList.at("topicName")).SubscriberList;
+  bool isHeartbeat = false;
 
-  for(T_Subscriber subscriber : mTopicList.at(requestToSubscriber.mParameterList.at("topicName")).SubscriberList) {
-    subscriber.connection->sendResponse(response);
+  if(mTopicList.at(requestToSubscriber.mParameterList.at("topicName")).Request == requestToSubscriber) {  //Heartbeat
+    if(currentSubscriberList.empty()) {
+      std::cout << "Heartbeat: no subscribers found for topic >>" << requestToSubscriber.mParameterList.at("topicName") << "<<" << std::endl;
+      return;
+    } else {
+      std::cout << "Heartbeat for topic >>" << requestToSubscriber.mParameterList.at("topicName") << "<< sent to:" << std::endl;
+      isHeartbeat = true;
+    }
+  } else { //new message
+    if(currentSubscriberList.empty()) {
+      std::cout << "No subscribers have subscribed to this topit yet" << std::endl;
+      return;
+    } else {
+      std::cout << "Message sent to:" << std::endl;
+    }
   }
+
+  for(T_Subscriber subscriber : currentSubscriberList) {
+    subscriber.connection->sendResponse(response);
+    std::cout << "- " << subscriber.endpoint.toString() << std::endl;
+  }
+  if(isHeartbeat) std::cout << std::endl;
 }
 
 
@@ -119,7 +154,7 @@ Broker::Broker() : mOwnEndpoint({"localhost", "8080"}), mLogger(LOG_FILE_NAME), 
   instance = this;
 }
 
-Broker::~Broker(void) {
+Broker::~Broker() {
   instance = nullptr;
 }
 
@@ -162,9 +197,13 @@ void Broker::messageHandler(std::shared_ptr<TcpConnection> conn, const std::stri
       response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicList);
       break;
     case ActionType::GET_TOPIC_STATUS:
-      topicStatus = getTopicStatus(request.mParameterList.at("topicName"));
-      actionStatus = ActionStatusType::STATUS_OK;
-      response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicStatus);
+      if(topicStatus = getTopicStatus(request.mParameterList.at("topicName")); topicStatus.Timestamp != 0){
+        actionStatus = ActionStatusType::STATUS_OK;
+        response = mMessageParser.encodeObject(actionStatus) + ";" + mMessageParser.encodeObject(topicStatus);
+      } else {
+        actionStatus = ActionStatusType::TOPIC_NON_EXISTENT;
+        response = mMessageParser.encodeObject(actionStatus);
+      }
       break;
     default:
       actionStatus = ActionStatusType::INTERNAL_ERROR;

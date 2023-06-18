@@ -2,7 +2,14 @@
 
 Christoph Koßlowski, Lukas Adrion, Thibault Rey, Ralf Ehli, Philipp Thümler
 
-## Publisher-Subscriber-System
+## :postbox: Publisher-Subscriber-System
+The publisher-subscriber pattern in distributed systems is a messaging pattern that facilitates asynchronous communication between components. Publishers produce messages and send them to a central broker, while subscribers express their interest by subscribing to specific message types. The broker then delivers relevant messages to the interested subscribers, enabling loose coupling and scalability in distributed architectures. This pattern is commonly used for event-driven architectures, real-time data streaming, and building resilient and decoupled systems.
+
+>:information_source: The system can be used independently of the console implementation. The use of the console merely demonstrates an example implementation to showcase the capabilities of the model.
+
+## :memo: Documentation
+Learn more about the concepts behind the implementation.
+- German: [DE.md](./docs/DE.md)
 
 ## :running: Get up and running
 Switch to the `build` directory (you may need to [compile](#gear-compile-via-script) the application first):

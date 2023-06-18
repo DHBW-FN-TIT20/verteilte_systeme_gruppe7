@@ -40,7 +40,7 @@ Nachfolgend werden die relevantesten Klassen beschrieben.
 
 **Request type**<br>
 Alle Anfragen an den Broker werden über Request Objekte formuliert.
-Je nach geforderter "mAction" werden unterschiedliche Paramter benötigt.
+Je nach geforderter "mAction" werden unterschiedliche Parameter benötigt.
 Diese werden in der "mParameterList" definiert.
 Ein Parameterelement sieht folgendermaßen aus: `<"Parameterbezeichung", "Parameterwert">`
 
@@ -111,7 +111,7 @@ Da das Unsubscriben einer Nachricht mit dem Beenden eines Clients verbunden ist 
 
 ### Broker
 Der Broker dient als zentrale Server-Instanz.
-Alle Clients verbinden sich mit diesem um Requests zu stellen.
+Alle Clients verbinden sich mit diesem, um Requests zu stellen.
 Für jeden möglichen Request existiert eine dedizierte Funktion im Broker, die diese Anfrage abarbeitet.
 Die jeweils aufzurufende Funktion wird in der `messageHandler`Methode ermittelt.
 Für die korrekte Weiterleitung einer gepublishten Nachricht an alle Subscriber wird eine Liste (kategorisiert nach den Topics) geführt.

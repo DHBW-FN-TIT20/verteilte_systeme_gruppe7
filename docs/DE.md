@@ -28,19 +28,19 @@ Dem Publisher, dem Broker und dem Subscriber.
 </p>
 
 Der Broker dient als zentrale Server-Instanz.
-Die Publisher und Subsriber können als Clients betrachtet werden.
-Der Publisher publiziert die Nachrichten über den Broker an alle die Subscriber, die sich für ein bestimmtes Thema interessieren.
+Die Publisher und die Subsriber können als Clients betrachtet werden.
+Der Publisher publiziert die Nachrichten über den Broker an all die Subscriber, die sich für ein bestimmtes Thema interessieren.
 Die Subscriber melden sich dazu zuvor mit der Wahl eines Topics am Broker an.
-Der Broker leitet die gepublishted Nachrichten der Pubsliher gezielt an die einzelnen Subscriber weiter.
+Der Broker leitet die gepublishten Nachrichten, des Pubslihers gezielt an die einzelnen Subscriber weiter.
 Die Anzahl der Publisher und Subscriber kann variieren.
 
-Nachfolgend werden die relevantesten Klassen beschreiben.
+Nachfolgend werden die relevantesten Klassen beschrieben.
 
 ### Globale Helper Klassen
 
 **Request type**<br>
 Alle Anfragen an den Broker werden über Request Objekte formuliert.
-Je nach geforderte "mAction" werden unterschiedliche Paramter benötigt.
+Je nach geforderter "mAction" werden unterschiedliche Paramter benötigt.
 Diese werden in der "mParameterList" definiert.
 Ein Parameterelement sieht folgendermaßen aus: `<"Parameterbezeichung", "Parameterwert">`
 
@@ -81,7 +81,7 @@ Alle Clients verwenden die globalen Funktionen `sendRequest(request)` und `sendR
 `sendRequestWithoutResponse(request)` - für Anfragen ohne weitere Response Informationen neben dem ActionStatus
 
 Der ActionStatus wird in diese Funktionen bereits abgehandelt.
-Die darüberliegenden Funktionen, die die sendRequest Funktionen verwenden kennen den ActionStatus nicht.
+Die darüberliegenden Funktionen, die die sendRequest Funktionen verwenden, kennen den ActionStatus nicht.
 Sobald die sendRequest Funktion eine Rückgabe zurückgibt kann von einer erfolgreichen Abarbeitung des Requests ausgegangen werden.
 Bei einer nicht erfolgreichen Abarbeitung wird innerhalb der sendRequest Methode eine Exception mit den Details geworfen.
 Bei einer Implementierung, bei der sich das Programm nicht wie in diesem Falle bei einem Fehlerfall beenden soll, können diese Exceptions von außen abgefangen werden.
@@ -112,9 +112,9 @@ Da das Unsubscriben einer Nachricht mit dem Beenden eines Clients verbunden ist 
 ### Broker
 Der Broker dient als zentrale Server-Instanz.
 Alle Clients verbinden sich mit diesem um Requests zu stellen.
-Für jeden möglichen Request existiert eine dedizierte Funktion im Broker die diese Anfrage abarbeitet.
+Für jeden möglichen Request existiert eine dedizierte Funktion im Broker, die diese Anfrage abarbeitet.
 Den Aufruf der korrekten Funktion wird in der `messageHandler` Methode entschieden.
-Für die korrekte Weiterleitung einer gepubslihten Nachricht an alle Subscriber wird eine Liste kategorisiert nach den Topics geführt.
+Für die korrekte Weiterleitung einer gepublishten Nachricht an alle Subscriber wird eine Liste (kategorisiert nach den Topics) geführt.
 Zu jedem Topic wird eine Liste der Subscriberaddressen gespeichert.
 Für jedes Topic wird ein eigener Thread gestartet der im 10 Sekundentakt die letzte gepublishte Nachricht an die Subscriber versendet.
 Dazu wird die letzte gepublishte Nachricht im fertigen aussendbaren Request Objekt gespeichert.
@@ -133,7 +133,7 @@ Alle weiteren Verbindungen werden nach dem Beenden eines Requests wieder geschlo
 Die eigentilchen Informationen zum jeweligen Endpoint des Clients/Servers wird in einem eigenen Endpoint Objekt gespeichert.
 
 Übernommen wird die Socketverwaltung durch asio.
-Für die einfachere Handhabung und den späteren einfacheren möglichen Austausch der Verbindungsart werden die TCP Socket in eigenen Objekten abgewickelt.
+Für die einfachere Handhabung und den späteren, einfacheren möglichen Austausch der Verbindungsart werden die TCP Socket in eigenen Objekten abgewickelt.
 Dazu existiert eine `TcpServer` und eine `TcpClient` Klasse.
 Jeder Client besitzt ein Objekt vom Typ TcpClient, der Server ein Objekt vom Typ TcpServer.
 
@@ -151,7 +151,7 @@ Durch asio ist eine asynchrone Abarbeitung der einzelnen Requests möglich.
 </p>
 
 Der TcpClient bestitz für das Empfangen einer gepublishten Nachricht die Eigenschaft `responseHandler`.
-So kann die ausgeführte Funktion, in dem Falle die Ausgabe der gepublishten Nachricht auf der Konsole, durch eine andere Handlerimplementierung ausgetauscht werden.
+So kann die ausgeführte Funktion, in diesem Falle die Ausgabe der gepublishten Nachricht auf der Konsole, durch eine andere Handlerimplementierung ausgetauscht werden.
 
 ---
 ### Vollständiges Klassendiagramm

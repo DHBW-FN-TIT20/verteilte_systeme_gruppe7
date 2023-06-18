@@ -159,5 +159,3 @@ The TcpClient has the `responseHandler` property for receiving a published messa
 Using [gitmoji.dev](https://gitmoji.dev/) for commit messages.
 
 The commit message should be written in English. The tense used should be "simple present" (each commit should describe what it actively changes!)
-
-Please let me know if there's anything else I can help you with!

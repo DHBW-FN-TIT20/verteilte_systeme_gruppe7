@@ -10,6 +10,7 @@ The publisher-subscriber pattern in distributed systems is a messaging pattern t
 ## :memo: Documentation
 Learn more about the concepts behind the implementation.
 - German: [DE.md](./docs/DE.md)
+- English: [EN.md](./docs/EN.md)
 
 ## :running: Get up and running
 Switch to the `build` directory (you may need to [compile](#gear-compile-via-script) the application first):

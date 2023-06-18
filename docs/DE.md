@@ -86,6 +86,16 @@ Sobald die sendRequest Funktion eine Rückgabe zurückgibt kann von einer erfolg
 Bei einer nicht erfolgreichen Abarbeitung wird innerhalb der sendRequest Methode eine Exception mit den Details geworfen.
 Bei einer Implementierung, bei der sich das Programm nicht wie in diesem Falle bei einem Fehlerfall beenden soll, können diese Exceptions von außen abgefangen werden.
 
+**Logging**<br>
+
+Der ganze Nachrichtenaustausch wird mitgeschrieben.
+Dazu existiert eine zentrale Klasse für das Logging.
+Für die Zugriffsverwaltung existiert hierfür ein Mutex.
+
+<p align="center">
+  <img src="assets/log-manager.svg" width="300px">
+</p>
+
 ### Publisher
 
 ### Subscriber
@@ -104,7 +114,35 @@ Dazu wird die letzte gepublishte Nachricht im fertigen aussendbaren Request Obje
   <img src="assets/broker-without-tcp.svg" width="800px">
 </p>
 
+### TCP Connections
+Alle Verbindungen zwischen Client und Server werden über TCP abgewickelt.
+Den Verbindungsaufbau beginnen immer die Clients.
+Verbindungen werden nur bei einem subscribe request aufrecht gehalten.
+Alle weiteren Verbindungen werden nach dem Beenden eines Requests wieder geschlossen.
+
+Die eigentilchen Informationen zum jeweligen Endpoint des Clients/Servers wird in einem eigenen Endpoint Objekt gespeichert.
+
+Übernommen wird die Socketverwaltung durch asio.
+Für die einfachere Handhabung und den späteren einfacheren möglichen Austausch der Verbindungsart werden die TCP Socket in eigenen Objekten abgewickelt.
+Dazu existiert eine `TcpServer` und eine `TcpClient` Klasse.
+Jeder Client besitzt ein Objekt vom Typ TcpClient, der Server ein Objekt vom Typ TcpServer.
+
+Zum Abarbeiten von Requests besitzt der Server noch für jede Tcp Verbindung ein Objekt des Typs TcpConnection.
+In diesem werden die Verbindungsinformationen abgespeichert.
+So können später auf Requests geantwortet werden, oder Nachrichten an die richtigen Subscriber gepublisht werden.
+Durch asio ist eine asynchrone Abarbeitung der einzelnen Requests möglich.
+
+<p align="center">
+  <img src="assets/broker-tcp.svg" width="850px">
+</p>
+
+<p align="center">
+  <img src="assets/client-tcp.svg" width="500px">
+</p>
+
 ---
+### Vollständiges Klassendiagramm
+
 <p align="center">
   <img src="assets/class-diagramm.svg" width="90%">
 </p>

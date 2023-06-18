@@ -96,9 +96,18 @@ Für die Zugriffsverwaltung existiert hierfür ein Mutex.
   <img src="assets/log-manager.svg" width="300px">
 </p>
 
-### Publisher
+### Publisher & Subscriber
+Die Clients besitzen für jede mögliche Aktion eine eigene Funktion.
 
-### Subscriber
+<p align="center">
+  <img src="assets/subscriber.svg" width="500px">
+</p>
+
+Da das Unsubscriben einer Nachricht mit dem Beenden eines Clients verbunden ist wird die `unsubscribeTopic` Funktion selbständig beim Beenden des Subscribers aufgerufen.
+
+<p align="center">
+  <img src="assets/publisher.svg" width="500px">
+</p>
 
 ### Broker
 Der Broker dient als zentrale Server-Instanz.
@@ -114,6 +123,7 @@ Dazu wird die letzte gepublishte Nachricht im fertigen aussendbaren Request Obje
   <img src="assets/broker-without-tcp.svg" width="800px">
 </p>
 
+
 ### TCP Connections
 Alle Verbindungen zwischen Client und Server werden über TCP abgewickelt.
 Den Verbindungsaufbau beginnen immer die Clients.
@@ -127,18 +137,21 @@ Für die einfachere Handhabung und den späteren einfacheren möglichen Austausc
 Dazu existiert eine `TcpServer` und eine `TcpClient` Klasse.
 Jeder Client besitzt ein Objekt vom Typ TcpClient, der Server ein Objekt vom Typ TcpServer.
 
+<p align="center">
+  <img src="assets/broker-tcp.svg" width="850px">
+</p>
+
 Zum Abarbeiten von Requests besitzt der Server noch für jede Tcp Verbindung ein Objekt des Typs TcpConnection.
 In diesem werden die Verbindungsinformationen abgespeichert.
 So können später auf Requests geantwortet werden, oder Nachrichten an die richtigen Subscriber gepublisht werden.
 Durch asio ist eine asynchrone Abarbeitung der einzelnen Requests möglich.
 
 <p align="center">
-  <img src="assets/broker-tcp.svg" width="850px">
-</p>
-
-<p align="center">
   <img src="assets/client-tcp.svg" width="500px">
 </p>
+
+Der TcpClient bestitz für das Empfangen einer gepublishten Nachricht die Eigenschaft `responseHandler`.
+So kann die ausgeführte Funktion, in dem Falle die Ausgabe der gepublishten Nachricht auf der Konsole, durch eine andere Handlerimplementierung ausgetauscht werden.
 
 ---
 ### Vollständiges Klassendiagramm

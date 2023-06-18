@@ -145,10 +145,11 @@ Durch asio ist eine asynchrone Abarbeitung der einzelnen Requests möglich.
 
 ([open raw](https://raw.githubusercontent.com/philippthuemler/verteilte_systeme_gruppe7/docs/docs/assets/class-diagramm.svg?token=GHSAT0AAAAAACB7WAXVCFAWQ253ZS3XPTVGZEPCRNA))
 
-
-<p align="center">
-  <img src="assets/class-diagramm.svg" width="90%">
-</p>
+<a href="https://raw.githubusercontent.com/philippthuemler/verteilte_systeme_gruppe7/docs/docs/assets/class-diagramm.svg?token=GHSAT0AAAAAACB7WAXVCFAWQ253ZS3XPTVGZEPCRNA">
+  <p align="center">
+    <img src="assets/class-diagramm.svg" width="90%">
+  </p>
+</a>
 
 ## Contributing
 

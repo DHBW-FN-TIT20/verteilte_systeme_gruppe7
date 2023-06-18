@@ -197,5 +197,5 @@ So kann die ausgeführte Funktion, in diesem Falle die Ausgabe der gepublishten 
 ```
 Verwendung von [gitmoji.dev](https://gitmoji.dev/).
 
-Die Commitmessage wird in english verfasst.
+Die Commitmessage wird in Engisch verfasst.
 Als Zeit wird "simple present" verwendet (Jeder Commit soll beschreiben was dieser aktiv verändert!)

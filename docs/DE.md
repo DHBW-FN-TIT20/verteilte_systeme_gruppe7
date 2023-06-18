@@ -29,7 +29,7 @@ Dem Publisher, dem Broker und dem Subscriber.
 
 Der Broker dient als zentrale Server-Instanz.
 Die Publisher und die Subsriber können als Clients betrachtet werden.
-Der Publisher publiziert die Nachrichten über den Broker an all die Subscriber, die sich für ein bestimmtes Thema interessieren.
+Der Publisher publiziert die Nachrichten über den Broker an alle Subscriber, die sich für ein bestimmtes Thema interessieren.
 Die Subscriber melden sich dazu zuvor mit der Wahl eines Topics am Broker an.
 Der Broker leitet die gepublishten Nachrichten, des Publishers gezielt an die einzelnen Subscriber weiter.
 Die Anzahl der Publisher und Subscriber kann variieren.
@@ -84,7 +84,7 @@ Der ActionStatus wird in diese Funktionen bereits abgehandelt.
 Die darüberliegenden Funktionen, die die sendRequest Funktionen verwenden, kennen den ActionStatus nicht.
 Sobald die sendRequest Funktion eine Rückgabe zurückgibt kann von einer erfolgreichen Abarbeitung des Requests ausgegangen werden.
 Bei einer nicht erfolgreichen Abarbeitung wird innerhalb der sendRequest Methode eine Exception mit den Details geworfen.
-Bei einer Implementierung, bei der sich das Programm nicht wie in diesem Falle bei einem Fehlerfall beenden soll, können diese Exceptions von außen abgefangen werden.
+Bei einer Implementierung, bei der sich das Programm (nicht wie in diesem Falle bei einem Fehlerfall) beenden soll, können diese Exceptions von außen abgefangen werden.
 
 **Logging**<br>
 
@@ -127,7 +127,7 @@ Dazu wird die letzte gepublishte Nachricht im fertigen aussendbaren Request Obje
 ### TCP Connections
 Alle Verbindungen zwischen Client und Server werden über TCP abgewickelt.
 Den Verbindungsaufbau beginnen immer die Clients.
-Verbindungen werden nur bei einem subscribe request aufrecht gehalten.
+Verbindungen werden nur bei einem subscribe request aufrecht erhalten.
 Alle weiteren Verbindungen werden nach dem Beenden eines Requests wieder geschlossen.
 
 Die eigentilchen Informationen zum jeweligen Endpoint des Clients/Servers werden in einem eigenen Endpoint Objekt gespeichert.
